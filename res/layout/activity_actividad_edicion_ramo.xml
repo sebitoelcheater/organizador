@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+    <!-- Layout que muestra los  datos del Ramo-->    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+        
+        
+        <LinearLayout
+        android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+        android:orientation="horizontal" >
+	       <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/edittextNombredelRamo"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>
+		   	<EditText
+	    	    android:id="@+id/nombreRamoAEditar"
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="50dp"
+	    	    android:layout_alignParentLeft="true"
+	    	    android:layout_below="@+id/textView1"
+	    	    android:ems="10" >
+
+	        </EditText>
+
+	   	<Button
+	   	    android:id="@+id/botonColor"
+	   	    android:layout_width="wrap_content"
+	   	    android:layout_height="wrap_content"
+	   	    android:onClick="cambiarColor"
+	   	    android:text="Editar Color" />
+
+	        <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Módulos"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+    		<ListView android:id="@android:id/list"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:drawSelectorOnTop="false"/>
+
+    		<Button
+    		    android:id="@+id/botonAgregarModulo"
+    		    android:layout_width="fill_parent"
+    		    android:layout_height="wrap_content"
+    		    android:onClick="agregarModulo"
+    		    android:text=" + Agregar Módulo" />
+	    
+	  </LinearLayout>
+    
+      
+      <LinearLayout
+        android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+          <Button
+              android:id="@+id/botonCambios"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:onClick="guardarCambios"
+              android:text="Guardar" />
+	    
+	     <Button
+	         android:id="@+id/botonEliminarCurso"
+	         android:layout_width="wrap_content"
+	         android:layout_weight="1"
+	         android:layout_height="wrap_content"
+	         android:onClick="eliminarCurso"
+	         android:color="#000000"
+	         android:text="Eliminar Curso" />
+     </LinearLayout>
+     
+     
+
+    
+
+        
+
+</LinearLayout>
+<!--  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textView1"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editText1"
+        android:layout_alignBottom="@+id/editText1"
+        android:layout_alignParentLeft="true"
+        android:text="Nombre Del Ramo"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText1"
+        android:layout_toRightOf="@+id/textView1"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editText2"
+        android:layout_alignBottom="@+id/editText2"
+        android:layout_toLeftOf="@+id/editText2"
+        android:text="Nombre Profesor"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText2"
+        android:layout_below="@+id/editText2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/spinner1"
+        android:layout_alignBottom="@+id/spinner1"
+        android:layout_toLeftOf="@+id/spinner1"
+        android:text="Numero de Notas"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/spinner1"
+        android:text="Modulos Semanales"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView4" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="Guardar" />
+    <TextView
+        android:id="@+id/textNombreRamo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       />
+
+</RelativeLayout>-->

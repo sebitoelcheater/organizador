@@ -1,0 +1,52 @@
+<!-- Layout Principal, la que contiene los Ramos y El Boton Añadir Ramo -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+	
+	<!-- Layout que muestra los Ramos-->    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+        
+		<!-- A continuación hay un Layout Horizontal para Cada 
+		Ramo, con su nombre y el botón para editar -->
+		<!-- Todo lo que viene a continuación (en este Layout) debería ser generado automáticamente -->
+
+	    
+	     
+	     
+	      <ListView android:id="@android:id/list"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:drawSelectorOnTop="false"/>
+	    
+	    
+	  </LinearLayout>
+    
+     
+     <LinearLayout
+        android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+        android:orientation="horizontal" >
+	     <Button
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_weight="1"
+	         android:onClick="configurarnuevoramo"
+	         android:text="@string/configurar_nuevo_curso" />
+	     <Button
+	         android:layout_width="wrap_content"
+	         android:layout_weight="1"
+	         android:layout_height="wrap_content"
+	         android:onClick="suscribirCurso"
+	         android:text="@string/descargar_curso" />
+
+     </LinearLayout>
+</LinearLayout>

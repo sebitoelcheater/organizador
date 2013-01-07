@@ -1,0 +1,115 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.version2"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".AwesomeActivity"
+            android:label="@string/title_activity_principal" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActividadQueMuestraMensaje"
+            android:label="@string/title_activity_actividad_que_muestra_mensaje" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.version0.Principal" />
+        </activity>
+        <activity
+            android:name=".ActividadConfiguracion"
+            android:label="@string/title_activity_actividad_configuracion" >
+        </activity>
+        <activity
+            android:name=".ActividadHorario"
+            android:label="@string/title_activity_actividad_horario" >
+        </activity>
+        <activity
+            android:name=".ActividadNotas"
+            android:label="@string/title_activity_actividad_notas" >
+        </activity>
+        <activity
+            android:name="com.example.DEPRECATED.ActividadRamosAnterior"
+            android:label="@string/title_activity_actividad_ramos" >
+        </activity>
+        <activity
+            android:name=".ActividadDatosDelRamo"
+            android:label="@string/title_activity_actividad_datos_del_ramo" >
+        </activity>
+        <activity
+            android:name=".NotaNombreRamo"
+            android:label="@string/title_activity_nota_nombre_ramo" >
+        </activity>
+        <activity android:name="nuevoRamo" >
+        </activity>
+        <activity
+            android:name=".Dialogo"
+            android:label="@string/title_activity_dialogo" >
+        </activity>
+        <activity
+            android:name=".ActividadRamos"
+            android:label="@string/title_activity_actividad_ramos2" >
+        </activity>
+        <activity
+            android:name=".ActividadNotas2"
+            android:label="@string/title_activity_actividad_notas2" >
+        </activity>
+        <activity
+            android:name=".ActividadFeedback"
+            android:label="@string/title_activity_actividad_feedback" >
+        </activity>
+
+        <service android:name=".alarmChecker" />
+
+        <activity
+            android:name=".ActividadEdicionRamo"
+            android:label="@string/title_activity_actividad_edicion_ramo" >
+        </activity>
+        <activity
+            android:name=".ActividadSuscribirCursoActivity"
+            android:label="@string/title_activity_actividad_suscribir_curso" >
+        </activity>
+        <activity
+            android:name=".ActividadHorarioSemanal"
+            android:label="@string/title_activity_actividad_horario_semanal"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".ActividadHorarioSemanal2"
+            android:label="@string/title_activity_actividad_horario_semanal2" >
+        </activity>
+        <activity
+            android:name=".ActividadHorario2"
+            android:label="@string/title_activity_actividad_horario2" >
+        </activity>
+        <activity
+            android:name=".DibujarLineas"
+            android:label="@string/title_activity_dibujar_lineas" >
+        </activity>
+        <activity
+            android:name=".ActividadFeedBackear"
+            android:label="@string/title_activity_actividad_feed_backear" >
+        </activity>
+        <activity
+            android:name=".TwitterWebActivity"
+            android:label="@string/title_activity_twitter_web" >
+            
+        </activity>
+    </application>
+
+</manifest>

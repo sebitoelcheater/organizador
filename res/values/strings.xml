@@ -1,0 +1,67 @@
+<resources>
+
+    <string name="app_name">Organizador</string>
+    <string name="edit_message">Escribe algo!</string>
+    <string name="menu_settings">Configuración </string>
+    <string name="title_activity_principal">Organizador</string>
+    <string name="pagina_principal_">Página Principal!</string>
+    <string name="boton_feedback">Da tu Feedback!</string>
+    <string name="horario">Horario</string>
+    <string name="calificaciones">Calificaciones</string>
+    <string name="configuraci_n_de_ramos">Configuración de Cursos</string>
+    <string name="button_send">Envíalo!</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_actividad_que_muestra_mensaje">ActividadQueMuestraMensaje</string>
+    <string name="boton_configurar">Configura tus Cursos</string>
+    <string name="boton_horario">Revisa tu Horario</string>
+    <string name="boton_notas">Revisa tus Notas</string>
+    <string name="title_activity_actividad_configuracion">ActividadConfiguración</string>
+    <string name="title_activity_actividad_horario">ActividadHorario</string>
+    <string name="title_activity_actividad_notas">ActividadNotas</string>
+    <string name="nombre_ramo">Nombre Curso</string>
+    <string name="nombre_ramo_con_otro_nombre">Nombre Curso con otro Nombre</string>
+    <string name="title_activity_datos_del_ramo">DatosDelRamo</string>
+    <string name="title_activity_actividad_datos_del_ramo">ActividadDatosDelCurso</string>
+    <string name="title_activity_actividad_ramos">ActividadCursos</string>
+    <string name="title_activity_nota_nombre_ramo">NotaNombreCurso</string>
+    <string name="edittextNombredelRamo">Nombre del Curso</string>
+    <string name="title_activity_dialogo">Diálogo</string>
+    <string name="title_activity_actividad_ramos2">ActividadCursos2</string>
+    <string name="title_activity_actividad_notas2">ActividadNotas2</string>
+    <string name="title_activity_actividad_feedback">ActividadFeedback</string>
+    <string name="title_activity_actividad_edicion_ramo">ActividadEdicionCurso</string>
+    <string name="title_activity_actividad_suscribir_curso">MainActivity</string>
+    <string name="hello">Hello World, TabSample!</string>
+
+    <string-array name="Spinner_Content">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+    </string-array>
+
+    <string name="title_activity_actividad_horario_semanal">ActividadHorarioSemanal</string>
+    <string name="title_activity_actividad_horario_semanal2">ActividadHorarioSemanal2</string>
+    <string name="title_activity_actividad_horario2">ActividadHorario2</string>
+    <string name="title_activity_dibujar_lineas">DibujarLineas</string>
+    <string name="menu_about">Acerca de esta App</string>
+    <string name="about_site">Sitio Web</string>
+    <string name="about_desc">Organizador - 2012 Sebastián Hernandez, Ariel Cáceres y Esteban Iglesias.</string>
+    <string name="about_title">Acerca de Organizador</string>
+    <string name="about_website">Sitio Web</string>
+    <string name="about_version">Versión:</string>
+    <string name="ok">Ok</string>
+    <string name="URL">"http://www.cheaper.cl/android"</string>
+    <string name="title_activity_actividad_feed_backear">ActividadFeedBackear</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="editar">Editar</string>
+    <string name="sala">Lugar:</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="configurar_nuevo_curso">Configurar Nuevo Curso</string>
+    <string name="descargar_curso">Descargar Curso</string>
+    <string name="settings_bg_color_dialog">Elige un Color</string>
+    <string name="settings_bg_color_confirm">Aceptar</string>
+    <string name="settings_default_color_confirm">Color Defecto</string>
+    <string name="title_activity_twitter_web">TwitterWebActivity</string>
+
+</resources>

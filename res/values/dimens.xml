@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="DimensionHora">10dp</dimen>
+    <dimen name="DimensionNombre">40dp</dimen>
+    <dimen name="DimensionNombre2">25dp</dimen>
+    <dimen name="DimensionNombre3">20dp</dimen>
+    <dimen name="Quince">15dp</dimen>
+    <dimen name="Diez">10dp</dimen>
+    <dimen name="Ocho">8dp</dimen>
+    <dimen name="Catorce">14dp</dimen>
+    <dimen name="Trece">13dp</dimen>
+</resources>

@@ -1,0 +1,75 @@
+
+<!-- Layout Principal. Este es Vertical y contiene dos cosas, Un Layout Horizontal
+que tiene el campo de texto y el botón (del tutorial), y un layout vertical
+que contiene los botones principales -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+   <!-- LinearLayout realizado usando el tutorial de http://developer.android.com/training/basics/firstapp/building-ui.html
+Opino dejarlo. Por lo menos para mi (Esteban) me sirve para recordar lo hecho
+en ese tutorial. Se los recomiendo -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+
+        <EditText
+            android:id="@+id/edit_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/edit_message" />
+
+
+	    <Button
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/button_send"
+	        android:onClick="enviarMensaje"/>
+    
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical" >
+    
+          <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="bottom"
+	        android:layout_weight="1"	       
+	        android:onClick="verFormularioFeedback"
+	        android:text="@string/boton_feedback" />
+          
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="bottom"
+	        android:layout_weight="1"	       
+	        android:onClick="verRamos"
+	        android:text="@string/boton_configurar" />
+	     <!-- el onClick ejecuta el método (en este caso verConfiguracion) que está 
+	        en el archivo .java -->
+
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:onClick="verHorario"
+	        android:text="@string/boton_horario" />
+    
+    </LinearLayout>
+
+    
+    
+</LinearLayout>
+
+
