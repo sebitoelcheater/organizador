@@ -66,60 +66,56 @@ public class Curso extends Modelo
 	}
 	
 
-		public boolean esEditable()
-		{
-			return !(esDescargado());
-		}
+	public boolean esEditable()
+	{
+		return !(esDescargado());
+	}
+	
+	public boolean esDescargado()
+	{
+		return this.params.get("idC").equals("0");
+	}
 		
-		public boolean esDescargado()
-		{
-			return this.params.get("idC").equals("0");
-		}
-		
-		public String obtenerColor()
-		{
-			return (String)this.params.get("color");
-		}
+	public String obtenerColor()
+	{
+		return (String)this.params.get("color");
+	}
 	//METODOS DE OBTENCION
 		
 	//METODOS DE SETEO DEL OBJETO(NO DB)
 
-		public boolean actualizar(Context context) throws UnknownHostException, NoHttpResponseException, NoExisteCursoException 
-		{
-			server s = new server();
-			boolean b = s.actualizarCurso(obtenerIdMaster(), context);//seba va a arreglar 
-    		return b;
+	public boolean actualizar(Context context) throws Exception 
+	{
+		server s = new server();
+		boolean b = s.actualizarCurso(obtenerIdMaster(), context);//seba va a arreglar 
+    	return b;
+	}
+		
+	public boolean borrarCurso(Context context)  //DEPRECATED ???(DEBERIA IR EN EL CONTROLADOR?)
+	{
+		AdapterDatabase db = new AdapterDatabase(context);
+	
+		if(db.deleteRecord(nombreTabla, Long.parseLong(obtenerId())))
+		{	
+			return true;
 		}
 		
-		public boolean borrarCurso(Context context)  //DEPRECATED ???(DEBERIA IR EN EL CONTROLADOR?)
-		{
-			AdapterDatabase db = new AdapterDatabase(context);
-			
-					
-			
-			if(db.deleteRecord(nombreTabla, Long.parseLong(obtenerId())))
-			{	
-				
-				return true;
-			}
-			 
-			
 			return false;
-		}
+	}
 	// METODOS DE SETEO DE LA BASE DE DATOS Y OBJETO
 
-		public boolean existeCursoComentable(Context context)// Le das el idmaster y te dice si ya lo tienes en ls base de datos interna :)
-		{
-			AdapterDatabase db = new AdapterDatabase(context);
-			
-		    boolean b=db.getRecordWhere(Curso.class,"Cursos",new String[]{ "idC"},new String[]{obtenerIdMaster()},null,null,null,null).size()==0; 
+	public boolean existeCursoComentable(Context context)// Le das el idmaster y te dice si ya lo tienes en ls base de datos interna :)
+	{
+		AdapterDatabase db = new AdapterDatabase(context);
+		
+	    boolean b=db.getRecordWhere(Curso.class,"Cursos",new String[]{ "idC"},new String[]{obtenerIdMaster()},null,null,null,null).size()==0; 
 		    
-		    return !b;
+	    return !b;
 			
-		}
+	}
 		
 		@Override
-		public void setData(String id, Object[] params) {
+	public void setData(String id, Object[] params) {
 			
 //			this.id = id;
 //			private String id; //iidC
@@ -131,37 +127,32 @@ public class Curso extends Modelo
 //			private static String nombreTabla="Cursos";
 			
 //"iidC integer primary key autoincrement, idC integer, iidP integer, title VARCHAR not null, comentable integer, color VARCHAR not null"));
-			this.NombreTabla=nombreTabla;
-			for(int i=0;i<keys.length;i++)
-			{
-				this.params.put(this.keys[i], (String)params[i]);
-			}
-			
-		}
-		
-		static public Curso obtenerCurso(Context context, String id) //DEPRECATED???
+		this.NombreTabla=nombreTabla;
+		for(int i=0;i<keys.length;i++)
 		{
-			AdapterDatabase ad = new AdapterDatabase(context);
-	   		
-	   		Curso c =ad.getRecord(Curso.class, "Cursos", Long.parseLong(id));
-			return c;
+			this.params.put(this.keys[i], (String)params[i]);
 		}
+			
+	}
 		
-		static public ArrayList<Curso> obtenerCursosOrdenados(Context context)//por esEditable == idC=0
-		{
-			
-			AdapterDatabase db = new AdapterDatabase(context);
-			
-			ArrayList<Curso> cursos1 = db.getRecordWhere(Curso.class, nombreTabla, new String[]{keys[2]},new String[]{"0"} , null, null, null, null);
-			ArrayList<Curso> cursos2 = db.getRecordWhere(Curso.class, nombreTabla, new String[]{keys[2]},new String[]{"1"} , null, null, null, null);
-			
-			ArrayList<Curso> ordenados = new ArrayList<Curso>();
-			ordenados.addAll(cursos1);
-			ordenados.addAll(cursos2);
-
-	        
-			return ordenados;
-		}
+	static public Curso obtenerCurso(Context context, String id) //DEPRECATED???
+	{
+		AdapterDatabase ad = new AdapterDatabase(context);
+  		
+   		Curso c =ad.getRecord(Curso.class, "Cursos", Long.parseLong(id));
+		return c;
+	}
+		
+	static public ArrayList<Curso> obtenerCursosOrdenados(Context context)//por esEditable == idC=0
+	{
+		AdapterDatabase db = new AdapterDatabase(context);
+		ArrayList<Curso> cursos1 = db.getRecordWhere(Curso.class, nombreTabla, new String[]{keys[2]},new String[]{"0"} , null, null, null, null);
+		ArrayList<Curso> cursos2 = db.getRecordWhere(Curso.class, nombreTabla, new String[]{keys[2]},new String[]{"1"} , null, null, null, null);
+		ArrayList<Curso> ordenados = new ArrayList<Curso>();
+		ordenados.addAll(cursos1);
+		ordenados.addAll(cursos2);
+		return ordenados;
+	}
 
 		static public ArrayList<Curso> obtenerCursosComentables(Context context)
 		{
@@ -172,7 +163,6 @@ public class Curso extends Modelo
 	        return cursos;
 			
 		}
-		
 		public static ArrayList<Curso> obtenerCursosEditables(Context context) {
 			// TODO Auto-generated method stub //idC=0
 			
