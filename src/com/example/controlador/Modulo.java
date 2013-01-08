@@ -9,6 +9,7 @@ import com.example.data.*;
 public class Modulo extends Modelo
 {								// 0      1     2      3      4       5       6
 	String[] keys = new String[]{"iidH","idH","iidC","dds","inicio","fin","ubicación"};
+
 	String nombreTabla = "Horarios";
 //	private String id=null;
 //	private String idH=null;

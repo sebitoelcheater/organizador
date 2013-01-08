@@ -1,5 +1,3 @@
-SEBA CARA DE POTO
-lalalal
 package com.example.controlador;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -18,17 +16,29 @@ import com.example.version2.ActividadRamos;
 import com.example.version2.R;
 public class Curso extends Modelo
 {
-
-	private String[] keys = new String[]{"iidC","nombre","idC","idP","comentable","color"};
-	
+//                                                0       1       2     3       4           5
+	//private static String[] keys = new String[]{"iidC","nombre","idC","idP","comentable","color"};
+	private static String[] keys;
 	private static String nombreTabla="Cursos";
 
+	/**
+	 * No lo usi conchetumare!
+	 */
 	public Curso()
 	{
 		
 		
 	}
 	
+	public Curso(Context context,int idC, int iidP, String nombre,String comentable,String color) throws Exception //CUANDO ESTO CRESCA NO OLVIDAR AGREGAR ACA NUEVAS CARACTERISTICAS
+	{
+		
+		super(nombreTabla,AdapterDatabase.tablas.get(nombreTabla).keys,new String[]{""+idC,""+iidP,nombre,comentable,color});
+		keys=AdapterDatabase.tablas.get(nombreTabla).keys;
+		AdapterDatabase db = new AdapterDatabase(context);
+		db.insertRecord(nombreTabla,new String[]{""+idC,""+iidP,nombre,comentable,color});
+	    db.close();
+	}
 	
 	public String obtenerId()
 	{
@@ -98,6 +108,16 @@ public class Curso extends Modelo
 		}
 	// METODOS DE SETEO DE LA BASE DE DATOS Y OBJETO
 
+		public boolean existeCursoComentable(Context context)// Le das el idmaster y te dice si ya lo tienes en ls base de datos interna :)
+		{
+			AdapterDatabase db = new AdapterDatabase(context);
+			
+		    boolean b=db.getRecordWhere(Curso.class,"Cursos",new String[]{ "idC"},new String[]{obtenerIdMaster()},null,null,null,null).size()==0; 
+		    
+		    return !b;
+			
+		}
+		
 		@Override
 		public void setData(String id, Object[] params) {
 			
@@ -118,4 +138,48 @@ public class Curso extends Modelo
 			}
 			
 		}
+		
+		static public Curso obtenerCurso(Context context, String id) //DEPRECATED???
+		{
+			AdapterDatabase ad = new AdapterDatabase(context);
+	   		
+	   		Curso c =ad.getRecord(Curso.class, "Cursos", Long.parseLong(id));
+			return c;
+		}
+		
+		static public ArrayList<Curso> obtenerCursosOrdenados(Context context)//por esEditable == idC=0
+		{
+			
+			AdapterDatabase db = new AdapterDatabase(context);
+			
+			ArrayList<Curso> cursos1 = db.getRecordWhere(Curso.class, nombreTabla, new String[]{keys[2]},new String[]{"0"} , null, null, null, null);
+			ArrayList<Curso> cursos2 = db.getRecordWhere(Curso.class, nombreTabla, new String[]{keys[2]},new String[]{"1"} , null, null, null, null);
+			
+			ArrayList<Curso> ordenados = new ArrayList<Curso>();
+			ordenados.addAll(cursos1);
+			ordenados.addAll(cursos2);
+
+	        
+			return ordenados;
+		}
+
+		static public ArrayList<Curso> obtenerCursosComentables(Context context)
+		{
+			
+			AdapterDatabase db = new AdapterDatabase(context);
+			ArrayList<Curso> cursos = db.getRecordWhere(Curso.class, nombreTabla, new String[]{keys[4]}, new String[]{"1"}, null, null, null, null);
+		
+	        return cursos;
+			
+		}
+		
+		public static ArrayList<Curso> obtenerCursosEditables(Context context) {
+			// TODO Auto-generated method stub //idC=0
+			
+			AdapterDatabase db = new AdapterDatabase(context);
+			
+			return db.getRecordWhere(Curso.class, nombreTabla, new String[]{keys[2]}, new String[]{"0"}, null, null, null, null);
+			
+		}
+		
 }

@@ -8,6 +8,7 @@ public class Tabla {
 	 * En campos[0] esta el nombre de la variable y en campos[1] esta el tipo y en [2] el resto de palabras
 	 */
 	public ArrayList<String[]> campos = new ArrayList<String[]>();
+	public String[] keys;
 
 	public int numCampos=0;
 	
@@ -26,11 +27,12 @@ public class Tabla {
 		this.nombre=nombre;
 		
 		String[] codeSplit = sqliteCode.split(",");
-		
+		keys = new String[codeSplit.length];
 		for(int i=0;i<codeSplit.length;i++)
 		{
 			String[] txt=codeSplit[i].trim().split(" ");
 			String nombreCampo = txt[0];
+			keys[i]=nombreCampo;
 			String tipoCampo = txt[1];
 			String resto = "";
 			

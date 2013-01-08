@@ -31,10 +31,13 @@ public abstract class Modelo {//EX ISeteable
 		
 		this.NombreTabla=nombreTabla;
 		
+		
+		
+		
+		
 	}
-	
 	
 	public abstract void setData(String id,Object[] params);
 	
-
+	
 }

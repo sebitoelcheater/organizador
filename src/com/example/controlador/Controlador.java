@@ -10,86 +10,6 @@ import com.example.data.*;
 
 public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PENSAR BIEN EN SU VERDADERA FUNCIONALIDAD!
 {
-	static public boolean existeCursoComentable(Context context,String idMaster)// Le das el idmaster y te dice si ya lo tienes en ls base de datos interna :)
-	{
-		AdapterDatabase db = new AdapterDatabase(context);
-		
-	    boolean b=db.getRecordWhere(Curso.class,"Cursos",new String[]{ "idC"},new String[]{idMaster},null,null,null,null).size()==0; 
-	    
-	    return !b;
-		
-	}
-	
-	static public Modulo ultimoModulo(Context context,Curso c) 
-	{
-		
-		Modulo ultimoModulo = null;    
-	    Modulo primerModulo;
-		Modulo anterior = ultimoModulo;
-		
-		Calendar ahora = Calendar.getInstance();
-		
-		ArrayList<Modulo> modulosDeC = obtenerModulosPorIdCurso(context,c.obtenerId());
-		if(modulosDeC.size()>=1)
-		{
-			ArrayList<Modulo> anteriores = new ArrayList<Modulo>();
-			ArrayList<Modulo> posteriores = new ArrayList<Modulo>();
-			ultimoModulo = modulosDeC.get(0);
-			primerModulo = ultimoModulo;
-			for(Modulo m:modulosDeC)
-			{
-				if(m.obtenerInicio().after(ultimoModulo.obtenerInicio()))
-					ultimoModulo = m;
-				
-				if(m.obtenerInicio().before(primerModulo.obtenerInicio()))
-					primerModulo = m;
-				
-				if(m.obtenerInicio().get(Calendar.DAY_OF_WEEK)>=ahora.get(Calendar.DAY_OF_WEEK))
-				{
-					if(m.obtenerInicio().get(Calendar.HOUR_OF_DAY)>=ahora.get(Calendar.HOUR_OF_DAY))
-					{
-						if(m.obtenerInicio().get(Calendar.MINUTE)>=ahora.get(Calendar.MINUTE))
-						{
-							anteriores.add(m);
-						}
-						else
-						{
-							posteriores.add(m);
-						}
-					}
-					else
-					{
-						posteriores.add(m);
-					}
-				}
-				else
-				{
-					posteriores.add(m);
-				}
-			}
-		
-			if(anteriores.size()>=1)
-			{	
-				anterior = anteriores.get(0);
-				for(Modulo a : anteriores)
-				{
-					if(a.obtenerFin().after(anterior))
-						anterior = a;
-				}
-			}	
-			else
-			{
-				anterior = posteriores.get(0);
-				for(Modulo a : posteriores)
-				{
-					if(a.obtenerFin().before(anterior))
-						anterior = a;
-				}
-			}
-			
-		}	
-		return anterior;
-	}
 
 	static public String insertarProfesor(Context context,String idP,String usuario,String contrasena,String nombre, String apellido)//DEPRECATED, despues se usara el objeto profesor
 	{
@@ -104,34 +24,13 @@ public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PE
 	static public String insertarComentario(Context context,String idCom, String iidH, String fecha,String comentario)//CUANDO MANEJE ESTO COMO OBJETO PUEDO INTERPRETAR EL fecha COMO UN CALENDAR :)
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
-		;        
+		        
 		String[] params = new String[]{idCom,iidH,fecha,comentario};
 		String id = db.insertRecord("Comentarios",params)+"";
 	    
 		return id;
 	}
-	
-	static public Curso crearNuevoCurso(Context context,int idC, int iidP, String nombre,boolean comentable,String color) //CUANDO ESTO CRESCA NO OLVIDAR AGREGAR ACA NUEVAS CARACTERISTICAS
-	{
-		int c = 1;
-		if(!comentable)
-			c = 0;
-		AdapterDatabase db = new AdapterDatabase(context);
-		String[] params = new String[]{""+idC,""+iidP,nombre,""+c,color};
-	    String id = db.insertRecord("Cursos",params)+"";
-		Curso curs =db.getRecord(Curso.class, "Cursos", (Integer.parseInt(id)));
-	    db.close();
-	    return curs;
-	}
-	
-	/* HACER ESTO*/
-	static public Curso obtenerCurso(Context context, String id) //DEPRECATED???
-	{
-		AdapterDatabase ad = new AdapterDatabase(context);
-   		
-   		Curso c =ad.getRecord(Curso.class, "Cursos", Long.parseLong(id));
-		return c;
-	}
+
 	
 	static public boolean crearNuevoModulo(Context context,int idH,int iidC,int diaDeLaSemana, Calendar inicio, Calendar fin, String nombre)
 	{
@@ -175,40 +74,7 @@ public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PE
 				
         return cursos;
 	}
-	
-	static public ArrayList<Curso> obtenerCursosOrdenados(Context context)
-	{
-		
-		AdapterDatabase db = new AdapterDatabase(context);
-		
-				
-		ArrayList<Curso> cursos = db.getAllRecords(Curso.class,"Cursos");
-		ArrayList<Curso> ordenados = new ArrayList<Curso>();
-		for(Curso curso : cursos)
-		{
-			if(curso.esEditable())
-				ordenados.add(curso);
-		}
-		
-		for(Curso curso : cursos)
-		{
-			if(!(curso.esEditable()))
-				ordenados.add(curso);
-		}
-        
-		return ordenados;
-	}
 
-	static public ArrayList<Curso> obtenerCursosComentables(Context context)
-	{
-		
-		AdapterDatabase db = new AdapterDatabase(context);
-		ArrayList<Curso> cursos = db.getAllRecords(Curso.class,"Cursos");
-	
-        return cursos;
-		
-	}
-	
 	static public ArrayList<Modulo> obtenerModulos(Context context)
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
@@ -430,22 +296,7 @@ public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PE
 		return posiblesModulos;
 	}
 	
-	public static ArrayList<Curso> obtenerCursosEditables(Context context) {
-		// TODO Auto-generated method stub
-		ArrayList<Curso> cursos = new ArrayList<Curso>();
-		AdapterDatabase db = new AdapterDatabase(context);
 		
-		ArrayList<Curso> cursosNoOrdenados = db.getAllRecords(Curso.class,"Cursos");
-		for(Curso curso : cursosNoOrdenados)
-		{
-			if(curso.esEditable())
-        		cursos.add(curso);
-			
-		}
-	
-        return cursos;
-	}
-	
 	private static void quicksortRecursivo(ArrayList<Modulo> x,int lo,int ho)
 	  {
 	    int  l=lo, h=ho;
