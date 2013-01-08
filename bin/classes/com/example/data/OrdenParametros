@@ -1,1 +1,11 @@
-Acá guardaremos la conexion con la base de datos
+Profesores:
+iidP, idP, usuario, contrasena, nombre, apellido
+
+Cursos:
+iidC, idC, iidP, title, comentable, color
+
+Horarios:
+iidH, idH, iidC, dds, inicio, fin, ubicaci—n
+
+Comentarios:
+iidCom, idCom, iidH, fecha, comentario

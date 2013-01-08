@@ -1,5 +1,3 @@
-SEBA CARA DE POTO
-lalalal
 package com.example.controlador;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ import com.example.version2.R;
 public class Curso extends Modelo
 {
 
-	private String[] keys = new String[]{"iidC","nombre","idC","idP","comentable","color"};
+	private static String[] keys = new String[]{"iidC","nombre","idC","idP","comentable","color"};
 	
 	private static String nombreTabla="Cursos";
 
