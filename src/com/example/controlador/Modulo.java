@@ -7,57 +7,57 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.example.data.*;
 public class Modulo extends Modelo
-{
-	private String id=null;
-	private String idH=null;
-	private String idCurso=null;
-	private String ubicacion=null;
-	private String diaDeLaSemana=null;
-	private Calendar inicio=null;
-	private Calendar fin=null;
-	
+{								// 0      1     2      3      4       5       6
+	String[] keys = new String[]{"iidH","idH","iidC","dds","inicio","fin","ubicación"};
+	String nombreTabla = "Horarios";
+//	private String id=null;
+//	private String idH=null;
+//	private String idCurso=null;
+//	private String ubicacion=null;
+//	private String diaDeLaSemana=null;
+//	private Calendar inicio=null;
+//	private Calendar fin=null;
+//	
 	public Modulo()
 	{
 		
 	}
 	
-	public Modulo(Context context,String id)
-	{
-		this.id=id;
-		
-	}
 	public String obtenerId()
 	{
-				return id;
+		return (String)this.params.get(keys[0]);
 	}
 	public String getDiaDeLaSemana()
 	{
-		return diaDeLaSemana;
+		//return diaDeLaSemana;
+		return (String)this.params.get(keys[3]);
 	}
 
 			
 	public String obtenerIdMaster()
 	{
-		return idH;
+		//return idH;
+		return (String)this.params.get(keys[1]);
 	}
 			
 	public String obtenerIdCurso()
 	{
-		return idCurso;
+		return (String)this.params.get(keys[2]);
 	}
 			
 	public String obtenerUbicacion()
 	{
-		return ubicacion;
+		return (String)this.params.get(keys[6]);
 	}
 			
 	public String obtenerDiaDeLaSemana()
 	{
-		return diaDeLaSemana;
+		return (String)this.params.get(keys[3]);
 	}
 			
 	public String obtenerNombreDiaDeLaSemana() 
 	{
+		String diaDeLaSemana = obtenerDiaDeLaSemana();
 		if (diaDeLaSemana.equals("2")){
 			return "Lunes";
 		}
@@ -91,64 +91,33 @@ public class Modulo extends Modelo
 			
 			public Calendar obtenerInicio()
 			{
-				return (Calendar) inicio.clone();
+				return (Calendar) ((Calendar)this.params.get(keys[4])).clone();
 			}
 			
 			public Calendar obtenerFin()
 			{
-				return (Calendar) fin.clone();
+				return (Calendar) ((Calendar)this.params.get(keys[5])).clone();
 			}
 			
 			public String obtenerStringInicio() {
+				Calendar inicio= obtenerInicio();
 				return  agregarCeros(2,inicio.get(Calendar.HOUR_OF_DAY))+":"+agregarCeros(2,inicio.get(Calendar.MINUTE));
 			}
 			
 			public String obtenerStringFin() {
+				Calendar fin = obtenerFin();
 				return agregarCeros(2,fin.get(Calendar.HOUR_OF_DAY))+":"+agregarCeros(2,fin.get(Calendar.MINUTE));
 			}
 		//METODOS DE OBTENCION
 		
 		//METODOS DE SETEO DEL OBJETO(NO DB)
-			public void setDiaDeLaSemana(String diaDeLaSemana) 
-			{
-				this.diaDeLaSemana = diaDeLaSemana;				
-			}
 
-			public void setId(String id)
-			{
-				this.id = id;
-			}
-			
-			public void setIdMaster(String idMaster)
-			{
-				this.idH = idMaster;
-			}
-			
-			public void setIdCrso(String idCurso)
-			{
-				this.idCurso = idCurso;
-			}
-			
-			public void setUbicacion(String nombre)
-			{
-				this.ubicacion = nombre;
-			}
-			
-			public void setInicio(Calendar inicio)
-			{
-				this.inicio = (Calendar) inicio.clone();
-			}
-			
-			public void setFin(Calendar fin)
-			{
-				this.fin = (Calendar) fin.clone();
-			}
 	
 			public boolean borrarModulo(Context context) //DEPRECATED ???(DEBERIA IR EN EL CONTROLADOR?)
 			{
 				AdapterDatabase db = new AdapterDatabase(context);
 				
-				if(db.deleteRecord("Horarios",Long.parseLong(this.id)))
+				if(db.deleteRecord("Horarios",Long.parseLong(obtenerId())))
 				{	
 					
 					return true;
@@ -177,31 +146,11 @@ public class Modulo extends Modelo
 		@SuppressLint("SimpleDateFormat")
 		@Override
 		public void setData(String id, Object[] params) {
-				// TODO Auto-generated method stub
-			
-
-// iidH integer primary key autoincrement, idH integer, iidC integer, dds integer, inicio date, fin date, ubicacion VARCHAR"));
-		    	
-				Date a = new Date();
-				Date b = new Date();
-				inicio = new GregorianCalendar();
-				fin = new GregorianCalendar();
-				SimpleDateFormat formato = new SimpleDateFormat("HH:mm");
-				
-				this.id=(String)params[0]; 
-				idH=(String)params[1]; 
-				idCurso=(String)params[2];
-				diaDeLaSemana=(String)params[3];
-				try {
-					a = formato.parse((String) params[4]);
-					b = formato.parse((String)params[5]);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				inicio.setTime(a);
-				fin.setTime(b);
-				ubicacion=(String)params[6];
+			this.NombreTabla=nombreTabla;
+			for(int i=0;i<keys.length;i++)
+			{
+				this.params.put(this.keys[i], (String)params[i]);
+			}
 			
 				
 				

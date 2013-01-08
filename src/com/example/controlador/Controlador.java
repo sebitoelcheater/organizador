@@ -13,7 +13,7 @@ public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PE
 	static public boolean existeCursoComentable(Context context,String idMaster)// Le das el idmaster y te dice si ya lo tienes en ls base de datos interna :)
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
-		;        
+		
 	    boolean b=db.getRecordWhere(Curso.class,"Cursos",new String[]{ "idC"},new String[]{idMaster},null,null,null,null).size()==0; 
 	    
 	    return !b;
@@ -117,15 +117,11 @@ public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PE
 		if(!comentable)
 			c = 0;
 		AdapterDatabase db = new AdapterDatabase(context);
-		;        
 		String[] params = new String[]{""+idC,""+iidP,nombre,""+c,color};
-	    String id = db.insertRecord("Cursos",params)+"";    
-	    
-	    AdapterDatabase ad = new AdapterDatabase(context);
-		
-		Curso curs =ad.getRecord(Curso.class, "Cursos", (Integer.parseInt(id)));
-	    ad.close();
-	   return curs;
+	    String id = db.insertRecord("Cursos",params)+"";
+		Curso curs =db.getRecord(Curso.class, "Cursos", (Integer.parseInt(id)));
+	    db.close();
+	    return curs;
 	}
 	
 	/* HACER ESTO*/
@@ -252,7 +248,7 @@ public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PE
 	{
 		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
 		AdapterDatabase db = new AdapterDatabase(context);
-		;
+		
 		ArrayList<Modulo> modulosNoOrdenados = db.getAllRecords(Modulo.class,"Horarios");
 		
 		for(Modulo modulo: modulosNoOrdenados)
@@ -354,7 +350,7 @@ public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PE
 			   AdapterDatabase ad = new AdapterDatabase(context);
        		
        		Curso c =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-			if(c.obtenerComentable())
+			if(c.obtenerComentable().equals("1"))
 			{
 				modulosComentables.add(m);
 			}
@@ -410,7 +406,7 @@ public class Controlador  //NOTA: REVISAR BIEN LOS METODOS DEL CONTROLADOR....PE
 			AdapterDatabase ad = new AdapterDatabase(context);
        		
        		Curso c =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-			if(c.obtenerComentable())
+			if(c.obtenerComentable().equals("1"))
 			{
 				posibles2Modulos.add(m);
 			}

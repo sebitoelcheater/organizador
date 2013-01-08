@@ -112,7 +112,7 @@ private void Notificar() throws UnknownHostException, NoHttpResponseException, N
 		AdapterDatabase ad = new AdapterDatabase(this);
    		
    		Curso c =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-		if(c.obtenerComentable())
+		if(c.obtenerComentable().equals("1"))
 		{	
 			if(!(c.obtenerNombre().endsWith(" ")))
 			{
