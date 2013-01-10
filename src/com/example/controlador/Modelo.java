@@ -12,7 +12,7 @@ public abstract class Modelo {//EX ISeteable
 		NombreTabla=null;
 		params=null;
 	}
-	protected Modelo(String nombreTabla, String[] keys,String[] values) throws Exception
+	protected Modelo(String nombreTabla, String[] keys,Object[] values) throws Exception
 	{
 		if(keys.length!=values.length)
 		{

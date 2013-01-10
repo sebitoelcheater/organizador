@@ -38,7 +38,8 @@ public class AdapterDatabase {
     	tablas.put("Horarios",new Tabla("Horarios","iidH integer primary key autoincrement, idH integer, iidC integer, dds integer, inicio date, fin date, ubicacion VARCHAR"));
     	tablas.put("Profesores",new Tabla("Profesores","iidP integer primary key autoincrement, idP integer, usuario VARCHAR, contrasena VARCHAR, nombre VARCHAR, apellido VARCHAR"));
     	tablas.put("Comentarios",new Tabla("Comentarios","iidCom integer primary key autoincrement, idCom integer, iidH integer, fecha date, comentario text"));
-        
+    	Curso.setKeys(tablas.get("Cursos").keys);
+    	Modulo.setKeys(tablas.get("Horarios").keys);
     }
     
     public AdapterDatabase(Context ctx)

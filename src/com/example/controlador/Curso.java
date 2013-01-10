@@ -16,11 +16,24 @@ import com.example.version2.ActividadRamos;
 import com.example.version2.R;
 public class Curso extends Modelo
 {
+
 //                                                0       1       2     3       4           5
 	//private static String[] keys = new String[]{"iidC","nombre","idC","idP","comentable","color"};
 	private static String[] keys;
-	private static String nombreTabla="Cursos";
 
+	static String[] getKeys() {
+		return keys;
+	}
+
+	public static void setKeys(String[] keys) {
+		Curso.keys = keys;
+	}
+	
+	private static String nombreTabla="Cursos";
+	public static String getNombreTabla()
+	{
+		return nombreTabla;
+	}
 	/**
 	 * No lo usi conchetumare!
 	 */
@@ -139,7 +152,7 @@ public class Curso extends Modelo
 	{
 		AdapterDatabase ad = new AdapterDatabase(context);
   		
-   		Curso c =ad.getRecord(Curso.class, "Cursos", Long.parseLong(id));
+   		Curso c =ad.getRecord(Curso.class, nombreTabla, Long.parseLong(id));
 		return c;
 	}
 		
