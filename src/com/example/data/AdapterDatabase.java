@@ -339,11 +339,6 @@ public class AdapterDatabase {
         return ret;
     }
     
-    public void close() 
-    {
-        DBHelper.close();
-    }
-    
     public ArrayList<Modulo> comprobarTopeHorario(String diaDeLaSemana,String inicio, String fin)
     {
     	String fInicio = "'"+inicio+"'";

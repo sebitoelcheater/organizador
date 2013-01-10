@@ -5,6 +5,9 @@ import java.util.*;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.example.data.*;
 public class Modulo extends Modelo
 {								
@@ -360,6 +363,36 @@ public class Modulo extends Modelo
 		
 		return modulos;
 	}
+	/**
+	 * Cambiar el nombre de este metodo a "existen modulos entre inicio y fin"
+	 * @param ctx
+	 * @param diaDeLaSemana
+	 * @param inicio
+	 * @param fin
+	 * @return
+	 */
+	public static  ArrayList<Modulo> comprobarTopeHorario(Context ctx, String diaDeLaSemana,String inicio, String fin)
+	{
+		AdapterDatabase ad = new AdapterDatabase(ctx);
+		
+//	    	String fInicio = "'"+inicio+"'";
+//	    	String fFin = "'"+fin+"'";
+//	    	String KEY_INICIO="inicio";
+//	    	String KEY_FIN = "fin";
+//	    
+//	    	Cursor mCursor =
+//	                 db.query(true, nombreTabla, getNombresCampos("Horarios"), 
+//	                 "dds" + "=" + diaDeLaSemana+ " AND (("+KEY_INICIO+"<"+fInicio+" AND "+ KEY_FIN+">"+fFin+") OR ("+KEY_INICIO+">="+fInicio+" AND "+ KEY_INICIO+"<"+fFin+") OR ("+KEY_FIN+">"+fInicio+" AND "+ KEY_FIN+"<="+fFin+")"+")", null, null, null, null, null);
+//	         if (mCursor != null) {
+//	             mCursor.moveToFirst();
+//	         }
+//db.close() ; DBHelper.close(); mCursor.close();
+	         ArrayList<Modulo> modulos = ad.getRecordWhere(Modulo.class, nombreTabla, new String[]{"dds"},new String[]{diaDeLaSemana}, new String[]{"inicio","fin"},new String[]{inicio,null}, new String[]{null,fin}, null);
+	         
+	         return modulos;
+	    }
+
+
 	
 	public String obtenerId()
 	{
