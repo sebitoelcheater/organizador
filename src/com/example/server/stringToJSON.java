@@ -10,34 +10,34 @@ public class stringToJSON {
 
 	/**
 	 * @param args
-	 * @return 
+	 * @return
 	 */
-	public static ArrayList<JSONObject> getArray(String hola,String elemento) {
+	public static ArrayList<JSONObject> getArray(String hola, String elemento) {
 		try {
-	    	   // String the_json = "{'profiles': [{'name':'john', 'age': 44}, {'name':'Alex','age':11}],'weita': [{'name':'john', 'age': 44}, {'name':'Alex','age':11}]}";
-	    	   JSONObject myjson = new JSONObject(hola);
-	    	   JSONArray the_json_array = myjson.getJSONArray(elemento);
+			// String the_json =
+			// "{'profiles': [{'name':'john', 'age': 44}, {'name':'Alex','age':11}],'weita': [{'name':'john', 'age': 44}, {'name':'Alex','age':11}]}";
+			JSONObject myjson = new JSONObject(hola);
+			JSONArray the_json_array = myjson.getJSONArray(elemento);
 
-	            
-	            int size = the_json_array.length();
-	            ArrayList<JSONObject> arrays = new ArrayList<JSONObject>();
-	            for (int i = 0; i < size; i++) {
-	                JSONObject another_json_object = the_json_array.getJSONObject(i);
-	                arrays.add(another_json_object);
-	            }
+			int size = the_json_array.length();
+			ArrayList<JSONObject> arrays = new ArrayList<JSONObject>();
+			for (int i = 0; i < size; i++) {
+				JSONObject another_json_object = the_json_array
+						.getJSONObject(i);
+				arrays.add(another_json_object);
+			}
 
-	        //Finally
-	        JSONObject[] jsons = new JSONObject[arrays.size()];
-	        arrays.toArray(jsons);
+			// Finally
+			JSONObject[] jsons = new JSONObject[arrays.size()];
+			arrays.toArray(jsons);
 
-	        return arrays;
+			return arrays;
 
-	        } catch (JSONException e) {
-	        	
-	                e.printStackTrace();
-	                return null;
-	        }
-		
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 

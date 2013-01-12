@@ -10,12 +10,11 @@ import twitter4j.conf.ConfigurationBuilder;
 import android.content.Context;
 import android.util.Log;
 
-
 public class TweetHelper {
-	
-	//Clase para acceder a twitter de la lib T4J.
+
+	// Clase para acceder a twitter de la lib T4J.
 	private Twitter twitter;
-	
+
 	private RequestToken mRequestToken = null;
 
 	Constants_Settings constants = new Constants_Settings();
@@ -28,11 +27,11 @@ public class TweetHelper {
 	// Registros a guardar en Shared preferences
 	public String TW_ACCTOKEN = constants.TW_ACCTOKEN;
 	public String TW_ACCTOKEN_SECRET = constants.TW_ACCTOKEN_SECRET;
-	
-	//instancia a clase para manejar el acceso al Shared preferences
+
+	// instancia a clase para manejar el acceso al Shared preferences
 	Shar_Pref_Helper shrpref;
 
-	//Constructor recibe como parametro el contexto 
+	// Constructor recibe como parametro el contexto
 	public TweetHelper(Context context) {
 		// creo referencia para manejar shared prefrences
 		shrpref = new Shar_Pref_Helper(constants.SHARED_PREF_NAME, context);
@@ -40,23 +39,22 @@ public class TweetHelper {
 		// Empezamos a crear objeto para interactuar con twitter
 		twitter = new TwitterFactory().getInstance();
 		mRequestToken = null;
-		
-		//Seteamos claves para la autenticacion usando OAuth
+
+		// Seteamos claves para la autenticacion usando OAuth
 		twitter.setOAuthConsumer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET);
-		
-		
+
 		String callbackURL = CALLBACKURL;
 
 		try {
-			//Tomamos request token en base a callback URL
-			//es utilizado para en el web view para obtener las claves
+			// Tomamos request token en base a callback URL
+			// es utilizado para en el web view para obtener las claves
 			mRequestToken = twitter.getOAuthRequestToken();
-			
+
 		} catch (TwitterException e) {
-			System.out.println("mRequestToken : "+e.getMessage());
-			System.out.println("ERROR DE NET : "+e.isCausedByNetworkIssue());
+			System.out.println("mRequestToken : " + e.getMessage());
+			System.out.println("ERROR DE NET : " + e.isCausedByNetworkIssue());
 			e.printStackTrace();
-			
+
 		}
 
 	}
@@ -82,11 +80,9 @@ public class TweetHelper {
 
 	// Devolvemos autentication URL
 	public String get_AuthenticationURL() {
-		System.out.println("mRequestToken : "+mRequestToken);
+		System.out.println("mRequestToken : " + mRequestToken);
 		return mRequestToken.getAuthenticationURL();
 	}
-
-
 
 	// Borramos del shared preferences valores TW_ACCTOKEN y TW_ACCTOKEN_SECRET
 	public void Logoff() {
@@ -94,72 +90,74 @@ public class TweetHelper {
 		shrpref.Remove_Value(TW_ACCTOKEN_SECRET);
 	}
 
-	/*Verifica si en el shared preferences estan guardados 
-	TW_ACCTOKEN
-	TW_ACCTOKEN_SECRET*/
-	public boolean verify_logindata(){
-		
-		
-		if (shrpref.isExist(TW_ACCTOKEN))
-			{
-			Log.e("shrpref.isExist(TW_ACCTOKEN)->","true");
-			if (shrpref.isExist(TW_ACCTOKEN_SECRET)){				
-				
-				//ok estan estos datos guardados
-				Log.e("shrpref.isExist(TW_ACCTOKEN_SECRET)->","true");
+	/*
+	 * Verifica si en el shared preferences estan guardados TW_ACCTOKEN
+	 * TW_ACCTOKEN_SECRET
+	 */
+	public boolean verify_logindata() {
+
+		if (shrpref.isExist(TW_ACCTOKEN)) {
+			Log.e("shrpref.isExist(TW_ACCTOKEN)->", "true");
+			if (shrpref.isExist(TW_ACCTOKEN_SECRET)) {
+
+				// ok estan estos datos guardados
+				Log.e("shrpref.isExist(TW_ACCTOKEN_SECRET)->", "true");
 				return true;
-			}else{
-				Log.e("shrpref.isExist(TW_ACCTOKEN_SECRET)->","false");
+			} else {
+				Log.e("shrpref.isExist(TW_ACCTOKEN_SECRET)->", "false");
 
 				return false;
 			}
-			}else{
-				Log.e("shrpref.isExist(TW_ACCTOKEN)->","false");
+		} else {
+			Log.e("shrpref.isExist(TW_ACCTOKEN)->", "false");
 
-				//tiene que estar si o si los dos 
-				return false;
-			}
-		
+			// tiene que estar si o si los dos
+			return false;
+		}
+
 	}
-	
+
 	// Enviamos Tweet
 	public boolean Send_Tweet(String tweet_text) {
 
 		Log.e("Tweet send_tweet", "started");
-		
-		//Cargamos keys del shared preferences 
+
+		// Cargamos keys del shared preferences
 		String accessToken = shrpref.Get_stringfrom_shprf(TW_ACCTOKEN);
-		String accessTokenSecret = shrpref.Get_stringfrom_shprf(TW_ACCTOKEN_SECRET);
-		
-		Log.e("accessToken= "+accessToken,"accessTokenSecret "+accessTokenSecret);
-		
-		//Validamos clave cargadas del shared preferences
+		String accessTokenSecret = shrpref
+				.Get_stringfrom_shprf(TW_ACCTOKEN_SECRET);
+
+		Log.e("accessToken= " + accessToken, "accessTokenSecret "
+				+ accessTokenSecret);
+
+		// Validamos clave cargadas del shared preferences
 		if ((accessToken != null) && (accessTokenSecret != null)) {
-			/* Luego creamos el objeto configuracion de T4j
-			 * pasamos como parametros las claves
-			 * consumer key and consumer Secret 
-			 * y los accessToken y accessTokensecret  para la autenticacion OAuth
+			/*
+			 * Luego creamos el objeto configuracion de T4j pasamos como
+			 * parametros las claves consumer key and consumer Secret y los
+			 * accessToken y accessTokensecret para la autenticacion OAuth
 			 */
 			Configuration conf = new ConfigurationBuilder()
 					.setOAuthConsumerKey(OAUTH_CONSUMER_KEY)
 					.setOAuthConsumerSecret(OAUTH_CONSUMER_SECRET)
 					.setOAuthAccessToken(accessToken)
 					.setOAuthAccessTokenSecret(accessTokenSecret).build();
-			
-			//usamos lo seteado anteriormente para obtener una instancia para autenticacion OAuth.
-			//creamos objeto para acceder a twitter.
+
+			// usamos lo seteado anteriormente para obtener una instancia para
+			// autenticacion OAuth.
+			// creamos objeto para acceder a twitter.
 			Twitter t = new TwitterFactory(conf).getInstance();
-			//System.out.println(t);
-			
-			if(tweet_text == null)
+			// System.out.println(t);
+
+			if (tweet_text == null)
 				System.out.println("AWEONAO");
 			System.out.println(tweet_text);
-			
+
 			try {
-                //Actualizamos estado, envamos el twwet.
+				// Actualizamos estado, envamos el twwet.
 				t.updateStatus(tweet_text);
 
-			} catch (TwitterException e) {//error
+			} catch (TwitterException e) {// error
 
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -180,4 +178,3 @@ public class TweetHelper {
 	}
 
 }
-

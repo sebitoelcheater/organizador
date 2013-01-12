@@ -20,7 +20,7 @@ public class Shar_Pref_Helper {
 
 	// Retorna T o F si existe el valor
 	public boolean isExist(String val) {
-		//si no existe retorna null
+		// si no existe retorna null
 		String value = settings.getString(val, null);
 
 		if (value == null) {
@@ -40,7 +40,7 @@ public class Shar_Pref_Helper {
 
 	}
 
-	//Escribimos un valor string
+	// Escribimos un valor string
 	public void Write_String(String clave, String valor) {
 		SharedPreferences.Editor editor = settings.edit();
 
@@ -49,7 +49,7 @@ public class Shar_Pref_Helper {
 
 	}
 
-	//borramos un valor
+	// borramos un valor
 	public void Remove_Value(String clave) {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.remove(clave);

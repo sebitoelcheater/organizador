@@ -23,25 +23,24 @@ public class TwitterWebActivity extends Activity {
 		mIntent = getIntent();
 		constants = new Constants_Settings();
 		String url = (String) mIntent.getExtras().get("URL");
-		System.out.println("FUERA: "+url);
+		System.out.println("FUERA: " + url);
 		WebView webView = (WebView) findViewById(R.id.webview);
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-		    	   System.out.println("DENTRO: "+url);
-					if (url.contains(constants.TWITTER_CALLBACK)) {
+				System.out.println("DENTRO: " + url);
+				if (url.contains(constants.TWITTER_CALLBACK)) {
 					Uri uri = Uri.parse(url);
 					String oauthVerifier = uri
 							.getQueryParameter("oauth_verifier");
-					
-					
+
 					mIntent.putExtra("oauth_verifier", oauthVerifier);
 					setResult(RESULT_OK, mIntent);
 					finish();
 					return true;
 				}
 				return false;
-			} 
+			}
 		});
 		webView.loadUrl(url);
 	}

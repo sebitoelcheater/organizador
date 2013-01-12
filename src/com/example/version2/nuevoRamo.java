@@ -27,25 +27,34 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.example.controlador.*;
 import com.example.data.*;
+
 public class nuevoRamo extends Activity {
-	
+
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.nuevo_ramo);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        
-    }
-	
-	public void crear(View view)
-	{
-		
-		EditText nameTxt = (EditText)findViewById(R.id.editText1);
-		Curso c = Controlador.crearNuevoCurso(this,0,0, nameTxt.getText().toString().trim(),false,"000-255-000"); //ESTEBAN, esto significa que no tiene profesor asociado, ni curso REMOTO ASOCIADO, ademas se establece como comentable(esto es para programar)
-		setResult(RESULT_OK);
-		
-		  finish();
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.nuevo_ramo);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 	}
-	
-	
+
+	public void crear(View view) {
+
+		EditText nameTxt = (EditText) findViewById(R.id.editText1);
+		Curso c = Controlador.crearNuevoCurso(this, 0, 0, nameTxt.getText()
+				.toString().trim(), false, "000-255-000"); // ESTEBAN, esto
+															// significa que no
+															// tiene profesor
+															// asociado, ni
+															// curso REMOTO
+															// ASOCIADO, ademas
+															// se establece como
+															// comentable(esto
+															// es para
+															// programar)
+		setResult(RESULT_OK);
+
+		finish();
+	}
+
 }
