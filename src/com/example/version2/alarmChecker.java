@@ -13,7 +13,7 @@ import com.example.controlador.Controlador;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
 import com.example.data.AdapterDatabase;
-import com.example.server.server.NoExisteCursoException;
+import com.example.server.Server.NoExisteCursoException;
 import com.example.version2.ActividadHorario;
 import com.example.version2.R;
 

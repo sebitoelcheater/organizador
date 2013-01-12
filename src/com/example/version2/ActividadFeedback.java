@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.example.controlador.*;
 import com.example.data.*;
-import com.example.server.server;
+import com.example.server.Server;
 public class ActividadFeedback extends Activity {
 	 private ArrayList<String> cursos;
 	 private ArrayList<Curso> cursosComentables;
@@ -93,7 +93,7 @@ public class ActividadFeedback extends Activity {
     	stringComentario = comentario.getText().toString();
     	if(!stringComentario.trim().equals("")){
     	//Crear objeto de la clase post y posteriormente ejecutar m�todo comentar
-    	server objeto1 = new server();
+    	Server objeto1 = new Server();
     	
     	try{
     		

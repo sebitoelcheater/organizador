@@ -13,6 +13,7 @@ public class Modulo extends Modelo
 {								
 										  // 0      1     2      3      4       5       6
 	private static String[] keys;
+	//iidH, idH, iidC, dds, inicio, fin, ubicaci—n
 	static String[] getKeys() {
 		return keys;
 	}
@@ -45,12 +46,18 @@ public class Modulo extends Modelo
 		String stringFin = agregarCeros(2,fin.get(Calendar.HOUR_OF_DAY))+":"+agregarCeros(2,fin.get(Calendar.MINUTE));
 		;        
 		
-		boolean b = db.comprobarTopeHorario(dds+"",stringInicio,stringFin).size()==0;
+		boolean b = comprobarTopeHorario(context,dds+"",stringInicio,stringFin).size()==0;
 		if(b)
 			db.insertRecord(nombreTabla,new String[]{""+idH,""+iidC,dds+"",stringInicio, stringFin, ubicacion});        
 	    
 		}
 	
+	/**
+	 * RE-HACER METODO CON getRecordWhere
+	 * @param context
+	 * @param idCurso
+	 * @return
+	 */
 	static public ArrayList<Modulo> obtenerModulosPorIdCurso(Context context,String idCurso)
 	{
 		
@@ -140,7 +147,7 @@ public class Modulo extends Modelo
 		String stringFin = agregarCeros(2,fin.get(Calendar.HOUR_OF_DAY))+":"+agregarCeros(2,fin.get(Calendar.MINUTE));
 		
 		;        
-		ArrayList<Modulo> c =db.comprobarTopeHorario(dds+"",stringInicio,stringFin);
+		ArrayList<Modulo> c =comprobarTopeHorario(context,dds+"",stringInicio,stringFin);
 		
 		boolean b = c.size()==0;
 		if((!b) && c.size()==1)
@@ -211,22 +218,28 @@ public class Modulo extends Modelo
 	
 	static public ArrayList<Modulo> obtenerModulosDelDia(Context context, Calendar hoydia) //INEFICIENTE!!!!
 	{
-		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
+		ArrayList<Modulo> modulos;
 		AdapterDatabase db = new AdapterDatabase(context);
 		
-		ArrayList<Modulo> modulosNoOrdenados = db.getAllRecords(Modulo.class,nombreTabla);
-		
-		for(Modulo modulo: modulosNoOrdenados)
-		{
-			if (modulo.obtenerDiaDeLaSemana().equals(hoydia.get(Calendar.DAY_OF_WEEK)+""))
-	        	modulos.add(modulo);
-			
-		}
-		
+//		ArrayList<Modulo> modulosNoOrdenados = db.getAllRecords(Modulo.class,nombreTabla);
+//		
+//		for(Modulo modulo: modulosNoOrdenados)
+//		{
+//			if (modulo.obtenerDiaDeLaSemana().equals(hoydia.get(Calendar.DAY_OF_WEEK)+""))
+//	        	modulos.add(modulo);
+//			
+//		}
+//		
+		modulos=db.getRecordWhere(Modulo.class, nombreTabla, new String[]{"dds"}, new String[]{""+hoydia.get(Calendar.DAY_OF_WEEK)}, null, null, null, null);
 				
 		return modulos;
 	}
-	
+	/**
+	 * RE-HACER METODO CON getRecordWhere
+	 * @param context
+	 * @param ahora
+	 * @return
+	 */
 	public static ArrayList<Modulo> obtenerLosFeedBackeables(Context context, Calendar ahora) {
 		// TODO Auto-generated method stub
 		int horas = 3;//Lo que espera el feedBack
@@ -266,7 +279,13 @@ public class Modulo extends Modelo
 		}
 		return posiblesModulos;
 	}
-	
+	/**
+	 * RE-HACER METODO CON getRecordWhere
+	 * @param context
+	 * @param ahora
+	 * @param minutos
+	 * @return
+	 */
 	static public ArrayList<Modulo> obtenerLosModulosAnterioresFin(Context context,Calendar ahora, int minutos) //TERMINAR
 	{
 		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
@@ -306,7 +325,13 @@ public class Modulo extends Modelo
 		
 		return modulosComentables;
 	}
-	
+	/**
+	 * RE-HACER METODO CON getRecordWhere
+	 * @param context
+	 * @param ahora
+	 * @param minutos
+	 * @return
+	 */
 	static public ArrayList<Modulo> obtenerLosModulosProximosInicio(Context context,Calendar ahora, int minutos) //TERMINAR
 	{
 		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
@@ -317,7 +342,7 @@ public class Modulo extends Modelo
 		String stringDespues = agregarCeros(2,despues.get(Calendar.HOUR_OF_DAY))+":"+agregarCeros(2,despues.get(Calendar.MINUTE));
 		
 		AdapterDatabase db = new AdapterDatabase(context);
-		;
+		
 		if(despues.get(Calendar.DAY_OF_WEEK)== ahora.get(Calendar.DAY_OF_WEEK))
 		{
 			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class,nombreTabla,new String[]{"dds"},new String[]{ahora.get(Calendar.DAY_OF_WEEK)+""},new String[]{"inicio"},new String[]{stringAhora},new String[]{stringDespues},"inicio");
@@ -340,14 +365,14 @@ public class Modulo extends Modelo
 	
 	static public ArrayList<Modulo> obtenerLosSiguientesModulosDelDia(Context context, Calendar ahora, int largo)
 	{
-		ArrayList<Modulo> modulos  = new ArrayList<Modulo>();
+		
 		String hora = agregarCeros(2,ahora.get(Calendar.HOUR_OF_DAY))+":"+agregarCeros(2,ahora.get(Calendar.MINUTE));
 		AdapterDatabase db = new AdapterDatabase(context);
 
 		ArrayList<Modulo> c = db.getRecordWhere(Modulo.class,nombreTabla, new String[]{"dds"}, new String[]{""+ahora.get(Calendar.DAY_OF_WEEK)}, new String[]{"inicio"}, new String[]{hora}, null, largo+"");
 		
 				
-		return modulos; 
+		return c; 
 	}
 	
 	static public ArrayList<Modulo> obtenerLosSiguientesModulos(Context context, Calendar ahora, int largo)
@@ -357,9 +382,15 @@ public class Modulo extends Modelo
 		AdapterDatabase db = new AdapterDatabase(context);
 		
 		
-		ArrayList<Modulo> modulos = db.getModulosSiguientesHORARIOS(ahora.get(Calendar.DAY_OF_WEEK)+"",hora,largo+"");
+		ArrayList<Modulo> modulosMismoDia = db.getRecordWhere(Modulo.class, nombreTabla, new String[]{"dds"}, new String[]{ahora.get(Calendar.DAY_OF_WEEK)+""}, new String[]{"inicio"}, new String[]{hora}, null, null);
+		ArrayList<Modulo> modulosDiasSiguientes = db.getRecordWhere(Modulo.class, nombreTabla, null, null, new String[]{"dds"}, new String[]{ahora.get(Calendar.DAY_OF_WEEK)+""}, null, null);
 		
+		ArrayList<Modulo> modulos =new ArrayList<Modulo>();
+		if(modulosMismoDia!=null)
+			modulos.addAll(modulosMismoDia);
 		
+		if(modulosDiasSiguientes!=null)
+			modulos.addAll(modulosDiasSiguientes);
 		
 		return modulos;
 	}
@@ -527,6 +558,27 @@ public class Modulo extends Modelo
 				
 			}
 
+		/**
+		 * Ver si es necesario este metodo
+		 * @param ctx
+		 * @param diaDeLaSemana
+		 * @param hora
+		 * @param limit
+		 * @return
+		 */
+		 public static ArrayList<Modulo> getModulosSiguientesHORARIOS(Context ctx,String diaDeLaSemana,String hora, String limit) {
+//		  		// TODO Auto-generated method stub
+//		    	AdapterDatabase ad = new AdapterDatabase(ctx);
+//		    	
+//		    	ArrayList<Modulo> modulos = ad.getRecordWhere(Modulo.class, nombreTabla, new String[]{"dds"}, new String[]{diaDeLaSemana], camposIntervalo, minIntervalo, maxIntervalo, ordenadoPor)
+//		    	Cursor mCursor = db.query("Horarios", null, "("+"dds"+"="+diaDeLaSemana+" and " +"inicio"+">='"+hora+"')"+" or " + "dds"+">="+diaDeLaSemana, null, null, null, "dds"+","+"inicio",limit);
+//		    	ArrayList<Modulo> ret = obtenerInstancias(Modulo.class,"Horarios", mCursor);
+//		    	
+//		    	db.close() ; DBHelper.close(); mCursor.close();
+//		      	return ret;
+			 
+			 return null;
+		  	}
 
 
 }

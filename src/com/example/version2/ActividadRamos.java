@@ -32,8 +32,8 @@ import android.widget.Toast;
 import com.example.controlador.Controlador;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.server.server;
-import com.example.server.server.NoExisteCursoException;
+import com.example.server.Server;
+import com.example.server.Server.NoExisteCursoException;
 //import android.app.Fragment;
 //import com.ciarang.tallyphant.DB;
 //import com.ciarang.tallyphant.DB;
@@ -321,7 +321,7 @@ protected Dialog onCreateDialog(int id, Bundle b) {
 			        		boolean noHayTope = true;
 			        		if(!Controlador.existeCursoComentable(v.getContext(), id_curso))
 			        		{	
-			        			server servidor = new server();
+			        			Server servidor = new Server();
 			        			
 			        			try {
 			        				noHayTope = servidor.suscribirCurso(id_curso,ActividadRamos.this);

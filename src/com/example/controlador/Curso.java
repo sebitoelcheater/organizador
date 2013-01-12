@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.data.*;
-import com.example.server.server;
-import com.example.server.server.NoExisteCursoException;
+import com.example.server.Server;
+import com.example.server.Server.NoExisteCursoException;
 import com.example.version2.ActividadRamos;
 import com.example.version2.R;
 public class Curso extends Modelo
@@ -50,7 +50,7 @@ public class Curso extends Modelo
 		keys=AdapterDatabase.tablas.get(nombreTabla).keys;
 		AdapterDatabase db = new AdapterDatabase(context);
 		db.insertRecord(nombreTabla,new String[]{""+idC,""+iidP,nombre,comentable,color});
-	    db.close();
+
 	}
 	
 	public String obtenerId()
@@ -99,7 +99,7 @@ public class Curso extends Modelo
 
 	public boolean actualizar(Context context) throws Exception 
 	{
-		server s = new server();
+		Server s = new Server();
 		boolean b = s.actualizarCurso(obtenerIdMaster(), context);//seba va a arreglar 
     	return b;
 	}
@@ -167,7 +167,7 @@ public class Curso extends Modelo
 		return ordenados;
 	}
 
-		static public ArrayList<Curso> obtenerCursosComentables(Context context)
+	static public ArrayList<Curso> obtenerCursosComentables(Context context)
 		{
 			
 			AdapterDatabase db = new AdapterDatabase(context);
@@ -176,7 +176,7 @@ public class Curso extends Modelo
 	        return cursos;
 			
 		}
-		public static ArrayList<Curso> obtenerCursosEditables(Context context) {
+	public static ArrayList<Curso> obtenerCursosEditables(Context context) {
 			// TODO Auto-generated method stub //idC=0
 			
 			AdapterDatabase db = new AdapterDatabase(context);

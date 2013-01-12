@@ -30,7 +30,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-public class server extends Activity {
+public class Server extends Activity {
 
 	public void comentar (View view, int i, String comentario) throws Exception {
         // Create a new HttpClient and Post Header
@@ -376,9 +376,9 @@ public class server extends Activity {
 		variable = variable.replace("&iacute;", "í");
 		variable = variable.replace("&oacute;", "ó");
 		variable = variable.replace("&uacute;", "ú");
-		variable = variable.replace("&Aacute;", "Á");
+		variable = variable.replace("&Aacute;", "�?");
 		variable = variable.replace("&Eacute;", "É");
-		variable = variable.replace("&Iacute;", "Í");
+		variable = variable.replace("&Iacute;", "�?");
 		variable = variable.replace("&Oacute;", "Ó");
 		variable = variable.replace("&Uacute;", "Ú");
 		variable = variable.replace("&ntilde;", "ñ");

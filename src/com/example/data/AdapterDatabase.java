@@ -339,30 +339,6 @@ public class AdapterDatabase {
         return ret;
     }
     
-    public ArrayList<Modulo> comprobarTopeHorario(String diaDeLaSemana,String inicio, String fin)
-    {
-    	String fInicio = "'"+inicio+"'";
-    	String fFin = "'"+fin+"'";
-    	Tabla t = tablas.get("Horarios");
-    	int size = t.campos.size();
-    	
-    	String KEY_INICIO="inicio";
-    	String KEY_FIN = "fin";
-    	SQLiteDatabase db = DBHelper.getWritableDatabase();
-    	Cursor mCursor =
-                 db.query(true, "Horarios", getNombresCampos("Horarios"), 
-                 "dds" + "=" + diaDeLaSemana+ " AND (("+KEY_INICIO+"<"+fInicio+" AND "+ KEY_FIN+">"+fFin+") OR ("+KEY_INICIO+">="+fInicio+" AND "+ KEY_INICIO+"<"+fFin+") OR ("+KEY_FIN+">"+fInicio+" AND "+ KEY_FIN+"<="+fFin+")"+")", null, null, null, null, null);
-         if (mCursor != null) {
-             mCursor.moveToFirst();
-         }
-         
-         ArrayList<Modulo> modulos = obtenerInstancias(Modulo.class,"Horarios", mCursor);
-         
-         
-         db.close() ; DBHelper.close(); mCursor.close();
-         return modulos;
-    }
-
     public String[] getNombresCampos(String nombreTabla)
     {
     	System.out.println("\nNombre de Tabla: "+nombreTabla);
@@ -380,34 +356,6 @@ public class AdapterDatabase {
     
     }
     
-    public ArrayList<Modulo> getRecordPorCursoHORARIOS(String idCurso)
-    {
-    	String[] campos=getNombresCampos("Horarios");
-    	SQLiteDatabase db = DBHelper.getWritableDatabase();
-    	 Cursor mCursor =
-                 db.query(true, "Horarios", campos, 
-                 "iidC" + "=" + idCurso, null, null, null, null, null);
-         if (mCursor != null) {
-             mCursor.moveToFirst();
-         }
-         
-         ArrayList<Modulo> ret = obtenerInstancias(Modulo.class,"Horarios", mCursor);
-                
-         
-         
-         db.close() ; DBHelper.close(); mCursor.close();
-         return ret;
-    }
-    
-    public ArrayList<Modulo> getModulosSiguientesHORARIOS(String diaDeLaSemana,String hora, String limit) {
-  		// TODO Auto-generated method stub
-    	SQLiteDatabase db = DBHelper.getWritableDatabase();
-    	Cursor mCursor = db.query("Horarios", null, "("+"dds"+"="+diaDeLaSemana+" and " +"inicio"+">='"+hora+"')"+" or " + "dds"+">="+diaDeLaSemana, null, null, null, "dds"+","+"inicio",limit);
-    	ArrayList<Modulo> ret = obtenerInstancias(Modulo.class,"Horarios", mCursor);
-    	
-    	db.close() ; DBHelper.close(); mCursor.close();
-      	return ret;
-  	}
   
     private static <D> D getInstance(Class<D> _class)
     {
