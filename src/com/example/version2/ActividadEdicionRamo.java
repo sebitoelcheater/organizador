@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.controlador.Controlador;
+import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
 import com.example.data.AdapterDatabase;
@@ -130,7 +130,7 @@ public class ActividadEdicionRamo extends ListActivity implements
 
 		String nombreOriginal = cursoAEditar.obtenerNombre();
 
-		ArrayList<Modulo> array_modulos = Controlador.obtenerModulosPorIdCurso(
+		ArrayList<Modulo> array_modulos = Functions.obtenerModulosPorIdCurso(
 				this, idRamoAEditar);
 
 		setContentView(R.layout.activity_actividad_edicion_ramo);
@@ -154,8 +154,8 @@ public class ActividadEdicionRamo extends ListActivity implements
 
 		Button botonColor = (Button) findViewById(R.id.botonColor);
 		String color = cursoAEditar.obtenerColor();
-		botonColor.setBackgroundColor(Color.rgb(Controlador.getRed(color),
-				Controlador.getGreen(color), Controlador.getBlue(color)));
+		botonColor.setBackgroundColor(Color.rgb(Functions.getRed(color),
+				Functions.getGreen(color), Functions.getBlue(color)));
 
 		adaptador = new MiModuloEditandoArrayAdapter(this,
 				R.layout.item_modulo_editando, array_modulos);
@@ -191,14 +191,14 @@ public class ActividadEdicionRamo extends ListActivity implements
 	public void actualizarColor() {
 		Button botonColor = (Button) findViewById(R.id.botonColor);
 		String color = cursoAEditar.obtenerColor();
-		botonColor.setBackgroundColor(Color.rgb(Controlador.getRed(color),
-				Controlador.getGreen(color), Controlador.getBlue(color)));
+		botonColor.setBackgroundColor(Color.rgb(Functions.getRed(color),
+				Functions.getGreen(color), Functions.getBlue(color)));
 
 	}
 
 	public void actualizarModulos() {
 
-		ArrayList<Modulo> nuevo_array_modulos = Controlador
+		ArrayList<Modulo> nuevo_array_modulos = Functions
 				.obtenerModulosPorIdCurso(this, idRamoAEditar);
 
 		adaptador.clear();
@@ -245,14 +245,14 @@ public class ActividadEdicionRamo extends ListActivity implements
 	public void cambiarColor(View view) {
 
 		String color = cursoAEditar.obtenerColor();
-		int intColor = Color.rgb(Controlador.getRed(color),
-				Controlador.getGreen(color), Controlador.getBlue(color));
+		int intColor = Color.rgb(Functions.getRed(color),
+				Functions.getGreen(color), Functions.getBlue(color));
 		new ColorPickerDialog(this, this, "", intColor, intColor).show();
 	}
 
 	public void colorChanged(String key, int color) {
 		// TODO Auto-generated method stub
-		cursoAEditar.setColor(Controlador.agregarCeros(3, Color.red(color)));
+		cursoAEditar.setColor(Functions.agregarCeros(3, Color.red(color)));
 		try {
 			cursoAEditar.actualizar(this);
 		} catch (Exception e) {
@@ -410,7 +410,7 @@ public class ActividadEdicionRamo extends ListActivity implements
 					fin.set(Calendar.HOUR_OF_DAY, tPFin.getCurrentHour());
 					fin.set(Calendar.MINUTE, tPFin.getCurrentMinute());
 					if (inicio.before(fin)) {
-						if (Controlador.puedoCambiarModulo(v.getContext(),
+						if (Functions.puedoCambiarModulo(v.getContext(),
 								spinnerDias.getSelectedItemPosition() + 1,
 								inicio, fin, moduloAEditar)) {
 							moduloAEditar.setInicio(inicio);
@@ -543,7 +543,7 @@ public class ActividadEdicionRamo extends ListActivity implements
 					String lugar = campoTextoLugar.getText().toString();
 
 					if (inicio.before(fin)) {
-						if (Controlador.crearNuevoModulo(v.getContext(), 0,
+						if (Functions.crearNuevoModulo(v.getContext(), 0,
 								Integer.parseInt(cursoAEditar.obtenerId()),
 								spinnerDias.getSelectedItemPosition() + 1,
 								inicio, fin, lugar)) {

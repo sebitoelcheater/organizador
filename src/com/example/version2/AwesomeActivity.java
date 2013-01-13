@@ -2,7 +2,7 @@ package com.example.version2;
 
 import java.util.Calendar;
 
-import com.example.controlador.Controlador;
+import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.data.AdapterDatabase;
 
@@ -52,7 +52,7 @@ public class AwesomeActivity extends TabActivity implements
 		tabHost.setOnTabChangedListener(this);
 
 		activarNotificaciones();
-		if (Controlador.obtenerCursos(this).size() == 0) {
+		if (Functions.obtenerCursos(this).size() == 0) {
 			Toast.makeText(this, "¿No sabes que hacer?", Toast.LENGTH_LONG)
 					.show();
 			Toast.makeText(this, "Presiona el botón Menú!", Toast.LENGTH_LONG)
@@ -92,7 +92,7 @@ public class AwesomeActivity extends TabActivity implements
 	public void onTabChanged(String tabId) {
 		// TODO Auto-generated method stub
 		if (tabId.equals("FEEDBACK")
-				&& Controlador.obtenerLosFeedBackeables(this,
+				&& Functions.obtenerLosFeedBackeables(this,
 						Calendar.getInstance()).size() == 0) {
 			tabHost.setCurrentTab(tab);
 			Toast.makeText(this, "No hay cursos para FeedBackear ahora",

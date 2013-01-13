@@ -1,20 +1,9 @@
 package com.example.controlador;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import org.apache.http.NoHttpResponseException;
-
 import android.content.Context;
-import android.database.Cursor;
-import android.widget.EditText;
-import android.widget.Toast;
-
 import com.example.data.*;
 import com.example.server.Server;
-import com.example.server.Server.NoExisteCursoException;
-import com.example.version2.ActividadRamos;
-import com.example.version2.R;
 
 public class Curso extends Modelo {
 
@@ -27,6 +16,7 @@ public class Curso extends Modelo {
 		return keys;
 	}
 
+
 	public static void setKeys(String[] keys) {
 		Curso.keys = keys;
 	}
@@ -38,27 +28,21 @@ public class Curso extends Modelo {
 	}
 
 	/**
-	 * No lo usi conchetumare!
+	 * No usar
 	 */
 	public Curso() {
 
 	}
 
 	public Curso(Context context, int idC, int iidP, String nombre,
-			String comentable, String color) throws Exception // CUANDO ESTO
-																// CRESCA NO
-																// OLVIDAR
-																// AGREGAR ACA
-																// NUEVAS
-																// CARACTERISTICAS
-	{
+			String comentable, String color) throws Exception {
 
 		super(nombreTabla, AdapterDatabase.tablas.get(nombreTabla).keys,
 				new String[] { "" + idC, "" + iidP, nombre, comentable, color });
+
 		keys = AdapterDatabase.tablas.get(nombreTabla).keys;
 		AdapterDatabase db = new AdapterDatabase(context);
-		db.insertRecord(nombreTabla, new String[] { "" + idC, "" + iidP,
-				nombre, comentable, color });
+		db.insertRecord(nombreTabla, (String[])params.values().toArray());
 
 	}
 
@@ -94,10 +78,6 @@ public class Curso extends Modelo {
 		return (String) this.params.get("color");
 	}
 
-	// METODOS DE OBTENCION
-
-	// METODOS DE SETEO DEL OBJETO(NO DB)
-
 	public boolean actualizar(Context context) throws Exception {
 		Server s = new Server();
 		boolean b = s.actualizarCurso(obtenerIdMaster(), context);// seba va a
@@ -116,8 +96,6 @@ public class Curso extends Modelo {
 
 		return false;
 	}
-
-	// METODOS DE SETEO DE LA BASE DE DATOS Y OBJETO
 
 	public boolean existeCursoComentable(Context context)// Le das el idmaster y
 															// te dice si ya lo
@@ -155,7 +133,7 @@ public class Curso extends Modelo {
 
 	}
 
-	static public Curso obtenerCurso(Context context, String id) // DEPRECATED???
+	public static Curso obtenerCurso(Context context, String id) // DEPRECATED???
 	{
 		AdapterDatabase ad = new AdapterDatabase(context);
 
@@ -163,7 +141,7 @@ public class Curso extends Modelo {
 		return c;
 	}
 
-	static public ArrayList<Curso> obtenerCursosOrdenados(Context context)// por
+	public static ArrayList<Curso> obtenerCursosOrdenados(Context context)// por
 																			// esEditable
 																			// ==
 																			// idC=0
@@ -181,7 +159,7 @@ public class Curso extends Modelo {
 		return ordenados;
 	}
 
-	static public ArrayList<Curso> obtenerCursosComentables(Context context) {
+	public static ArrayList<Curso> obtenerCursosComentables(Context context) {
 
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Curso> cursos = db.getRecordWhere(Curso.class, nombreTabla,

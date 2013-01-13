@@ -20,7 +20,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.controlador.Controlador;
+import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
 import com.example.data.AdapterDatabase;
@@ -142,7 +142,7 @@ public class Server extends Activity {
 			String nombre = Profesor.get(i).getString("nombre");
 			String apellido = Profesor.get(i).getString("apellido");
 
-			iidP = Controlador.insertarProfesor(ctx, idP, usuario, contrasena,
+			iidP = Functions.insertarProfesor(ctx, idP, usuario, contrasena,
 					nombre, apellido);
 			// introducir nuevo profesor (si no est‡ introducido). Lo obtengo a
 			// partir de un for, pero es claro que arrojar‡ s—lo un elemento
@@ -155,7 +155,7 @@ public class Server extends Activity {
 					.trim();
 			String comentable = Curso.getString("comentable");
 			String color = Curso.getString("color");
-			Curso c = Controlador.crearNuevoCurso(ctx, Integer.parseInt(idC),
+			Curso c = Functions.crearNuevoCurso(ctx, Integer.parseInt(idC),
 					Integer.parseInt(iidP == null ? "0" : iidP), titulo,
 					comentable.equals("1"), color);
 			if (c != null)
@@ -196,7 +196,7 @@ public class Server extends Activity {
 				} catch (ParseException e) {
 				}
 
-				boolean pudeCrearlo = Controlador.crearNuevoModulo(ctx,
+				boolean pudeCrearlo = Functions.crearNuevoModulo(ctx,
 						Integer.parseInt(idH),
 						Integer.parseInt(iidC == null ? "0" : iidC),
 						Integer.parseInt(dds), cInicio, cFin, ubicacion);

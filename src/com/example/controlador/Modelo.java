@@ -1,6 +1,5 @@
 package com.example.controlador;
 
-import java.util.Dictionary;
 import java.util.HashMap;
 
 public abstract class Modelo {// EX ISeteable
@@ -33,5 +32,5 @@ public abstract class Modelo {// EX ISeteable
 	}
 
 	public abstract void setData(String id, Object[] params);
-
+	
 }

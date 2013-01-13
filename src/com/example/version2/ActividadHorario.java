@@ -208,7 +208,7 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 		String a = "";
 		if (hoy != viendo) {
 			a = "Mira mi Horario de " + stringDDS(viendo) + " : ";
-			ArrayList<Modulo> modulos = Controlador
+			ArrayList<Modulo> modulos = Functions
 					.obtenerModulosSegunDiaOrdenadosSegunInicio(this, viendo);
 			for (Modulo m : modulos) {
 
@@ -219,7 +219,7 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 						+ "-" + m.obtenerStringFin() + ")" + " ";
 			}
 		} else {
-			ArrayList<Modulo> modulos = Controlador
+			ArrayList<Modulo> modulos = Functions
 					.obtenerLosSiguientesModulosDelDia(this,
 							Calendar.getInstance(), 5);
 			if (modulos.size() != 0) {
@@ -281,13 +281,13 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 		ArrayList<Modulo> modulos;
 		TextView titulo = (TextView) findViewById(R.id.textView1);
 		if (hoy == viendo) {
-			modulos = Controlador.obtenerLosSiguientesModulosDelDia(this,
+			modulos = Functions.obtenerLosSiguientesModulosDelDia(this,
 					Calendar.getInstance(), 5);// HASTA ACA VOY BIEN 3
 			titulo.setText("Siguientes clases(HOY)");
 		}
 
 		else {
-			modulos = Controlador.obtenerModulosSegunDiaOrdenadosSegunInicio(
+			modulos = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(
 					this, viendo);
 			titulo.setText(stringDDS(viendo));
 		}
