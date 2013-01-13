@@ -41,7 +41,7 @@ public class nuevoRamo extends Activity {
 	public void crear(View view) {
 
 		EditText nameTxt = (EditText) findViewById(R.id.editText1);
-		Curso c = Controlador.crearNuevoCurso(this, 0, 0, nameTxt.getText()
+		Curso c = Functions.crearNuevoCurso(this, 0, 0, nameTxt.getText()
 				.toString().trim(), false, "000-255-000"); // ESTEBAN, esto
 															// significa que no
 															// tiene profesor

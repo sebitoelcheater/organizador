@@ -577,16 +577,6 @@ public class Modulo extends Modelo {
 		return numero;
 	}
 
-	@SuppressLint("SimpleDateFormat")
-	@Override
-	public void setData(String id, Object[] params) {
-		this.NombreTabla = nombreTabla;
-		for (int i = 0; i < getKeys().length; i++) {
-			this.params.put(this.getKeys()[i], (String) params[i]);
-		}
-
-	}
-
 	/**
 	 * Ver si es necesario este metodo
 	 * 

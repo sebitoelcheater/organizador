@@ -71,7 +71,7 @@ public class ActividadFeedback extends Activity {
 	 */
 	private void cargarDatos() {
 
-		cursosComentables = Controlador.obtenerCursosComentables(this); // ACA
+		cursosComentables = Functions.obtenerCursosComentables(this); // ACA
 																		// DEBERIA
 																		// IR UN
 																		// METODO
@@ -103,7 +103,7 @@ public class ActividadFeedback extends Activity {
 
 			try {
 
-				objeto1.comentar2(view, c, Controlador.ultimoModulo(this, c),
+				objeto1.comentar2(view, c, Functions.ultimoModulo(this, c),
 						stringComentario);
 
 				// Gracias por el feedback

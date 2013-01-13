@@ -5,9 +5,11 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.controlador.Comentario;
 import com.example.controlador.Curso;
 import com.example.controlador.Modelo;
 import com.example.controlador.Modulo;
+import com.example.controlador.Profesor;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -55,6 +57,8 @@ public class AdapterDatabase {
 						"iidCom integer primary key autoincrement, idCom integer, iidH integer, fecha date, comentario text"));
 		Curso.setKeys(tablas.get("Cursos").keys);
 		Modulo.setKeys(tablas.get("Horarios").keys);
+		Profesor.setKeys(tablas.get("Profesores").keys);
+		Comentario.setKeys(tablas.get("Comentarios").keys);
 	}
 
 	public AdapterDatabase(Context ctx) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.example.controlador.Controlador;
+import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
 import com.example.data.AdapterDatabase;
@@ -140,7 +140,7 @@ public class ActividadFeedBackear extends Activity implements
 
 		ListView lista = (ListView) findViewById(R.id.listView1);
 
-		modulosAFeedBackear = Controlador.obtenerLosFeedBackeables(this,
+		modulosAFeedBackear = Functions.obtenerLosFeedBackeables(this,
 				Calendar.getInstance());
 
 		lista.setAdapter(new MiModuloFeedBackeandoArrayAdapter(this,

@@ -24,7 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ListView;
 
-import com.example.controlador.Controlador;
+import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
 import com.example.data.AdapterDatabase;
@@ -96,14 +96,14 @@ public class ActividadDatosDelRamo extends ListActivity implements
 				Long.parseLong(idRamoAEditar));
 
 		String nombreOriginal = cursoAVer.obtenerNombre();
-		ArrayList<Modulo> array_modulos = Controlador.obtenerModulosPorIdCurso(
+		ArrayList<Modulo> array_modulos = Functions.obtenerModulosPorIdCurso(
 				this, idRamoAEditar);
 
 		setContentView(R.layout.activity_actividad_datos_del_ramo);
 		Button botonColor = (Button) findViewById(R.id.button2);
 		String color = cursoAVer.obtenerColor();
-		int intColor = Color.rgb(Controlador.getRed(color),
-				Controlador.getGreen(color), Controlador.getBlue(color));
+		int intColor = Color.rgb(Functions.getRed(color),
+				Functions.getGreen(color), Functions.getBlue(color));
 		botonColor.setBackgroundColor(intColor);
 		botonColor.setClickable(false);
 
@@ -175,7 +175,7 @@ public class ActividadDatosDelRamo extends ListActivity implements
 		TextView campoTextoNombre = (TextView) findViewById(R.id.nombreRamoAVer);
 		campoTextoNombre.setText(nombreOriginal);
 
-		ArrayList<Modulo> nuevo_array_modulos = Controlador
+		ArrayList<Modulo> nuevo_array_modulos = Functions
 				.obtenerModulosPorIdCurso(this, idRamoAEditar);
 
 		adaptador.clear();
