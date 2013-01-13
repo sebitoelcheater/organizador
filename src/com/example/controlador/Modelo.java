@@ -1,6 +1,5 @@
 package com.example.controlador;
 
-import java.util.Dictionary;
 import java.util.HashMap;
 
 public abstract class Modelo {// EX ISeteable

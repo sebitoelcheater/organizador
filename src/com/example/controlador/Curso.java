@@ -1,20 +1,9 @@
 package com.example.controlador;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import org.apache.http.NoHttpResponseException;
-
 import android.content.Context;
-import android.database.Cursor;
-import android.widget.EditText;
-import android.widget.Toast;
-
 import com.example.data.*;
 import com.example.server.Server;
-import com.example.server.Server.NoExisteCursoException;
-import com.example.version2.ActividadRamos;
-import com.example.version2.R;
 
 public class Curso extends Modelo {
 
@@ -45,16 +34,11 @@ public class Curso extends Modelo {
 	}
 
 	public Curso(Context context, int idC, int iidP, String nombre,
-			String comentable, String color) throws Exception // CUANDO ESTO
-																// CRESCA NO
-																// OLVIDAR
-																// AGREGAR ACA
-																// NUEVAS
-																// CARACTERISTICAS
-	{
+			String comentable, String color) throws Exception {
 
 		super(nombreTabla, AdapterDatabase.tablas.get(nombreTabla).keys,
 				new String[] { "" + idC, "" + iidP, nombre, comentable, color });
+
 		keys = AdapterDatabase.tablas.get(nombreTabla).keys;
 		AdapterDatabase db = new AdapterDatabase(context);
 		db.insertRecord(nombreTabla, new String[] { "" + idC, "" + iidP,
