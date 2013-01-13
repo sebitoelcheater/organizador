@@ -29,7 +29,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.controlador.Controlador;
+import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
 import com.example.server.Server;
@@ -203,7 +203,7 @@ public class ActividadRamos extends ListActivity {
 
 		setContentView(R.layout.activity_actividad_ramos);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		ArrayList<Curso> array_cursos = Controlador
+		ArrayList<Curso> array_cursos = Functions
 				.obtenerCursosOrdenados(this);
 		ArrayList<String> array_ramos = new ArrayList<String>();
 		ArrayList<String> array_idramos = new ArrayList<String>();
@@ -233,7 +233,7 @@ public class ActividadRamos extends ListActivity {
 	}
 
 	public void actualizarListaRamos() {
-		ArrayList<Curso> nuevo_array_cursos = Controlador
+		ArrayList<Curso> nuevo_array_cursos = Functions
 				.obtenerCursosOrdenados(this);
 		adaptador.clear();
 		for (Curso curso : nuevo_array_cursos) {
@@ -321,7 +321,7 @@ public class ActividadRamos extends ListActivity {
 							if (id_curso.equals(""))
 								return;
 							boolean noHayTope = true;
-							if (!Controlador.existeCursoComentable(
+							if (!Functions.existeCursoComentable(
 									v.getContext(), id_curso)) {
 								Server servidor = new Server();
 
@@ -412,27 +412,27 @@ public class ActividadRamos extends ListActivity {
 							public void colorChanged(String key, int colorido) {
 								// TODO Auto-generated method stub
 								color = colorido;
-								System.out.println(Controlador.agregarCeros(3,
+								System.out.println(Functions.agregarCeros(3,
 										Color.red(color))
 										+ "-"
-										+ Controlador.agregarCeros(3,
+										+ Functions.agregarCeros(3,
 												Color.green(color))
 										+ "-"
-										+ Controlador.agregarCeros(3,
+										+ Functions.agregarCeros(3,
 												Color.blue(color)));
-								Curso c = Controlador.crearNuevoCurso(
+								Curso c = Functions.crearNuevoCurso(
 										ActividadRamos.this,
 										0,
 										0,
 										nombre_curso,
 										false,
-										Controlador.agregarCeros(3,
+										Functions.agregarCeros(3,
 												Color.red(color))
 												+ "-"
-												+ Controlador.agregarCeros(3,
+												+ Functions.agregarCeros(3,
 														Color.green(color))
 												+ "-"
-												+ Controlador.agregarCeros(3,
+												+ Functions.agregarCeros(3,
 														Color.blue(color)));
 								Toast.makeText(getApplicationContext(),
 										"Curso Agregado", Toast.LENGTH_LONG)

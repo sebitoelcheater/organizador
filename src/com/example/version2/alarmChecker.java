@@ -7,7 +7,7 @@ import java.util.Random;
 
 import org.apache.http.NoHttpResponseException;
 
-import com.example.controlador.Controlador;
+import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
 import com.example.data.AdapterDatabase;
@@ -52,9 +52,9 @@ public class alarmChecker extends Service implements Runnable {
 		indiceFin = 0;
 
 		Calendar ahora = Calendar.getInstance();
-		proximosInicios = Controlador.obtenerLosModulosProximosInicio(this,
+		proximosInicios = Functions.obtenerLosModulosProximosInicio(this,
 				ahora, MINUTOS);
-		anterioresFinales = Controlador.obtenerLosModulosAnterioresFin(this,
+		anterioresFinales = Functions.obtenerLosModulosAnterioresFin(this,
 				ahora, MINUTOS);
 
 		/*

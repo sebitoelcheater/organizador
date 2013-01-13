@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.controlador.Controlador;
+import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.DisplaySupport;
 import com.example.controlador.Modulo;
@@ -198,7 +198,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			//TRABAJO
 	    	
 	    	String a = "";
-	    	ArrayList<Modulo> modulos = Controlador.obtenerLosSiguientesModulosDelDia(this, Calendar.getInstance(), 5);
+	    	ArrayList<Modulo> modulos = Functions.obtenerLosSiguientesModulosDelDia(this, Calendar.getInstance(), 5);
 	    	if(modulos.size()!=0){
     		a = "Lo que me queda por hacer hoy "+ stringDDS(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))+ " : ";
 	    	for(Modulo m : modulos)
@@ -261,7 +261,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
     	int enQueVoy = 480;
     	int minutosFinAnterior=480;
     	LinearLayout l = (LinearLayout) findViewById(R.id.LinearLayoutLunes);
-    	ArrayList<Modulo> modulosDia = Controlador.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 2);
+    	ArrayList<Modulo> modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 2);
 		
     	
     	//EDITANDO
@@ -303,7 +303,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
 			
 			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
+			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
 		}
@@ -312,7 +312,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 		
     	enQueVoy = 480;
 		l = (LinearLayout) findViewById(R.id.LinearLayoutMartes);
-		modulosDia = Controlador.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 3);
+		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 3);
 		for(Modulo m : modulosDia)
 		{
 			AdapterDatabase ad = new AdapterDatabase(this);
@@ -344,7 +344,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			
 			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
 			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
+			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
 		}
@@ -356,7 +356,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 		
 		enQueVoy = 480;
 		l = (LinearLayout) findViewById(R.id.LinearLayoutMiercoles);
-		modulosDia = Controlador.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 4);
+		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 4);
 		for(Modulo m : modulosDia)
 		{
 			
@@ -386,14 +386,14 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			
 			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
 			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
+			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
 		}
 		
 		enQueVoy = 480;
 		l = (LinearLayout) findViewById(R.id.LinearLayoutJueves);
-		modulosDia = Controlador.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 5);
+		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 5);
 		for(Modulo m : modulosDia)
 		{
 			AdapterDatabase ad = new AdapterDatabase(this);
@@ -422,14 +422,14 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			
 			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
 			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
+			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
 		}
 		
 		enQueVoy = 480;
 		l = (LinearLayout) findViewById(R.id.LinearLayoutViernes);
-		modulosDia = Controlador.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 6);
+		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 6);
 		for(Modulo m : modulosDia)
 		{
 			
@@ -459,14 +459,14 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			
 			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
 			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
+			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
 		}
 		
 		enQueVoy = 480;
 		l = (LinearLayout) findViewById(R.id.LinearLayoutSabado);
-		modulosDia = Controlador.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 7);
+		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 7);
 		for(Modulo m : modulosDia)
 		{
 			
@@ -496,14 +496,14 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			
 			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
 			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
+			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
 		}
 		
 		enQueVoy = 480;
 		l = (LinearLayout) findViewById(R.id.LinearLayoutDomingo);
-		modulosDia = Controlador.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 1);
+		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 1);
 		for(Modulo m : modulosDia)
 		{
 			
@@ -534,7 +534,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			
 			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
 			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
+			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
 		}
@@ -625,7 +625,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
             	fin.set(Calendar.MINUTE,tPFin.getCurrentMinute());
             	if(inicio.before(fin))
             	{
-            		if(Controlador.puedoCambiarModulo(v.getContext(), spinnerDias.getSelectedItemPosition()+1, inicio, fin,moduloAEditar))
+            		if(Functions.puedoCambiarModulo(v.getContext(), spinnerDias.getSelectedItemPosition()+1, inicio, fin,moduloAEditar))
             		{
             			moduloAEditar.setInicio( inicio);
             			moduloAEditar.setFin(fin);

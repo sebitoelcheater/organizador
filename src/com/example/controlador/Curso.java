@@ -16,6 +16,7 @@ public class Curso extends Modelo {
 		return keys;
 	}
 
+
 	public static void setKeys(String[] keys) {
 		Curso.keys = keys;
 	}
@@ -27,7 +28,7 @@ public class Curso extends Modelo {
 	}
 
 	/**
-	 * No lo usi conchetumare!
+	 * No usar
 	 */
 	public Curso() {
 
@@ -41,8 +42,7 @@ public class Curso extends Modelo {
 
 		keys = AdapterDatabase.tablas.get(nombreTabla).keys;
 		AdapterDatabase db = new AdapterDatabase(context);
-		db.insertRecord(nombreTabla, new String[] { "" + idC, "" + iidP,
-				nombre, comentable, color });
+		db.insertRecord(nombreTabla, (String[])params.values().toArray());
 
 	}
 
@@ -78,10 +78,6 @@ public class Curso extends Modelo {
 		return (String) this.params.get("color");
 	}
 
-	// METODOS DE OBTENCION
-
-	// METODOS DE SETEO DEL OBJETO(NO DB)
-
 	public boolean actualizar(Context context) throws Exception {
 		Server s = new Server();
 		boolean b = s.actualizarCurso(obtenerIdMaster(), context);// seba va a
@@ -100,8 +96,6 @@ public class Curso extends Modelo {
 
 		return false;
 	}
-
-	// METODOS DE SETEO DE LA BASE DE DATOS Y OBJETO
 
 	public boolean existeCursoComentable(Context context)// Le das el idmaster y
 															// te dice si ya lo
@@ -139,7 +133,7 @@ public class Curso extends Modelo {
 
 	}
 
-	static public Curso obtenerCurso(Context context, String id) // DEPRECATED???
+	public static Curso obtenerCurso(Context context, String id) // DEPRECATED???
 	{
 		AdapterDatabase ad = new AdapterDatabase(context);
 
@@ -147,7 +141,7 @@ public class Curso extends Modelo {
 		return c;
 	}
 
-	static public ArrayList<Curso> obtenerCursosOrdenados(Context context)// por
+	public static ArrayList<Curso> obtenerCursosOrdenados(Context context)// por
 																			// esEditable
 																			// ==
 																			// idC=0
@@ -165,7 +159,7 @@ public class Curso extends Modelo {
 		return ordenados;
 	}
 
-	static public ArrayList<Curso> obtenerCursosComentables(Context context) {
+	public static ArrayList<Curso> obtenerCursosComentables(Context context) {
 
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Curso> cursos = db.getRecordWhere(Curso.class, nombreTabla,
