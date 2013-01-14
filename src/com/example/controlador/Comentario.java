@@ -13,24 +13,24 @@ public class Comentario extends Modelo {
 	
 	public Comentario()
 	{
-		
+		this.NombreTabla = nombreTabla;
 	}
 	
 	public Comentario(Context context, String idCom,
-			String iidH, String fecha, String comentario)
+			String iidH, String fecha, String comentario) throws Exception
 	{
-		AdapterDatabase db = new AdapterDatabase(context);
-		String[] params = new String[] { idCom, iidH, fecha, comentario };
-		db.insertRecord("Comentarios", params) ;
-
+		super(nombreTabla,keys,new String[] { idCom, iidH, fecha, comentario });
+		this.NombreTabla = nombreTabla;
+	
 		
 	}
+	
 
 	@Override
 	public void setData(String id, Object[] params) {
 		// TODO Auto-generated method stub
 		
-		this.NombreTabla = nombreTabla;
+		
 		for (int i = 0; i < keys.length; i++) {
 			this.params.put(this.keys[i], (String) params[i]);
 		}

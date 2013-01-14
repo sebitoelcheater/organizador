@@ -36,26 +36,34 @@ public class Modulo extends Modelo {
 	//
 	public Modulo() {
 
+		this.NombreTabla = nombreTabla;
 	}
 
 	public Modulo(Context context, int idH, int iidC, int dds, Calendar inicio,
 			Calendar fin, String ubicacion) throws Exception {
 		super(nombreTabla, getKeys(), new Object[] { idH, iidC, dds, inicio,
 				fin, ubicacion });
-		AdapterDatabase db = new AdapterDatabase(context);
+		this.NombreTabla=nombreTabla;
+		
 
-		String stringInicio = agregarCeros(2, inicio.get(Calendar.HOUR_OF_DAY))
-				+ ":" + agregarCeros(2, inicio.get(Calendar.MINUTE));
-		String stringFin = agregarCeros(2, fin.get(Calendar.HOUR_OF_DAY)) + ":"
-				+ agregarCeros(2, fin.get(Calendar.MINUTE));
-		;
+	}
+	
+	@Override
+	public boolean save(Context ctx)
+	{
+		AdapterDatabase db = new AdapterDatabase(ctx);
 
-		boolean b = comprobarTopeHorario(context, dds + "", stringInicio,
+		
+		String stringInicio = obtenerStringInicio();
+		String stringFin = obtenerStringFin();
+		
+
+		boolean b = comprobarTopeHorario(ctx, obtenerDiaDeLaSemana(), stringInicio,
 				stringFin).size() == 0;
 		if (b)
-			db.insertRecord(nombreTabla, new String[] { "" + idH, "" + iidC,
-					dds + "", stringInicio, stringFin, ubicacion });
-
+			db.insertRecord(nombreTabla, this.params.values().toArray());
+		
+		return b;
 	}
 
 	/**

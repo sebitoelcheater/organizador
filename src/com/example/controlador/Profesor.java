@@ -14,7 +14,7 @@ public class Profesor extends Modelo {
 	
 	
 	public Profesor(){
-		
+		this.NombreTabla = nombreTabla;
 	}
 	
 	public Profesor(Context context, int idP, String usuario, String contrasena,
@@ -23,10 +23,7 @@ public class Profesor extends Modelo {
 		super(nombreTabla, AdapterDatabase.tablas.get(nombreTabla).keys,
 				new String[] { "" + idP, usuario, contrasena, nombre, apellido});
 
-		keys = AdapterDatabase.tablas.get(nombreTabla).keys;
-		AdapterDatabase db = new AdapterDatabase(context);
-		db.insertRecord(nombreTabla, new String[] { "" + idP, usuario, contrasena, nombre, apellido});
-
+		this.NombreTabla = nombreTabla;
 	}
 
 
