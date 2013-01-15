@@ -31,7 +31,10 @@ public class AdapterDatabase {
 	private final Context context;
 
 	private DatabaseHelper DBHelper;
-
+	/**
+	 * Metodo encargado de iniciar las tablas. De aqui se obtiene toda la informacion para las clases y demases.
+	 * Si se quiere agregar una tabla, colocar codigo aca
+	 */
 	public static void crearTablas() {
 		tablas = new HashMap<String, Tabla>(4);// si se va a agregar una tabla
 												// aumentar este 4
@@ -44,7 +47,7 @@ public class AdapterDatabase {
 				"Horarios",
 				new Tabla(
 						"Horarios",
-						"iidH integer primary key autoincrement, idH integer, iidC integer, dds integer, inicio date, fin date, ubicacion VARCHAR"));
+						"iidH integer primary key autoincrement, idH integer, iidC integer, inicio integer, fin integer, ubicacion VARCHAR"));
 		tablas.put(
 				"Profesores",
 				new Tabla(
