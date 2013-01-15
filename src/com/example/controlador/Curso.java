@@ -31,7 +31,7 @@ public class Curso extends Modelo {
 	 * No usar
 	 */
 	public Curso() {
-
+		this.NombreTabla = nombreTabla;
 	}
 
 	public Curso(Context context, int idC, int iidP, String nombre,
@@ -39,12 +39,10 @@ public class Curso extends Modelo {
 
 		super(nombreTabla, AdapterDatabase.tablas.get(nombreTabla).keys,
 				new String[] { "" + idC, "" + iidP, nombre, comentable, color });
-
-		keys = AdapterDatabase.tablas.get(nombreTabla).keys;
-		AdapterDatabase db = new AdapterDatabase(context);
-		db.insertRecord(nombreTabla, (String[])params.values().toArray());
+		this.NombreTabla = nombreTabla;
 
 	}
+	
 
 	public String obtenerId() {
 		return (String) this.params.get("iidC");
