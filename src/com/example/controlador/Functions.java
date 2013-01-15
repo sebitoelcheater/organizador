@@ -2,6 +2,8 @@ package com.example.controlador;
 
 public class Functions {
 
+	public static int minutosDelDia = 60*24;
+	
 	public static int getRed(String color) {
 		return Integer.parseInt(color.substring(0, 3));
 	}

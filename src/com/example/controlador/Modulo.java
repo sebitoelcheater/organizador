@@ -38,24 +38,11 @@ public class Modulo extends Modelo {
 
 	}
 
-	public Modulo(Context context, int idH, int iidC, int dds, Calendar inicio,
-			Calendar fin, String ubicacion) throws Exception {
-		super(nombreTabla, getKeys(), new Object[] { idH, iidC, dds, inicio,
+	public Modulo(Context context, int idH, int iidC, int inicio,
+			int fin, String ubicacion) throws Exception {
+		super(nombreTabla, getKeys(), new Object[] { idH, iidC, inicio,
 				fin, ubicacion });
-		AdapterDatabase db = new AdapterDatabase(context);
-
-		String stringInicio = agregarCeros(2, inicio.get(Calendar.HOUR_OF_DAY))
-				+ ":" + agregarCeros(2, inicio.get(Calendar.MINUTE));
-		String stringFin = agregarCeros(2, fin.get(Calendar.HOUR_OF_DAY)) + ":"
-				+ agregarCeros(2, fin.get(Calendar.MINUTE));
-		;
-
-		boolean b = comprobarTopeHorario(context, dds + "", stringInicio,
-				stringFin).size() == 0;
-		if (b)
-			db.insertRecord(nombreTabla, new String[] { "" + idH, "" + iidC,
-					dds + "", stringInicio, stringFin, ubicacion });
-
+		
 	}
 
 	/**
@@ -77,59 +64,9 @@ public class Modulo extends Modelo {
 
 	static public Modulo ultimoModulo(Context context, Curso c) {
 
-		Modulo ultimoModulo = null;
-		Modulo primerModulo;
-		Modulo anterior = ultimoModulo;
-
-		Calendar ahora = Calendar.getInstance();
-
-		ArrayList<Modulo> modulosDeC = obtenerModulosPorIdCurso(context,
-				c.obtenerId());
-		if (modulosDeC.size() >= 1) {
-			ArrayList<Modulo> anteriores = new ArrayList<Modulo>();
-			ArrayList<Modulo> posteriores = new ArrayList<Modulo>();
-			ultimoModulo = modulosDeC.get(0);
-			primerModulo = ultimoModulo;
-			for (Modulo m : modulosDeC) {
-				if (m.obtenerInicio().after(ultimoModulo.obtenerInicio()))
-					ultimoModulo = m;
-
-				if (m.obtenerInicio().before(primerModulo.obtenerInicio()))
-					primerModulo = m;
-
-				if (m.obtenerInicio().get(Calendar.DAY_OF_WEEK) >= ahora
-						.get(Calendar.DAY_OF_WEEK)) {
-					if (m.obtenerInicio().get(Calendar.HOUR_OF_DAY) >= ahora
-							.get(Calendar.HOUR_OF_DAY)) {
-						if (m.obtenerInicio().get(Calendar.MINUTE) >= ahora
-								.get(Calendar.MINUTE)) {
-							anteriores.add(m);
-						} else {
-							posteriores.add(m);
-						}
-					} else {
-						posteriores.add(m);
-					}
-				} else {
-					posteriores.add(m);
-				}
-			}
-
-			if (anteriores.size() >= 1) {
-				anterior = anteriores.get(0);
-				for (Modulo a : anteriores) {
-					if (a.obtenerFin().after(anterior))
-						anterior = a;
-				}
-			} else {
-				anterior = posteriores.get(0);
-				for (Modulo a : posteriores) {
-					if (a.obtenerFin().before(anterior))
-						anterior = a;
-				}
-			}
-
-		}
+		AdapterDatabase ad = new AdapterDatabase(context);
+		ArrayList<Modulo>ad.getRecordWhere(Modulo, nombreTabla, camposIguales, valoresIguales, camposIntervalo, minIntervalo, maxIntervalo, ordenadoPor)
+		
 		return anterior;
 	}
 
