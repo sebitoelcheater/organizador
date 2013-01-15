@@ -26,6 +26,7 @@ public class Comentario extends Modelo {
 		
 	}
 
+	
 	@Override
 	public void setData(String id, Object[] params) {
 		// TODO Auto-generated method stub
@@ -37,9 +38,10 @@ public class Comentario extends Modelo {
 		
 	}
 	
-	public static void setKeys(String[] _keys)
+	public static void setKeys(String[] keys,String nombreTabla)
 	{
-		keys=_keys;
+		Comentario.keys = keys;
+		Comentario.nombreTabla=nombreTabla;
 	}
 	
 

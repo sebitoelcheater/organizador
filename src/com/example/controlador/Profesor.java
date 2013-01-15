@@ -39,9 +39,10 @@ public class Profesor extends Modelo {
 		
 	}
 	
-	public static void setKeys(String[] _keys)
+	public static void setKeys(String[] keys,String nombreTabla)
 	{
-		keys=_keys;
+		Profesor.keys = keys;
+		Profesor.nombreTabla=nombreTabla;
 	}
 
 

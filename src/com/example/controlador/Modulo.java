@@ -607,4 +607,17 @@ public class Modulo extends Modelo {
 		return null;
 	}
 
+	public static void setKeys(String[] keys,String nombreTabla) {
+		Modulo.keys = keys;
+		Modulo.nombreTabla=nombreTabla;
+	}
+	
+	@Override
+	public void setData(String id, Object[] params) {
+		
+		for (int i = 0; i < keys.length; i++) {
+			this.params.put(this.keys[i], (String) params[i]);
+		}
+		
+	}
 }
