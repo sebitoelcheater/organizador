@@ -35,30 +35,38 @@ public class AdapterDatabase {
 	public static void crearTablas() {
 		tablas = new HashMap<String, Tabla>(4);// si se va a agregar una tabla
 												// aumentar este 4
+		String cursos = "Cursos";
 		tablas.put(
-				"Cursos",
+				cursos,
 				new Tabla(
-						"Cursos",
+						cursos,
 						"iidC integer primary key autoincrement, idC integer, iidP integer, title VARCHAR not null, comentable integer, color VARCHAR not null"));
+
+		String horarios = "Horarios";
 		tablas.put(
-				"Horarios",
+				horarios,
 				new Tabla(
-						"Horarios",
+						horarios,
 						"iidH integer primary key autoincrement, idH integer, iidC integer, dds integer, inicio date, fin date, ubicacion VARCHAR"));
+
+		String profesores = "Profesores";
 		tablas.put(
-				"Profesores",
+				profesores,
 				new Tabla(
-						"Profesores",
+						profesores,
 						"iidP integer primary key autoincrement, idP integer, usuario VARCHAR, contrasena VARCHAR, nombre VARCHAR, apellido VARCHAR"));
+
+		String comentarios = "Comentarios";
 		tablas.put(
-				"Comentarios",
+				comentarios,
 				new Tabla(
-						"Comentarios",
+						comentarios,
 						"iidCom integer primary key autoincrement, idCom integer, iidH integer, fecha date, comentario text"));
-		Curso.setKeys(tablas.get("Cursos").keys);
-		Modulo.setKeys(tablas.get("Horarios").keys);
-		Profesor.setKeys(tablas.get("Profesores").keys);
-		Comentario.setKeys(tablas.get("Comentarios").keys);
+
+		Curso.setKeys(tablas.get(cursos).keys, cursos);
+		Modulo.setKeys(tablas.get(horarios).keys, horarios);
+		Profesor.setKeys(tablas.get(profesores).keys, profesores);
+		Comentario.setKeys(tablas.get(comentarios).keys, comentarios);
 	}
 
 	public AdapterDatabase(Context ctx) {
