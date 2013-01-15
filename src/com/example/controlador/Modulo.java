@@ -70,13 +70,9 @@ public class Modulo extends Modelo {
 
 		AdapterDatabase db = new AdapterDatabase(context);
 
-		ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, "Horarios",
-				new String[] { "idC" },
-				new String[] { idCurso },null,null,null,null);
-		
-		// Antes era as’: ArrayList<Modulo> modulos = db.getRecordPorCursoHORARIOS(idCurso);
+		ArrayList<Modulo> modulos = db.getRecordPorCursoHORARIOS(idCurso);
 
-		return c;
+		return modulos;
 	}
 
 	static public Modulo ultimoModulo(Context context, Curso c) {
@@ -254,7 +250,8 @@ public class Modulo extends Modelo {
 	 * @param ahora
 	 * @return
 	 */
-	public static ArrayList<Modulo> obtenerLosFeedBackeables(Context context, Calendar ahora) {
+	public static ArrayList<Modulo> obtenerLosFeedBackeables(Context context,
+			Calendar ahora) {
 		// TODO Auto-generated method stub
 		int horas = 3;// Lo que espera el feedBack
 
