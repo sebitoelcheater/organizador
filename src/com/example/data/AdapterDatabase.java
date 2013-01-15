@@ -166,7 +166,13 @@ public class AdapterDatabase {
 		return ret;
 	}
 
-	// ---retrieves all the records---
+	/**
+	 * Obtiene todos los objetos(filas) que esten en la tabla indicada
+	 * 
+	 * @param _class
+	 * @param nombreTabla
+	 * @return
+	 */
 	public <T extends Modelo> ArrayList<T> getAllRecords(Class<T> _class,
 			String nombreTabla) {
 		SQLiteDatabase db = DBHelper.getWritableDatabase();
@@ -182,10 +188,9 @@ public class AdapterDatabase {
 	}
 
 	/**
-	 * Obtiene los ids del cursor indicado .
+	 * Obtiene objetos creados con los parametros de las filas apuntadas por el
+	 * cursor
 	 * 
-	 * @param <T>
-	 * @param <T>
 	 * @param <T>
 	 * @param ret
 	 * @return
@@ -222,7 +227,15 @@ public class AdapterDatabase {
 		return arrayList;
 	}
 
-	// ---retrieves a particular record---
+	/**
+	 * Obtiene el objeto cuyo id=rowId de nombreTabla
+	 * 
+	 * @param _class
+	 * @param nombreTabla
+	 * @param rowId
+	 * @return
+	 * @throws SQLException
+	 */
 	public <T extends Modelo> T getRecord(Class<T> _class, String nombreTabla,
 			long rowId) throws SQLException {
 		SQLiteDatabase db = DBHelper.getWritableDatabase();
@@ -246,12 +259,37 @@ public class AdapterDatabase {
 	}
 
 	/**
+	 * Obtiene todos los objetos(filas) que cumplan con las condiciones
+	 * especificadas con los parametros. NOTA: El orden en que se pongan los
+	 * campos debe ser consistente con el orden de los valores. NOTA: Si no se
+	 * quiere un limite max, colocar null. Es valido colocar null, o new
+	 * String[]{null}, o new String[]{"2",null}. En el ultimo caso indica que el
+	 * rango del primer campo tiene max, pero el del segundo no
 	 * 
-	 * @param <T>
+	 * @param _class
+	 *            Clase que representa a la tabla
+	 * 
 	 * @param nombreTabla
-	 * @param nombreCampo
-	 * @param valorCampo
-	 * @return
+	 *            Nombre de la tabla
+	 * 
+	 * @param camposIguales
+	 *            Campos que tienen una restriccion de igualdad. por ejemplo si
+	 *            queremos todos los objetos en que "dds" = 3, aqui va new
+	 *            String[]{"dds"}
+	 * @param valoresIguales
+	 *            Valores que toman los campos señalados en camposIguales. En el
+	 *            ejemplo , iria new String[]{"3"}
+	 * @param camposIntervalo
+	 *            Campos que tienen una restriccion de igualdad, por ejemplo
+	 *            3<="dds"<=5. INCLUYE EXTREMOS
+	 * @param minIntervalo
+	 *            Valores minimo, en el caso anterior es new String[]{"3"}
+	 * @param maxIntervalo
+	 *            Valores maximos, en el caso anterior es new String[]{"5"}
+	 * @param ordenadoPor
+	 *            Campo segun el cual se quieren ordenar los parametros (NO
+	 *            PROBADO)
+	 * @return Un ArrayList de objetos que cumplen con lo pedido
 	 */
 	public <T extends Modelo> ArrayList<T> getRecordWhere(Class<T> _class,
 			String nombreTabla, String[] camposIguales,
@@ -288,6 +326,14 @@ public class AdapterDatabase {
 		return listaInstancias;
 	}
 
+	/**
+	 * Crea el codigo SQL que se encarga de pedir que campos[i] =valores[i] para
+	 * todo i
+	 * 
+	 * @param campos
+	 * @param valores
+	 * @return
+	 */
 	private String generarCodigoIgual(String[] campos, String[] valores) {
 		if (campos != null) {
 			String txt = "";
@@ -301,6 +347,15 @@ public class AdapterDatabase {
 		}
 	}
 
+	/**
+	 * Crea el codigo SQL que se encarga de pedir que min[i]<=campos[i]<=max[i]
+	 * para todo i
+	 * 
+	 * @param min
+	 * @param campos
+	 * @param max
+	 * @return
+	 */
 	private String generarCodigoIntervalo(String[] min, String[] campos,
 			String[] max) {
 		if (campos != null && (max != null || min != null)) {
@@ -325,6 +380,8 @@ public class AdapterDatabase {
 
 	// ---updates a record---
 	/**
+	 * Actualiza una fila de la tabla con los datos de params. En params[0]
+	 * siempre esta el id Unico !
 	 * 
 	 * @param nombreTabla
 	 * @param params
@@ -350,6 +407,12 @@ public class AdapterDatabase {
 		return ret;
 	}
 
+	/**
+	 * Obtiene los nombres de las columnas de la tabla indicada
+	 * 
+	 * @param nombreTabla
+	 * @return
+	 */
 	public String[] getNombresCampos(String nombreTabla) {
 		System.out.println("\nNombre de Tabla: " + nombreTabla);
 
@@ -364,6 +427,12 @@ public class AdapterDatabase {
 
 	}
 
+	/**
+	 * Obtiene un objeto creado con el constructor vacio de la clase indicada
+	 * 
+	 * @param _class
+	 * @return
+	 */
 	private static <D> D getInstance(Class<D> _class) {
 		try {
 			return _class.newInstance();
