@@ -52,9 +52,9 @@ public class Functions {
 
 	public static int getAhoraEnMinutos()
 	{
-		int dia = traducirDias(Calendar.DAY_OF_WEEK);
-		int hora = Calendar.HOUR_OF_DAY;
-		int minutos = Calendar.MINUTE;
+		int dia = traducirDias(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+		int hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+		int minutos = Calendar.getInstance().get(Calendar.MINUTE);
 		return dia*24*60+hora*60+minutos;
 		
 		
