@@ -71,4 +71,11 @@ public class Functions {
 		return dia;
 		
 	}
+	
+	public static int getEnMinutos(Calendar calendar){
+		int dia = traducirDias(calendar.get(Calendar.DAY_OF_WEEK));
+		int hora = calendar.get(Calendar.HOUR_OF_DAY);
+		int minutos = calendar.get(Calendar.MINUTE);
+		return dia*24*60+hora*60+minutos;
+	}
 }
