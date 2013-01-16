@@ -53,7 +53,7 @@ public class AwesomeActivity extends TabActivity implements
 		tabHost.setOnTabChangedListener(this);
 
 		activarNotificaciones();
-		if (Functions.obtenerCursos(this).size() == 0) {
+		if (Curso.getCursosOrdenados(this).size() == 0) {
 			Toast.makeText(this, "¿No sabes que hacer?", Toast.LENGTH_LONG)
 					.show();
 			Toast.makeText(this, "Presiona el botón Menú!", Toast.LENGTH_LONG)
@@ -93,8 +93,7 @@ public class AwesomeActivity extends TabActivity implements
 	public void onTabChanged(String tabId) {
 		// TODO Auto-generated method stub
 		if (tabId.equals("FEEDBACK")
-				&& Functions.obtenerLosFeedBackeables(this,
-						Calendar.getInstance()).size() == 0) {
+				&& Curso.getCursosComentables(this).size() == 0) {//FIJARSE QUE GETCURSOS COMENTABLES DEBERIA PEDIR UN TIEMPOACTUAL PARA SABER SI SE PUEDE FEEDBACKEAR AHORA
 			tabHost.setCurrentTab(tab);
 			Toast.makeText(this, "No hay cursos para FeedBackear ahora",
 					Toast.LENGTH_LONG).show();

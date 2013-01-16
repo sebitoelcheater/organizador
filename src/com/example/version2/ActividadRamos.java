@@ -83,7 +83,7 @@ public class ActividadRamos extends ListActivity {
 			// Recoje textview donde va el nombre del ramo
 			TextView label = (TextView) fila.findViewById(R.id.textoNombreRamo);
 			// Le pone el nombre al campo de texto del nombre del ramo
-			label.setText(objects.get(position).obtenerNombre());
+			label.setText(objects.get(position).getNombre());
 
 			/*
 			 * Aquí discrimina a los Cursos que son editables o noEn caso de
@@ -106,7 +106,7 @@ public class ActividadRamos extends ListActivity {
 						// Para Editar un RAmo
 						Intent intent = new Intent(ActividadRamos.this,
 								ActividadEdicionRamo.class);
-						intent.putExtra("id", objects.get(position).obtenerId());
+						intent.putExtra("id", objects.get(position).getId());
 
 						/*
 						 * Este intent envía un "requestCode" que es
@@ -167,7 +167,7 @@ public class ActividadRamos extends ListActivity {
 					// Para Ver un Ramo
 					Intent intent = new Intent(ActividadRamos.this,
 							ActividadDatosDelRamo.class);
-					intent.putExtra("id", objects.get(position).obtenerId());
+					intent.putExtra("id", objects.get(position).getId());
 
 					startActivityForResult(intent, REQUEST_EDITAR_O_AGREGAR);
 				}
@@ -204,13 +204,13 @@ public class ActividadRamos extends ListActivity {
 
 		setContentView(R.layout.activity_actividad_ramos);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		ArrayList<Curso> array_cursos = Functions
-				.obtenerCursosOrdenados(this);
+		ArrayList<Curso> array_cursos = Curso.getCursosOrdenados(this);
+
 		ArrayList<String> array_ramos = new ArrayList<String>();
 		ArrayList<String> array_idramos = new ArrayList<String>();
 		for (Curso c : array_cursos) {
-			array_ramos.add(c.obtenerNombre());
-			array_idramos.add(c.obtenerId());
+			array_ramos.add(c.getNombre());
+			array_idramos.add(c.getId());
 		}
 
 		// Ahora le damos los ids de las views que se deben ir llenando,
@@ -234,8 +234,7 @@ public class ActividadRamos extends ListActivity {
 	}
 
 	public void actualizarListaRamos() {
-		ArrayList<Curso> nuevo_array_cursos = Functions
-				.obtenerCursosOrdenados(this);
+		ArrayList<Curso> nuevo_array_cursos = Curso.getCursosOrdenados(this);
 		adaptador.clear();
 		for (Curso curso : nuevo_array_cursos) {
 			adaptador.agregarCurso(curso);
@@ -322,9 +321,9 @@ public class ActividadRamos extends ListActivity {
 							if (id_curso.equals(""))
 								return;
 							boolean noHayTope = true;
-							if (!Functions.existeCursoComentable(
-									v.getContext(), id_curso)) {
-								Server servidor = new Server();
+						//	if (!Functions.existeCursoComentable(v.getContext(), id_curso)) {
+							if(Curso.getCurso(v.getContext(), id_curso).getComentable()!="1"){
+							Server servidor = new Server();
 
 								try {
 									noHayTope = servidor.suscribirCurso(
@@ -397,14 +396,12 @@ public class ActividadRamos extends ListActivity {
 
 			d.setContentView(R.layout.dialogo_crear_curso);
 			d.setTitle("Ingrese un nombre para el Curso");
-			Button boton_suscribir_curso = (Button) d
-					.findViewById(R.id.botonCrearCurso);
+			Button boton_suscribir_curso = (Button) d.findViewById(R.id.botonCrearCurso);
 			// EditText idCurso =
 			// (EditText)d.findViewById(R.id.nombreCursoACrear);
 			// idCurso.setText("");
 
-			boton_suscribir_curso
-					.setOnClickListener(new View.OnClickListener() {
+			boton_suscribir_curso.setOnClickListener(new View.OnClickListener() {
 						private int color = Color.CYAN;
 
 						class OnColorChangedListenerMia implements
@@ -421,20 +418,22 @@ public class ActividadRamos extends ListActivity {
 										+ "-"
 										+ Functions.agregarCeros(3,
 												Color.blue(color)));
-								Curso c = Functions.crearNuevoCurso(
-										ActividadRamos.this,
-										0,
-										0,
-										nombre_curso,
-										false,
-										Functions.agregarCeros(3,
-												Color.red(color))
-												+ "-"
-												+ Functions.agregarCeros(3,
-														Color.green(color))
-												+ "-"
-												+ Functions.agregarCeros(3,
-														Color.blue(color)));
+//								Curso c = Functions.crearNuevoCurso(ActividadRamos.this,0,0,
+//										nombre_curso,
+//										false,
+//										Functions.agregarCeros(3,
+//												Color.red(color))
+//												+ "-"
+//												+ Functions.agregarCeros(3,
+//														Color.green(color))
+//												+ "-"
+//												+ Functions.agregarCeros(3,
+//														Color.blue(color)));
+								Curso c = new Curso(ActividadRamos.this,0,0,nombre_curso,"0",Functions.agregarCeros(3,
+										Color.red(color))+ "-"+ Functions.agregarCeros(3,Color.green(color))
+										+ "-"
+										+ Functions.agregarCeros(3,	Color.blue(color)));
+								c.save(ActividadRamos.this);
 								Toast.makeText(getApplicationContext(),
 										"Curso Agregado", Toast.LENGTH_LONG)
 										.show();
@@ -467,7 +466,6 @@ public class ActividadRamos extends ListActivity {
 		return d;
 
 	}
-
 	/*
 	 * private void showPopUp2() {
 	 * 

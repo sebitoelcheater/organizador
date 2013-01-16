@@ -42,17 +42,23 @@ public class nuevoRamo extends Activity {
 	public void crear(View view) {
 
 		EditText nameTxt = (EditText) findViewById(R.id.editText1);
-		Curso c = Functions.crearNuevoCurso(this, 0, 0, nameTxt.getText()
-				.toString().trim(), false, "000-255-000"); // ESTEBAN, esto
-															// significa que no
-															// tiene profesor
-															// asociado, ni
-															// curso REMOTO
-															// ASOCIADO, ademas
-															// se establece como
-															// comentable(esto
-															// es para
-															// programar)
+		
+		Curso c=new Curso(this,0,0,nameTxt.getText().toString().trim(),"0","000-255-000");
+		c.save(this);
+//		Curso c = Functions.crearNuevoCurso(this, 0, 0, nameTxt.getText()
+//				.toString().trim(), false, "000-255-000"); 
+		// ESTEBAN, esto
+		// significa que no
+		// tiene profesor
+		// asociado, ni
+		// curso REMOTO
+		// ASOCIADO, ademas
+		// se establece como
+		// comentable(esto
+		// es para
+		// programar)
+		
+		
 		setResult(RESULT_OK);
 
 		finish();

@@ -1,8 +1,8 @@
 package com.example.controlador;
 
-
 import java.util.*;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.example.data.*;
 
@@ -34,28 +34,24 @@ public class Modulo extends Modelo {
 		this.NombreTabla = nombreTabla;
 	}
 
-	public Modulo(Context context, int idH, int iidC, int inicio,
-			int fin, String ubicacion) throws Exception {
-		super(nombreTabla, getKeys(), new Object[] { idH, iidC, inicio,
-				fin, ubicacion });
+	public Modulo(Context context, int idH, int iidC, int inicio, int fin,
+			String ubicacion) throws Exception {
+		super(nombreTabla, getKeys(), new Object[] { idH, iidC, inicio, fin,
+				ubicacion });
 
-		this.NombreTabla=nombreTabla;
-		
+		this.NombreTabla = nombreTabla;
 
 	}
-	
+
 	@Override
-	public boolean save(Context ctx)
-	{
+	public boolean save(Context ctx) {
 		AdapterDatabase db = new AdapterDatabase(ctx);
 
-		
-				
-
-		boolean b = getModulosEntreInicioYFin(ctx,this.getInicio(),this.getFin()).size() == 0;
+		boolean b = getModulosEntreInicioYFin(ctx, this.getInicio(),
+				this.getFin()).size() == 0;
 		if (b)
 			db.insertRecord(nombreTabla, this.params.values().toArray());
-		
+
 		return b;
 	}
 
@@ -66,46 +62,43 @@ public class Modulo extends Modelo {
 	 * @param idCurso
 	 * @return
 	 */
-	static public ArrayList<Modulo> getModulosPorIdCurso(Context context,Curso c) {
+	static public ArrayList<Modulo> getModulosPorIdCurso(Context context,
+			Curso c) {
 		AdapterDatabase db = new AdapterDatabase(context);
-		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class, nombreTabla,
-				new String[] { "idC" },
-				new String[] { c.getId() }, null,
-				null, null, null);
+		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
+				nombreTabla, new String[] { "idC" },
+				new String[] { c.getId() }, null, null, null, null);
 
 		return modulos;
-		
-//		AdapterDatabase db = new AdapterDatabase(context);
-//
-//		ArrayList<Modulo> modulos = db.getRecordPorCursoHORARIOS(idCurso);
-//
-//		return modulos;
+
+		// AdapterDatabase db = new AdapterDatabase(context);
+		//
+		// ArrayList<Modulo> modulos = db.getRecordPorCursoHORARIOS(idCurso);
+		//
+		// return modulos;
 	}
 
-	/**Seba lo hace**/
+	/** Seba lo hace **/
 	static public Modulo ultimoModulo(Context context, Curso c) {
 
 		AdapterDatabase db = new AdapterDatabase(context);
-		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class, nombreTabla,
-				new String[] { "idC" },
-				new String[] { c.getId() }, null,
-				null, null, "inicio");
-		
-		int tamanoModulos=modulos.size();
-		if (tamanoModulos!=0){
-			return modulos.get(tamanoModulos-1);
-		}
-		else{
+		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
+				nombreTabla, new String[] { "idC" },
+				new String[] { c.getId() }, null, null, null, "inicio");
+
+		int tamanoModulos = modulos.size();
+		if (tamanoModulos != 0) {
+			return modulos.get(tamanoModulos - 1);
+		} else {
 			return null;
 		}
 
 	}
 
-	static public boolean puedoCambiarModulo(Context context,
-			int inicio, int fin, Modulo moduloAEditar) {
+	static public boolean puedoCambiarModulo(Context context, int inicio,
+			int fin, Modulo moduloAEditar) {
 
-		ArrayList<Modulo> c = getModulosEntreInicioYFin(context,
-				inicio, fin);
+		ArrayList<Modulo> c = getModulosEntreInicioYFin(context, inicio, fin);
 
 		boolean b = c.size() == 0;
 		if ((!b) && c.size() == 1)
@@ -122,15 +115,17 @@ public class Modulo extends Modelo {
 		return modulos;
 	}
 
-
 	static public ArrayList<Modulo> obtenerModulosSegunDiaOrdenadosSegunInicio(
-			Context context, int dia) 
-	{
+			Context context, int dia) {
 		AdapterDatabase db = new AdapterDatabase(context);
-		
-		ArrayList<Modulo> modulosOrdenados = db.getRecordWhere(Modulo.class, nombreTabla, null, null, new String[]{"inicio","fin"}, new String[]{dia*Functions.minutosDeUnDia+"",dia*Functions.minutosDeUnDia+""}, new String[]{(dia+1)*Functions.minutosDeUnDia+"",(dia+1)*Functions.minutosDeUnDia+""}, "inicio");
-	
-		
+
+		ArrayList<Modulo> modulosOrdenados = db.getRecordWhere(Modulo.class,
+				nombreTabla, null, null, new String[] { "inicio", "fin" },
+				new String[] { dia * Functions.minutosDeUnDia + "",
+						dia * Functions.minutosDeUnDia + "" }, new String[] {
+						(dia + 1) * Functions.minutosDeUnDia + "",
+						(dia + 1) * Functions.minutosDeUnDia + "" }, "inicio");
+
 		return modulosOrdenados;
 
 	}
@@ -141,14 +136,13 @@ public class Modulo extends Modelo {
 	 * @param x
 	 */
 
-	static public ArrayList<Modulo> getModulosDelDia(Context context,
-			int hoydia) // INEFICIENTE!!!!
+	static public ArrayList<Modulo> getModulosDelDia(Context context, int hoydia) // INEFICIENTE!!!!
 	{
-
 
 		return obtenerModulosSegunDiaOrdenadosSegunInicio(context, hoydia);
 	}
-	 //ACA HAY UN DDS !
+
+	// ACA HAY UN DDS !
 	/**
 	 * RE-HACER METODO CON getRecordWhere
 	 * 
@@ -160,59 +154,55 @@ public class Modulo extends Modelo {
 		// TODO Auto-generated method stub
 		int horas = 3;// Lo que espera el feedBack
 		int hoyMinutos = Functions.getAhoraEnMinutos();
-		
-		
-				
+
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Curso> cursos = db.getRecordWhere(Curso.class, "Cursos",
-				new String[] { "comentable" },
-				new String[] { "1" }, null,
+				new String[] { "comentable" }, new String[] { "1" }, null,
 				null, null, null);
-		
+
 		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
-		
-		for (Curso curso: cursos){
+
+		for (Curso curso : cursos) {
 			String idC = curso.getId();
-			
-			ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class, nombreTabla,
-					new String[] { "idC" },
-					new String[] { idC }, 
+
+			ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class,
+					nombreTabla, new String[] { "idC" }, new String[] { idC },
 					new String[] { "fin" },
 					new String[] { Integer.toString(hoyMinutos) },
-					new String[] { Integer.toString(hoyMinutos+horas*60) },
+					new String[] { Integer.toString(hoyMinutos + horas * 60) },
 					null);
-			
+
 			modulos.addAll(modulo);
 		}
 		return modulos;
-		
-//		ArrayList<Modulo> posiblesModulos = getModulosDelDia(context, ahora);
-//		ArrayList<Modulo> posibles2Modulos = new ArrayList<Modulo>();
-//
-//		for (Modulo m : posiblesModulos) {
-//			AdapterDatabase ad = new AdapterDatabase(context);
-//
-//			Curso c = ad.getRecord(Curso.class, Curso.getNombreTabla(),
-//					Long.parseLong(m.getIdCurso()));
-//			if (c.getComentable().equals("1")) {
-//				posibles2Modulos.add(m);
-//			}
-//
-//		}
-//
-//		posiblesModulos = new ArrayList<Modulo>();
-//		for (Modulo m : posibles2Modulos) {
-//			Calendar fin = m.getFin();
-//			Calendar plazoMaximo = (Calendar) fin.clone();
-//			plazoMaximo.add(Calendar.HOUR, horas);
-//			Calendar aahora = (Calendar) fin.clone();
-//			aahora.set(Calendar.HOUR_OF_DAY, ahora.get(Calendar.HOUR_OF_DAY));
-//			aahora.set(Calendar.MINUTE, ahora.get(Calendar.MINUTE));
-//
-//			if (aahora.before(plazoMaximo) && aahora.after(fin))
-//				posiblesModulos.add(m);
-//		}
-//		return posiblesModulos;
+
+		// ArrayList<Modulo> posiblesModulos = getModulosDelDia(context, ahora);
+		// ArrayList<Modulo> posibles2Modulos = new ArrayList<Modulo>();
+		//
+		// for (Modulo m : posiblesModulos) {
+		// AdapterDatabase ad = new AdapterDatabase(context);
+		//
+		// Curso c = ad.getRecord(Curso.class, Curso.getNombreTabla(),
+		// Long.parseLong(m.getIdCurso()));
+		// if (c.getComentable().equals("1")) {
+		// posibles2Modulos.add(m);
+		// }
+		//
+		// }
+		//
+		// posiblesModulos = new ArrayList<Modulo>();
+		// for (Modulo m : posibles2Modulos) {
+		// Calendar fin = m.getFin();
+		// Calendar plazoMaximo = (Calendar) fin.clone();
+		// plazoMaximo.add(Calendar.HOUR, horas);
+		// Calendar aahora = (Calendar) fin.clone();
+		// aahora.set(Calendar.HOUR_OF_DAY, ahora.get(Calendar.HOUR_OF_DAY));
+		// aahora.set(Calendar.MINUTE, ahora.get(Calendar.MINUTE));
+		//
+		// if (aahora.before(plazoMaximo) && aahora.after(fin))
+		// posiblesModulos.add(m);
+		// }
+		// return posiblesModulos;
 	}
 
 	/**
@@ -223,22 +213,20 @@ public class Modulo extends Modelo {
 	 * @param minutos
 	 * @return
 	 */
-	static public ArrayList<Modulo> getLosModulosAnterioresFin(
-			Context context, Calendar momento) // TERMINAR
+	static public ArrayList<Modulo> getLosModulosAnterioresFin(Context context,
+			Calendar momento) // TERMINAR
 	{
-				
+
 		AdapterDatabase db = new AdapterDatabase(context);
-		
-		ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class, nombreTabla,
-				null,
-				null, 
-				new String[] { "fin" },
-				new String[] { "0" },
-				new String[] { Integer.toString(Functions.getEnMinutos(momento)) },
-				null);
-		
+
+		ArrayList<Modulo> modulo = db
+				.getRecordWhere(Modulo.class, nombreTabla, null, null,
+						new String[] { "fin" }, new String[] { "0" },
+						new String[] { Integer.toString(Functions
+								.getEnMinutos(momento)) }, null);
+
 		return modulo;
-		
+
 	}
 
 	/**
@@ -252,41 +240,38 @@ public class Modulo extends Modelo {
 	static public ArrayList<Modulo> getLosModulosProximosInicio(
 			Context context, Calendar momento) // TERMINAR
 	{
-		
+
 		AdapterDatabase db = new AdapterDatabase(context);
 
-		
-		ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class, nombreTabla,
-				null,
-				null, 
-				new String[] { "inicio" },
-				new String[] { "0" },
-				new String[] { Integer.toString(Functions.getEnMinutos(momento)) },
-				null);
-		
+		ArrayList<Modulo> modulo = db
+				.getRecordWhere(Modulo.class, nombreTabla, null, null,
+						new String[] { "inicio" }, new String[] { "0" },
+						new String[] { Integer.toString(Functions
+								.getEnMinutos(momento)) }, null);
+
 		return modulo;
-		
+
 	}
 
 	static public ArrayList<Modulo> getLosSiguientesModulosDelDia(
 			Context context, int minAhora, int largo) {
 
-		
 		AdapterDatabase db = new AdapterDatabase(context);
-		ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla, null, null, new String[]{"inicio"}, new String[]{minAhora+""},null, "inicio");
+		ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla,
+				null, null, new String[] { "inicio" }, new String[] { minAhora
+						+ "" }, null, "inicio");
 
 		return c;
 	}
 
-
-
 	static public ArrayList<Modulo> obtenerLosSiguientesModulos(
 			Context context, int ahoraEnMinutos) {
 
-
 		AdapterDatabase db = new AdapterDatabase(context);
 
-		ArrayList<Modulo> modulos= db.getRecordWhere(Modulo.class, nombreTabla, null, null, new String[]{"inicio"}, new String[]{ahoraEnMinutos+""}, null, "inicio");
+		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
+				nombreTabla, null, null, new String[] { "inicio" },
+				new String[] { ahoraEnMinutos + "" }, null, "inicio");
 
 		return modulos;
 	}
@@ -301,17 +286,50 @@ public class Modulo extends Modelo {
 	 * @return
 	 */
 	public static ArrayList<Modulo> getModulosEntreInicioYFin(Context ctx,
-			 int inicio, int fin) {
+			int inicio, int fin) {
 		AdapterDatabase ad = new AdapterDatabase(ctx);
 
-		ArrayList<Modulo> modulos = ad
-				.getRecordWhere(Modulo.class, nombreTabla,
-						null, null ,
-						new String[] { "inicio", "fin" }, new String[] {
-								""+inicio, null }, new String[] { null, ""+fin },
-						null);
+		ArrayList<Modulo> modulos = ad.getRecordWhere(Modulo.class,
+				nombreTabla, null, null, new String[] { "inicio", "fin" },
+				new String[] { "" + inicio, null }, new String[] { null,
+						"" + fin }, null);
 
 		return modulos;
+	}
+
+	
+	public boolean actualizar(Context ctx, int minInicio, int minFin,
+			String ubicacion) {
+
+		String[] params = (String[]) this.params.values().toArray();
+
+		boolean actualizar = false;
+
+		if (this.getInicio() != minInicio || this.getFin() != minFin) {
+			if (minInicio < minFin) {
+				if (Modulo.puedoCambiarModulo(ctx, minInicio, minFin, this)) {
+					actualizar = true;
+					params[3] = "" + minInicio;
+					params[4] = "" + minFin;
+
+				}
+			}
+
+		}
+
+		if (!this.getUbicacion().equals(ubicacion)) {
+			actualizar = true;
+			params[5] = ubicacion;
+		}
+
+		if (actualizar) {
+			AdapterDatabase ad = new AdapterDatabase(ctx);
+			ad.updateRecord(nombreTabla, params);
+
+		}
+
+		return actualizar;
+
 	}
 
 	public String getId() {
@@ -363,14 +381,12 @@ public class Modulo extends Modelo {
 	}
 
 	public int getInicio() {
-		return Integer.parseInt((String)this.params.get("inicio"));
+		return Integer.parseInt((String) this.params.get("inicio"));
 	}
 
 	public int getFin() {
-		return Integer.parseInt((String)this.params.get("fin"));
+		return Integer.parseInt((String) this.params.get("fin"));
 	}
-
-
 
 	// METODOS DE OBTENCION
 
@@ -404,18 +420,17 @@ public class Modulo extends Modelo {
 		return numero;
 	}
 
-
-	public static void setKeys(String[] keys,String nombreTabla) {
+	public static void setKeys(String[] keys, String nombreTabla) {
 		Modulo.keys = keys;
-		Modulo.nombreTabla=nombreTabla;
+		Modulo.nombreTabla = nombreTabla;
 	}
-	
+
 	@Override
 	public void setData(String id, Object[] params) {
-		
+
 		for (int i = 0; i < keys.length; i++) {
 			this.params.put(this.keys[i], (String) params[i]);
 		}
-		
+
 	}
 }

@@ -17,9 +17,9 @@ public abstract class Modelo {// EX ISeteable
 	}
 
 	protected Modelo(String nombreTabla, String[] keys, Object[] values)
-			throws Exception {
+			 {
 		if (keys.length != values.length) {
-			throw new Exception(
+			System.out.println(
 					"Modelo/constructor largo de llaves != a de valores");
 		}
 
@@ -28,7 +28,7 @@ public abstract class Modelo {// EX ISeteable
 		}
 
 		if (keys.length != params.size()) {
-			throw new Exception("Modelo/constructor HashMap mato parametros");
+			System.out.println("Modelo/constructor HashMap mato parametros");
 		}
 
 		this.NombreTabla = nombreTabla;
