@@ -199,14 +199,14 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			//TRABAJO
 	    	
 	    	String a = "";
-	    	ArrayList<Modulo> modulos = Functions.obtenerLosSiguientesModulosDelDia(this, Calendar.getInstance(), 5);
+	    	ArrayList<Modulo> modulos = Modulo.getLosSiguientesModulosDelDia(this, Functions.getAhoraEnMinutos(), 5);
 	    	if(modulos.size()!=0){
     		a = "Lo que me queda por hacer hoy "+ stringDDS(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))+ " : ";
 	    	for(Modulo m : modulos)
 	    	{
 	    		AdapterDatabase ad = new AdapterDatabase(this);
-	    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-	    		a+= " "+curso.obtenerNombre()+"("+m.obtenerStringInicio() +"-"+m.obtenerStringFin() +")" +" ";
+	    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.getIdCurso()));
+	    		a+= " "+curso.getNombre()+"("+Functions.getHoraYMinutos(m.getInicio())+"-"+Functions.getHoraYMinutos(m.getFin()) +")" +" ";
 	    	}}
 	    	else{a="Terminaron las clases por hoy";}
 	    	a+= "- Desde Organizador";
@@ -259,10 +259,15 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 	   	// TODO Auto-generated method stub
     	//LA RELACION ES 25dp  corresponde a 60 minutos 
     	double factor= (185.0/500.0);
+    	
+    	
+    	
+    	for(int i=0;i<7;i++)
+    	{
     	int enQueVoy = 480;
     	int minutosFinAnterior=480;
     	LinearLayout l = (LinearLayout) findViewById(R.id.LinearLayoutLunes);
-    	ArrayList<Modulo> modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 2);
+    	ArrayList<Modulo> modulosDia = Modulo.getModulosDelDia(this, i);
 		
     	
     	//EDITANDO
@@ -270,12 +275,11 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 		{
     	
     		AdapterDatabase ad = new AdapterDatabase(this);
-    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
+    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.getIdCurso()));
     		
-    		Calendar inicio = m.obtenerInicio();
-			int minutosInicio = inicio.get(Calendar.HOUR_OF_DAY)*60+inicio.get(Calendar.MINUTE);
-			Calendar fin = m.obtenerFin();
-			int duracionEnMinutos = fin.get(Calendar.HOUR_OF_DAY)*60+fin.get(Calendar.MINUTE) - minutosInicio;
+    		int minutosInicio = m.getInicio();
+			int minutosFin = m.getFin();
+			int duracionEnMinutos =minutosInicio-minutosFin;
 			
 			
 			
@@ -286,12 +290,12 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 				l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutosInicio-minutosFinAnterior)))));
 	
 			}
-			minutosFinAnterior=fin.get(Calendar.HOUR_OF_DAY)*60+fin.get(Calendar.MINUTE);
+			minutosFinAnterior=minutosFin;
 				
 			ViewModulo a = new ViewModulo(this);
-			//a.setHoraInicio(m.obtenerStringInicio());
-			//a.setHoraFin(m.obtenerStringFin());
-			Curso curso2 =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
+			//a.setHoraInicio(m.getStringInicio());
+			//a.setHoraFin(m.getStringFin());
+			Curso curso2 =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.getIdCurso()));
 			if(curso2.esEditable()){
 				
 			a.setOnClickListener(this); 
@@ -299,246 +303,18 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 			a.setModulo(m);}
 			
 			
-			if(duracionEnMinutos>=120)  a.setSala(m.obtenerUbicacion());
+			if(duracionEnMinutos>=120)  a.setSala(m.getUbicacion());
 			
-			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
+			if(duracionEnMinutos>=45) a.setNombre(curso.getNombre().substring(0,3));
 			
-			String color = curso.obtenerColor();
+			String color = curso.getColor();
 			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
 		}
 		
-		//EDITANDO
+    	}
 		
-    	enQueVoy = 480;
-		l = (LinearLayout) findViewById(R.id.LinearLayoutMartes);
-		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 3);
-		for(Modulo m : modulosDia)
-		{
-			AdapterDatabase ad = new AdapterDatabase(this);
-    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-			
-    		Calendar inicio = m.obtenerInicio();
-			int minutos = inicio.get(Calendar.HOUR_OF_DAY)*60+inicio.get(Calendar.MINUTE);
-			Calendar fin = m.obtenerFin();
-			int duracionEnMinutos = fin.get(Calendar.HOUR_OF_DAY)*60+fin.get(Calendar.MINUTE) - minutos;
-			if(enQueVoy<minutos)  //Y si enQueVoy=>minutos(ESTO NO DEBERIA PASAR....)
-			{
-				l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutos-enQueVoy)))));
-				enQueVoy+= minutos-enQueVoy;
-			}
-				
-			ViewModulo a = new ViewModulo(this);
-			//a.setHoraInicio(m.obtenerStringInicio());
-			//a.setHoraFin(m.obtenerStringFin());
-			
-	
-    		Curso curso2 =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-			
-			if(curso2.esEditable()){
-				a.setOnClickListener(this);
-				a.setClickable(true);
-				a.setModulo(m);}
-			
-			if(duracionEnMinutos>=120)  a.setSala(m.obtenerUbicacion());
-			
-			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
-			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
-			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
-			enQueVoy+=duracionEnMinutos;
-		}
-		
-		//EDITANDO
-		
-		
-		
-		
-		enQueVoy = 480;
-		l = (LinearLayout) findViewById(R.id.LinearLayoutMiercoles);
-		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 4);
-		for(Modulo m : modulosDia)
-		{
-			
-			AdapterDatabase ad = new AdapterDatabase(this);
-    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso())); 
-    		
-    		Calendar inicio = m.obtenerInicio();
-			int minutos = inicio.get(Calendar.HOUR_OF_DAY)*60+inicio.get(Calendar.MINUTE);
-			Calendar fin = m.obtenerFin();
-			int duracionEnMinutos = fin.get(Calendar.HOUR_OF_DAY)*60+fin.get(Calendar.MINUTE) - minutos;
-			if(enQueVoy<minutos)  //Y si enQueVoy=>minutos(ESTO NO DEBERIA PASAR....)
-			{
-				l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutos-enQueVoy)))));
-				enQueVoy+= minutos-enQueVoy;
-			}
-				
-			ViewModulo a = new ViewModulo(this);
-			//a.setHoraInicio(m.obtenerStringInicio());
-			//a.setHoraFin(m.obtenerStringFin());
-			if(curso.esEditable()){
-				a.setOnClickListener(this);
-				a.setClickable(true);
-				a.setModulo(m);}
-			
-			
-			if(duracionEnMinutos>=120)  a.setSala(m.obtenerUbicacion());
-			
-			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
-			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
-			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
-			enQueVoy+=duracionEnMinutos;
-		}
-		
-		enQueVoy = 480;
-		l = (LinearLayout) findViewById(R.id.LinearLayoutJueves);
-		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 5);
-		for(Modulo m : modulosDia)
-		{
-			AdapterDatabase ad = new AdapterDatabase(this);
-    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-    		
-    		Calendar inicio = m.obtenerInicio();
-			int minutos = inicio.get(Calendar.HOUR_OF_DAY)*60+inicio.get(Calendar.MINUTE);
-			Calendar fin = m.obtenerFin();
-			int duracionEnMinutos = fin.get(Calendar.HOUR_OF_DAY)*60+fin.get(Calendar.MINUTE) - minutos;
-			if(enQueVoy<minutos)  //Y si enQueVoy=>minutos(ESTO NO DEBERIA PASAR....)
-			{
-				l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutos-enQueVoy)))));
-				enQueVoy+= minutos-enQueVoy;
-			}
-				
-			ViewModulo a = new ViewModulo(this);
-			//a.setHoraInicio(m.obtenerStringInicio());
-			//a.setHoraFin(m.obtenerStringFin());
-			if(curso.esEditable()){
-				a.setOnClickListener(this);
-				a.setClickable(true);
-				a.setModulo(m);}
-			
-			
-			if(duracionEnMinutos>=120)  a.setSala(m.obtenerUbicacion());
-			
-			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
-			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
-			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
-			enQueVoy+=duracionEnMinutos;
-		}
-		
-		enQueVoy = 480;
-		l = (LinearLayout) findViewById(R.id.LinearLayoutViernes);
-		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 6);
-		for(Modulo m : modulosDia)
-		{
-			
-			AdapterDatabase ad = new AdapterDatabase(this);
-    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-    		
-    		Calendar inicio = m.obtenerInicio();
-			int minutos = inicio.get(Calendar.HOUR_OF_DAY)*60+inicio.get(Calendar.MINUTE);
-			Calendar fin = m.obtenerFin();
-			int duracionEnMinutos = fin.get(Calendar.HOUR_OF_DAY)*60+fin.get(Calendar.MINUTE) - minutos;
-			if(enQueVoy<minutos)  //Y si enQueVoy=>minutos(ESTO NO DEBERIA PASAR....)
-			{
-				l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutos-enQueVoy)))));
-				enQueVoy+= minutos-enQueVoy;
-			}
-				
-			ViewModulo a = new ViewModulo(this);
-			//a.setHoraInicio(m.obtenerStringInicio());
-			//a.setHoraFin(m.obtenerStringFin());
-			
-			if(curso.esEditable()){
-				a.setOnClickListener(this);
-				a.setClickable(true);
-				a.setModulo(m);}
-			
-			if(duracionEnMinutos>=120)  a.setSala(m.obtenerUbicacion());
-			
-			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
-			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
-			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
-			enQueVoy+=duracionEnMinutos;
-		}
-		
-		enQueVoy = 480;
-		l = (LinearLayout) findViewById(R.id.LinearLayoutSabado);
-		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 7);
-		for(Modulo m : modulosDia)
-		{
-			
-			AdapterDatabase ad = new AdapterDatabase(this);
-    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-    		
-    		Calendar inicio = m.obtenerInicio();
-			int minutos = inicio.get(Calendar.HOUR_OF_DAY)*60+inicio.get(Calendar.MINUTE);
-			Calendar fin = m.obtenerFin();
-			int duracionEnMinutos = fin.get(Calendar.HOUR_OF_DAY)*60+fin.get(Calendar.MINUTE) - minutos;
-			if(enQueVoy<minutos)  //Y si enQueVoy=>minutos(ESTO NO DEBERIA PASAR....)
-			{
-				l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutos-enQueVoy)))));
-				enQueVoy+= minutos-enQueVoy;
-			}
-				
-			ViewModulo a = new ViewModulo(this);
-			//a.setHoraInicio(m.obtenerStringInicio());
-			//a.setHoraFin(m.obtenerStringFin());
-			if(curso.esEditable()){
-				a.setOnClickListener(this);
-				a.setClickable(true);
-				a.setModulo(m);}
-			
-			
-			if(duracionEnMinutos>=120)  a.setSala(m.obtenerUbicacion());
-			
-			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
-			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
-			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
-			enQueVoy+=duracionEnMinutos;
-		}
-		
-		enQueVoy = 480;
-		l = (LinearLayout) findViewById(R.id.LinearLayoutDomingo);
-		modulosDia = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(this, 1);
-		for(Modulo m : modulosDia)
-		{
-			
-			AdapterDatabase ad = new AdapterDatabase(this);
-    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.obtenerIdCurso()));
-    		
-    		Calendar inicio = m.obtenerInicio();
-			int minutos = inicio.get(Calendar.HOUR_OF_DAY)*60+inicio.get(Calendar.MINUTE);
-			Calendar fin = m.obtenerFin();
-			int duracionEnMinutos = fin.get(Calendar.HOUR_OF_DAY)*60+fin.get(Calendar.MINUTE) - minutos;
-			if(enQueVoy<minutos)  //Y si enQueVoy=>minutos(ESTO NO DEBERIA PASAR....)
-			{
-				l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutos-enQueVoy)))));
-				enQueVoy+= minutos-enQueVoy;
-			}
-				
-			ViewModulo a = new ViewModulo(this);
-			//a.setHoraInicio(m.obtenerStringInicio());
-			//a.setHoraFin(m.obtenerStringFin());
-			if(curso.esEditable()){
-				a.setOnClickListener(this);
-				a.setClickable(true);
-				a.setModulo(m);}
-			
-			
-			if(duracionEnMinutos>=120)  a.setSala(m.obtenerUbicacion());
-			
-			
-			if(duracionEnMinutos>=45) a.setNombre(curso.obtenerNombre().substring(0,3));
-			String color = curso.obtenerColor();
-			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
-			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
-			enQueVoy+=duracionEnMinutos;
-		}
 		
 	}
 
@@ -547,7 +323,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 		// TODO Auto-generated method stub
 		moduloAEditar = ((ViewModulo)v).getModulo();
 		Bundle b = new Bundle();
-		showDialog(obtenerIdUnica(),b);
+		showDialog(getIdUnica(),b);
 		
 	}
 	
@@ -560,10 +336,10 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 		
 				String []diasDeLaSemana = {"Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"};//CORRERSE EN UN INDICE...DOMINGO ==1
 				AdapterDatabase ad = new AdapterDatabase(this);
-	    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(moduloAEditar.obtenerIdCurso()));
+	    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(moduloAEditar.getIdCurso()));
 				
 		d.setContentView(R.layout.dialogo_modulo_bkn);
-		d.setTitle(curso.obtenerNombre());
+		d.setTitle(curso.getNombre());
 		Button boton_cancelar = (Button) d.findViewById(R.id.button2);
 		Button boton_aceptar = (Button) d.findViewById(R.id.button1);
 		Button boton_eliminar = (Button)  d.findViewById(R.id.button3);
@@ -573,20 +349,22 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 		
 		EditText campoTextoLugar = (EditText) d.findViewById(R.id.salaModuloAEditar);
 
-        String salaOriginal = moduloAEditar.obtenerUbicacion();
+        String salaOriginal = moduloAEditar.getUbicacion();
        campoTextoLugar.setText(salaOriginal);
-        //campoTextoLugar.setText(moduloAEditar.obtenerNombreDiaDeLaSemana());
+        //campoTextoLugar.setText(moduloAEditar.getNombreDiaDeLaSemana());
 
         
 		///Agregando datos
 		spinnerDias.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,diasDeLaSemana));
-		spinnerDias.setSelection(Integer.parseInt(moduloAEditar.obtenerDiaDeLaSemana())-1);
+		spinnerDias.setSelection(Integer.parseInt(moduloAEditar.getDiaDeLaSemana())-1);
 		tPInicio.setIs24HourView(true);
-		tPInicio.setCurrentHour(moduloAEditar.obtenerInicio().get(Calendar.HOUR_OF_DAY));
-		tPInicio.setCurrentMinute(moduloAEditar.obtenerInicio().get(Calendar.MINUTE));
+		int minInicio=moduloAEditar.getInicio();
+		int minFin = moduloAEditar.getFin();
+		tPInicio.setCurrentHour(Functions.getHoraDelDia(minInicio));
+		tPInicio.setCurrentMinute(Functions.getMinutosDelDia(minInicio));
 		tPFin.setIs24HourView(true);
-		tPFin.setCurrentHour(moduloAEditar.obtenerFin().get(Calendar.HOUR_OF_DAY));
-		tPFin.setCurrentMinute(moduloAEditar.obtenerFin().get(Calendar.MINUTE));
+		tPFin.setCurrentHour(Functions.getHoraDelDia(minFin));
+		tPFin.setCurrentMinute(Functions.getMinutosDelDia(minFin));
 		///Agregando datos
 		
         
@@ -617,11 +395,11 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
         		moduloAEditar.setUbicacion( nuevoLugar);
         		
             	moduloAEditar.setDiaDeLaSemana(""+(spinnerDias.getSelectedItemPosition()+1));
-            	Calendar inicio = moduloAEditar.obtenerInicio();
+            	Calendar inicio = moduloAEditar.getInicio();
             	inicio.set(Calendar.HOUR_OF_DAY, tPInicio.getCurrentHour());
             	inicio.set(Calendar.MINUTE,tPInicio.getCurrentMinute());
             	
-            	Calendar fin = moduloAEditar.obtenerFin();
+            	Calendar fin = moduloAEditar.getFin();
             	fin.set(Calendar.HOUR_OF_DAY, tPFin.getCurrentHour());
             	fin.set(Calendar.MINUTE,tPFin.getCurrentMinute());
             	if(inicio.before(fin))
@@ -732,7 +510,7 @@ public class ActividadHorarioSemanal2 extends Activity implements OnClickListene
 		}
 	}
 
-public static int obtenerIdUnica(){
+public static int getIdUnica(){
     	
     	/*Entrega una id Ãºnica. Vital para crear dialogos Ãºnicos */
     	Calendar now = Calendar.getInstance();
@@ -791,12 +569,12 @@ class Lienzo extends View {
 			}
 				
 			ViewModulo a = new ViewModulo(this);
-			a.setHoraInicio(m.obtenerStringInicio());
-			a.setHoraFin(m.obtenerStringFin());
-			a.setSala(m.obtenerNombre());
+			a.setHoraInicio(m.getStringInicio());
+			a.setHoraFin(m.getStringFin());
+			a.setSala(m.getNombre());
 			
-			a.setNombre(curso.obtenerNombre().substring(0,3));
-			String color = curso.obtenerColor();
+			a.setNombre(curso.getNombre().substring(0,3));
+			String color = curso.getColor();
 			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
 			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
 			enQueVoy+=duracionEnMinutos;
