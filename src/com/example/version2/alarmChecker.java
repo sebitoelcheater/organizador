@@ -53,13 +53,14 @@ public class alarmChecker extends Service implements Runnable {
 		indiceFin = 0;
 
 		Calendar ahora = Calendar.getInstance();
-		proximosInicios = Functions.obtenerLosModulosProximosInicio(this,
-				ahora, MINUTOS);
-		anterioresFinales = Functions.obtenerLosModulosAnterioresFin(this,
-				ahora, MINUTOS);
+		proximosInicios = Modulo.getLosModulosProximosInicio(this, ahora);
+		//getLosModulosProximosInicio(this, ahora, MINUTOS);
+		
+		//anterioresFinales = Modulo.getLosModulosAnterioresFin(this, ahora, MINUTOS);
+		anterioresFinales = Modulo.getLosModulosAnterioresFin(this, ahora);
 
 		/*
-		 * for(Modulo m : proximosInicios) Log.d("MODULO",m.obtenerNombre());
+		 * for(Modulo m : proximosInicios) Log.d("MODULO",m.getNombre());
 		 */
 		handler.sendEmptyMessage(MSG_KEY_INICIO);
 
@@ -84,6 +85,9 @@ public class alarmChecker extends Service implements Runnable {
 				} catch (NoExisteCursoException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (Exception e)
+				{
+					e.printStackTrace();
 				}
 				break;
 			}
@@ -92,13 +96,9 @@ public class alarmChecker extends Service implements Runnable {
 
 	/**
 	 * prepara y lanza la notificacion
-	 * 
-	 * @throws NoExisteCursoException
-	 * @throws NoHttpResponseException
-	 * @throws UnknownHostException
+	 * @throws Exception 
 	 */
-	private void Notificar() throws UnknownHostException,
-			NoHttpResponseException, NoExisteCursoException {
+	private void Notificar() throws Exception {
 
 		// Esta será la actividad de verdad que llamara la aplicacion
 		if (proximosInicios.size() != 0) {
@@ -107,12 +107,12 @@ public class alarmChecker extends Service implements Runnable {
 			AdapterDatabase ad = new AdapterDatabase(this);
 
 			Curso c = ad.getRecord(Curso.class, "Cursos",
-					Long.parseLong(m.obtenerIdCurso()));
-			if (c.obtenerComentable().equals("1")) {
-				if (!(c.obtenerNombre().endsWith(" "))) {
+					Long.parseLong(m.getIdCurso()));
+			if (c.getComentable().equals("1")) {
+				if (!(c.getNombre().endsWith(" "))) {
 
 					c.actualizar(this);// ?'
-					// c.establecerNombre(this, c.obtenerNombre()+" "); //esto
+					// c.establecerNombre(this, c.getNombre()+" "); //esto
 					// funciona considerando que el tiempo es lineal
 					Intent intentNot = new Intent(this, ActividadHorario.class);
 
@@ -120,20 +120,18 @@ public class alarmChecker extends Service implements Runnable {
 					Notification notification = new Notification(
 							android.R.drawable.ic_menu_my_calendar,
 							"Próxima Clase", System.currentTimeMillis());
-					notification.setLatestEventInfo(this, c.obtenerNombre(),
-							"A las "
-									+ proximosInicios.get(0)
-											.obtenerStringInicio(),
+					notification.setLatestEventInfo(this, c.getNombre(),
+							"A las "+ Functions.getHoraYMinutos(proximosInicios.get(0).getInicio()),
 							PendingIntent.getActivity(this.getBaseContext(), 0,
 									intentNot,
 									PendingIntent.FLAG_CANCEL_CURRENT));
 					notification.flags |= Notification.FLAG_AUTO_CANCEL;
-					mManager.notify(Integer.parseInt(m.obtenerId()),
+					mManager.notify(Integer.parseInt(m.getId()),
 							notification); // /PENSAR MEJOR ESTO Y ¿COMO HACER
 											// QUE NO APARESCA DOS VECES?
 				}
 			} else {
-				// c.establecerNombre(this, c.obtenerNombre()+" "); //esto
+				// c.establecerNombre(this, c.getNombre()+" "); //esto
 				// funciona considerando que el tiempo es lineal
 				c.actualizar(this);
 				Intent intentNot = new Intent(this, ActividadHorario.class);
@@ -143,13 +141,13 @@ public class alarmChecker extends Service implements Runnable {
 						android.R.drawable.ic_menu_my_calendar,
 						"Próxima Clase", System.currentTimeMillis());
 				notification
-						.setLatestEventInfo(this, c.obtenerNombre(), "A las "
-								+ proximosInicios.get(0).obtenerStringInicio(),
+						.setLatestEventInfo(this, c.getNombre(), "A las "
+								+ Functions.getHoraYMinutos(proximosInicios.get(0).getInicio()),
 								PendingIntent.getActivity(
 										this.getBaseContext(), 0, intentNot,
 										PendingIntent.FLAG_CANCEL_CURRENT));
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;
-				mManager.notify(Integer.parseInt(m.obtenerId()), notification);
+				mManager.notify(Integer.parseInt(m.getId()), notification);
 			}
 		}
 		if (anterioresFinales.size() != 0) {
@@ -157,25 +155,25 @@ public class alarmChecker extends Service implements Runnable {
 
 			AdapterDatabase ad = new AdapterDatabase(this);
 			Curso c = ad.getRecord(Curso.class, "Cursos",
-					Long.parseLong(m.obtenerIdCurso()));
-			if ((c.obtenerNombre().endsWith(" "))) {
-				// c.establecerNombre(this, c.obtenerNombre().trim());
+					Long.parseLong(m.getIdCurso()));
+			if ((c.getNombre().endsWith(" "))) {
+				// c.establecerNombre(this, c.getNombre().trim());
 				c.actualizar(this);
 				Intent intentNot = new Intent(this, ActividadFeedback.class);
 
-				intentNot.putExtra("ID", anterioresFinales.get(0).obtenerId());
+				intentNot.putExtra("ID", anterioresFinales.get(0).getId());
 
 				// Prepara la notificacion
 				Notification notification = new Notification(
 						android.R.drawable.ic_menu_send, "FeedBackea!",
 						System.currentTimeMillis());
 				notification.setLatestEventInfo(this,
-						"FeedBackear " + c.obtenerNombre(), " Da tu feedback!",
+						"FeedBackear " + c.getNombre(), " Da tu feedback!",
 						PendingIntent.getActivity(this.getBaseContext(), 0,
 								intentNot, PendingIntent.FLAG_CANCEL_CURRENT));
 				notification.flags |= Notification.FLAG_AUTO_CANCEL;
 				mManager.notify(
-						Integer.parseInt(anterioresFinales.get(0).obtenerId()) + 1,
+						Integer.parseInt(anterioresFinales.get(0).getId()) + 1,
 						notification); // /PENSAR MEJOR ESTO Y ¿COMO HACER QUE
 										// NO APARESCA DOS VECES?
 			}

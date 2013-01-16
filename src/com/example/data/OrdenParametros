@@ -5,7 +5,7 @@ Cursos:
 iidC, idC, iidP, title, comentable, color
 
 Horarios:
-iidH, idH, iidC, dds, inicio, fin, ubicaci—n
+iidH, idH, iidC, inicio, fin, ubicaci—n
 
 Comentarios:
 iidCom, idCom, iidH, fecha, comentario

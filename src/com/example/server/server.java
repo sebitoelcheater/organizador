@@ -253,13 +253,17 @@ public class Server extends Activity {
 		 */
 
 		// boolean delete=ad.deleteRecord("Curso", Long.parseLong(id));
-		boolean suscrito = false;
-		// if(delete==true)
-		AdapterDatabase ad = new AdapterDatabase(this);
-		String[] params = getParamsCurso(getRecordFromDatabase(id,"Curso")); 
-		ad.updateRecord("Cursos", params);
-
-		return suscrito;
+		
+		System.out.println("ACTUALIZARCURSO NO IMPLEMENTADO (Server)");
+		return false;
+		
+//		boolean suscrito = false;
+//		// if(delete==true)
+//		AdapterDatabase ad = new AdapterDatabase(this);
+//		String[] params = getParamsCurso(getRecordFromDatabase(id,"Curso")); 
+//		ad.updateRecord("Cursos", params);
+//
+//		return suscrito;
 
 		// boolean b = true;
 		// ArrayList<JSONObject> Profesor =

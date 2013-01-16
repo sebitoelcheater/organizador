@@ -30,7 +30,7 @@ public class Curso extends Modelo {
 	}
 
 	public Curso(Context context, int idC, int iidP, String nombre,
-			String comentable, String color) throws Exception {
+			String comentable, String color) {
 
 		super(nombreTabla, AdapterDatabase.tablas.get(nombreTabla).keys,
 				new String[] { "" + idC, "" + iidP, nombre, comentable, color });
