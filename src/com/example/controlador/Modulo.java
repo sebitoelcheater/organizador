@@ -52,12 +52,11 @@ public class Modulo extends Modelo {
 	 * @param idCurso
 	 * @return
 	 */
-	static public ArrayList<Modulo> getModulosPorIdCurso(Context context,
-			String idCurso) {
+	static public ArrayList<Modulo> getModulosPorIdCurso(Context context,Curso c) {
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class, nombreTabla,
 				new String[] { "idC" },
-				new String[] { idCurso }, null,
+				new String[] { c.getId() }, null,
 				null, null, null);
 
 		return modulos;
@@ -71,10 +70,19 @@ public class Modulo extends Modelo {
 
 	static public Modulo ultimoModulo(Context context, Curso c) {
 
-		AdapterDatabase ad = new AdapterDatabase(context);
-		ArrayList<Modulo>ad.getRecordWhere(Modulo, nombreTabla, camposIguales, valoresIguales, camposIntervalo, minIntervalo, maxIntervalo, ordenadoPor)
+		AdapterDatabase db = new AdapterDatabase(context);
+		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class, nombreTabla,
+				new String[] { "idC" },
+				new String[] { c.getId() }, null,
+				null, null, "inicio");
 		
-		return anterior;
+		int tamanoModulos=modulos.size();
+		if (tamanoModulos!=0){
+			return modulos.get(tamanoModulos-1);
+		}
+		else{
+			return null;
+		}
 	}
 
 	static public boolean puedoCambiarModulo(Context context, int dds,
@@ -207,7 +215,7 @@ public class Modulo extends Modelo {
 				new String[] { "1" }, null,
 				null, null, null);
 		
-		ArrayList<Modulo> modulos;
+		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
 		
 		for (Curso curso: cursos){
 			String idC = curso.getId();
@@ -216,8 +224,8 @@ public class Modulo extends Modelo {
 					new String[] { "idC" },
 					new String[] { idC }, 
 					new String[] { "fin" },
-					new String[] { hoyMinutos },
-					new String[] { hoyMinutos+horas*60 },
+					new String[] { Integer.toString(hoyMinutos) },
+					new String[] { Integer.toString(hoyMinutos+horas*60) },
 					null);
 			
 			modulos.addAll(modulo);
@@ -262,54 +270,69 @@ public class Modulo extends Modelo {
 	 * @return
 	 */
 	static public ArrayList<Modulo> getLosModulosAnterioresFin(
-			Context context, Calendar ahora, int minutos) // TERMINAR
+			Context context, Calendar momento) // TERMINAR
 	{
-		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
-		Calendar antes = ((Calendar) ahora.clone());
-		antes.add(Calendar.MINUTE, -minutos);
-
-		String stringAhora = agregarCeros(2, ahora.get(Calendar.HOUR_OF_DAY))
-				+ ":" + agregarCeros(2, ahora.get(Calendar.MINUTE));
-		String stringAntes = agregarCeros(2, antes.get(Calendar.HOUR_OF_DAY))
-				+ ":" + agregarCeros(2, antes.get(Calendar.MINUTE));
-
+				
 		AdapterDatabase db = new AdapterDatabase(context);
-		;
-		if (antes.get(Calendar.DAY_OF_WEEK) == ahora.get(Calendar.DAY_OF_WEEK)) {
-			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, "Horarios",
-					new String[] { "dds" },
-					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
-					new String[] { "fin" }, new String[] { stringAntes },
-					new String[] { stringAhora }, "fin");
-
-		} else {
-			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla,
-					new String[] { "dds" },
-					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
-					new String[] { "fin" }, new String[] { "00:00" },
-					new String[] { stringAhora }, "fin");
-
-			c = db.getRecordWhere(Modulo.class, nombreTabla,
-					new String[] { "dds" },
-					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
-					new String[] { "fin" }, new String[] { stringAntes },
-					new String[] { "23:59" }, "fin");
-
-		}
-
-		ArrayList<Modulo> modulosComentables = new ArrayList<Modulo>();// AQUI
-																		// ESTA
-		for (Modulo m : modulos) {
-			AdapterDatabase ad = new AdapterDatabase(context);
-
-			Curso c = ad.getRecord(Curso.class, Curso.getNombreTabla(),
-					Long.parseLong(m.getIdCurso()));
-			if (c.getComentable().equals("1")) {
-				modulosComentables.add(m);
-			}
-		}
-
-		return modulosComentables;
+		
+		ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class, nombreTabla,
+				null,
+				null, 
+				new String[] { "fin" },
+				new String[] { "0" },
+				new String[] { Integer.toString(Functions.getEnMinutos(momento)) },
+				null);
+		
+		return modulo;
+		
+		
+		
+//		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
+//		Calendar antes = ((Calendar) ahora.clone());
+//		antes.add(Calendar.MINUTE, -minutos);
+//
+//		String stringAhora = agregarCeros(2, ahora.get(Calendar.HOUR_OF_DAY))
+//				+ ":" + agregarCeros(2, ahora.get(Calendar.MINUTE));
+//		String stringAntes = agregarCeros(2, antes.get(Calendar.HOUR_OF_DAY))
+//				+ ":" + agregarCeros(2, antes.get(Calendar.MINUTE));
+//
+//		AdapterDatabase db = new AdapterDatabase(context);
+//		;
+//		if (antes.get(Calendar.DAY_OF_WEEK) == ahora.get(Calendar.DAY_OF_WEEK)) {
+//			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, "Horarios",
+//					new String[] { "dds" },
+//					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
+//					new String[] { "fin" }, new String[] { stringAntes },
+//					new String[] { stringAhora }, "fin");
+//
+//		} else {
+//			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla,
+//					new String[] { "dds" },
+//					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
+//					new String[] { "fin" }, new String[] { "00:00" },
+//					new String[] { stringAhora }, "fin");
+//
+//			c = db.getRecordWhere(Modulo.class, nombreTabla,
+//					new String[] { "dds" },
+//					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
+//					new String[] { "fin" }, new String[] { stringAntes },
+//					new String[] { "23:59" }, "fin");
+//
+//		}
+//
+//		ArrayList<Modulo> modulosComentables = new ArrayList<Modulo>();// AQUI
+//																		// ESTA
+//		for (Modulo m : modulos) {
+//			AdapterDatabase ad = new AdapterDatabase(context);
+//
+//			Curso c = ad.getRecord(Curso.class, Curso.getNombreTabla(),
+//					Long.parseLong(m.getIdCurso()));
+//			if (c.getComentable().equals("1")) {
+//				modulosComentables.add(m);
+//			}
+//		}
+//
+//		return modulosComentables;
 	}
 
 	/**
@@ -321,44 +344,58 @@ public class Modulo extends Modelo {
 	 * @return
 	 */
 	static public ArrayList<Modulo> getLosModulosProximosInicio(
-			Context context, Calendar ahora, int minutos) // TERMINAR
+			Context context, Calendar momento) // TERMINAR
 	{
-		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
-		Calendar despues = ((Calendar) ahora.clone());
-		despues.add(Calendar.MINUTE, minutos);
-
-		String stringAhora = agregarCeros(2, ahora.get(Calendar.HOUR_OF_DAY))
-				+ ":" + agregarCeros(2, ahora.get(Calendar.MINUTE));
-		String stringDespues = agregarCeros(2,
-				despues.get(Calendar.HOUR_OF_DAY))
-				+ ":" + agregarCeros(2, despues.get(Calendar.MINUTE));
-
+		
 		AdapterDatabase db = new AdapterDatabase(context);
-
-		if (despues.get(Calendar.DAY_OF_WEEK) == ahora
-				.get(Calendar.DAY_OF_WEEK)) {
-			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla,
-					new String[] { "dds" },
-					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
-					new String[] { "inicio" }, new String[] { stringAhora },
-					new String[] { stringDespues }, "inicio");
-
-		} else {
-			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla,
-					new String[] { "dds" },
-					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
-					new String[] { "inicio" }, new String[] { stringAhora },
-					new String[] { "23:59" }, "inicio");
-
-			c = db.getRecordWhere(Modulo.class, nombreTabla,
-					new String[] { "dds" },
-					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
-					new String[] { "inicio" }, new String[] { "00:00" },
-					new String[] { stringDespues }, "inicio");
-
-		}
-
-		return modulos;
+		
+		ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class, nombreTabla,
+				null,
+				null, 
+				new String[] { "inicio" },
+				new String[] { "0" },
+				new String[] { Integer.toString(Functions.getEnMinutos(momento)) },
+				null);
+		
+		return modulo;
+		
+		
+//		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
+//		Calendar despues = ((Calendar) ahora.clone());
+//		despues.add(Calendar.MINUTE, minutos);
+//
+//		String stringAhora = agregarCeros(2, ahora.get(Calendar.HOUR_OF_DAY))
+//				+ ":" + agregarCeros(2, ahora.get(Calendar.MINUTE));
+//		String stringDespues = agregarCeros(2,
+//				despues.get(Calendar.HOUR_OF_DAY))
+//				+ ":" + agregarCeros(2, despues.get(Calendar.MINUTE));
+//
+//		AdapterDatabase db = new AdapterDatabase(context);
+//
+//		if (despues.get(Calendar.DAY_OF_WEEK) == ahora
+//				.get(Calendar.DAY_OF_WEEK)) {
+//			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla,
+//					new String[] { "dds" },
+//					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
+//					new String[] { "inicio" }, new String[] { stringAhora },
+//					new String[] { stringDespues }, "inicio");
+//
+//		} else {
+//			ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla,
+//					new String[] { "dds" },
+//					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
+//					new String[] { "inicio" }, new String[] { stringAhora },
+//					new String[] { "23:59" }, "inicio");
+//
+//			c = db.getRecordWhere(Modulo.class, nombreTabla,
+//					new String[] { "dds" },
+//					new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
+//					new String[] { "inicio" }, new String[] { "00:00" },
+//					new String[] { stringDespues }, "inicio");
+//
+//		}
+//
+//		return modulos;
 	}
 
 	static public ArrayList<Modulo> getLosSiguientesModulosDelDia(
