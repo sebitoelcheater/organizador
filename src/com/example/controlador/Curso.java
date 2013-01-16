@@ -16,7 +16,6 @@ public class Curso extends Modelo {
 		return keys;
 	}
 
-
 	private static String nombreTabla = "Cursos";
 
 	public static String getNombreTabla() {
@@ -38,7 +37,6 @@ public class Curso extends Modelo {
 		this.NombreTabla = nombreTabla;
 
 	}
-	
 
 	public String getId() {
 		return (String) this.params.get("iidC");
@@ -75,7 +73,7 @@ public class Curso extends Modelo {
 	public boolean actualizar(Context context) throws Exception {
 		Server s = new Server();
 		boolean b = s.actualizarCurso(getIdMaster(), context);// seba va a
-																	// arreglar
+																// arreglar
 		return b;
 	}
 
@@ -91,19 +89,16 @@ public class Curso extends Modelo {
 		return false;
 	}
 
-	public boolean existeCursoComentable(Context context)
-	{
+	public boolean existeCursoComentable(Context context) {
 		AdapterDatabase db = new AdapterDatabase(context);
 
 		boolean b = db.getRecordWhere(Curso.class, "Cursos",
-				new String[] { "idC" }, new String[] { getIdMaster() },
-				null, null, null, null).size() == 0;
+				new String[] { "idC" }, new String[] { getIdMaster() }, null,
+				null, null, null).size() == 0;
 
 		return !b;
 
 	}
-
-
 
 	public static Curso getCurso(Context context, String id) // DEPRECATED???
 	{
@@ -114,9 +109,9 @@ public class Curso extends Modelo {
 	}
 
 	public static ArrayList<Curso> getCursosOrdenados(Context context)// por
-																			// esEditable
-																			// ==
-																			// idC=0
+																		// esEditable
+																		// ==
+																		// idC=0
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Curso> cursos1 = db.getRecordWhere(Curso.class, nombreTabla,
@@ -152,31 +147,20 @@ public class Curso extends Modelo {
 				null, null);
 
 	}
-	
+
 	@Override
 	public void setData(String id, Object[] params) {
-
-		// this.id = id;
-		// private String id; //iidC
-		// private String idC;
-		// private String idP;
-		// private String nombre;
-		// private boolean comentable;
-		// private String color;
-		// private static String nombreTabla="Cursos";
-
-		// "iidC integer primary key autoincrement, idC integer, iidP integer, title VARCHAR not null, comentable integer, color VARCHAR not null"));
 		this.NombreTabla = nombreTabla;
 		for (int i = 0; i < keys.length; i++) {
 			this.params.put(this.keys[i], (String) params[i]);
 		}
 
 	}
-	
-	public static void setKeys(String[] keys,String nombreTabla) {
-		
+
+	public static void setKeys(String[] keys, String nombreTabla) {
+
 		Curso.keys = keys;
-		Curso.nombreTabla=nombreTabla;
+		Curso.nombreTabla = nombreTabla;
 	}
 
 }

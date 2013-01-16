@@ -34,15 +34,15 @@ public abstract class Modelo {// EX ISeteable
 		this.NombreTabla = nombreTabla;
 
 	}
-	
-	public boolean save(Context ctx)
-	{//Recordar que Modulo hace override de este metodo
+
+	public boolean save(Context ctx) {// Recordar que Modulo hace override de
+										// este metodo
 		AdapterDatabase ad = new AdapterDatabase(ctx);
-		if(ad.insertRecord(NombreTabla,this.params.values().toArray() )>0)
+		if (ad.insertRecord(NombreTabla, this.params.values().toArray()) > 0)
 			return true;
 		return false;
 	}
 
 	public abstract void setData(String id, Object[] params);
-	
+
 }
