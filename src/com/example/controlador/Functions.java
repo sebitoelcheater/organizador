@@ -31,22 +31,46 @@ public class Functions {
 		return numero;
 	}
 
+/**
+ * Obtiene un int del 0 al 6, que representa lunes,martes,.....,domingo	
+ * @param minutos
+ * @return
+ */
 	public static int getDia(int minutos) {
 		return minutos / minutosDeUnDia;
 	}
 
+	/**
+	 * Obtiene la hora del dia en minutos(considerando HH:MM, considera tanto HH como MM), tomando como referencia las 00:00
+	 * @param minutos
+	 * @return
+	 */
 	public static int getHoraDelDiaEnMinutos(int minutos) {
 		return minutos % minutosDeUnDia;
 	}
 
+	/**
+	 * Si consideramos HH:MM, esto devuelve HH
+	 * @param minutos
+	 * @return
+	 */
 	public static int getHoraDelDia(int minutos) {
 		return getHoraDelDiaEnMinutos(minutos) / 60;
 	}
 
+	/**
+	 * Si consideramos HH:MM, esto devuelve MM
+	 * @param minutos
+	 * @return
+	 */
 	public static int getMinutosDelDia(int minutos) {
 		return getHoraDelDiaEnMinutos(minutos) % 60;
 	}
 
+	/**
+	 * Obtiene el momento actual considerando el dia de la semana, la hora y los minutos en sistema de referencia de los minutos, tomando como 0 el lunes a las 00:00
+	 * @return
+	 */
 	public static int getAhoraEnMinutos() {
 		int dia = traducirDias(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
 		int hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
@@ -55,6 +79,7 @@ public class Functions {
 
 	}
 
+	
 	private static int traducirDias(int USDia) {
 		int dia = USDia;
 		dia -= 2;
@@ -66,6 +91,11 @@ public class Functions {
 
 	}
 
+	/**
+	 * Obtiene la fecha calendar en sistema de minutos semanales
+	 * @param calendar
+	 * @return
+	 */
 	public static int getEnMinutos(Calendar calendar) {
 		int dia = traducirDias(calendar.get(Calendar.DAY_OF_WEEK));
 		int hora = calendar.get(Calendar.HOUR_OF_DAY);
