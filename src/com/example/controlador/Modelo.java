@@ -13,7 +13,7 @@ public abstract class Modelo {// EX ISeteable
 
 	protected Modelo() {
 		NombreTabla = null;
-		params = null;
+		
 	}
 
 	protected Modelo(String nombreTabla, String[] keys, Object[] values)

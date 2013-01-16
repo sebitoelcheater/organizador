@@ -52,7 +52,7 @@ public class AdapterDatabase {
 				new Tabla(
 
 						horarios,
-						"iidH integer primary key autoincrement, idH integer, iidC integer, dds integer, inicio date, fin date, ubicacion VARCHAR"));
+						"iidH integer primary key autoincrement, idH integer, iidC integer, inicio integer, fin integer, ubicacion VARCHAR"));
 
 		String profesores = "Profesores";
 
@@ -89,6 +89,7 @@ public class AdapterDatabase {
 			tablas = t;
 		}
 
+		
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 
@@ -208,11 +209,9 @@ public class AdapterDatabase {
 	 * @param ret
 	 * @return
 	 */
-	private <T extends Modelo> ArrayList<T> obtenerInstancias(Class<T> _class,
-			String nombreTabla, Cursor ret)
-
+	private <T extends Modelo> ArrayList<T> obtenerInstancias(Class<T> _class, String nombreTabla, Cursor ret)
 	{
-		SQLiteDatabase db = DBHelper.getWritableDatabase();
+		
 		ArrayList<T> arrayList = new ArrayList<T>();
 
 		if (ret.moveToFirst()) {
@@ -232,10 +231,6 @@ public class AdapterDatabase {
 
 			} while (ret.moveToNext());
 		}
-
-		db.close();
-		DBHelper.close();
-		ret.close();
 
 		return arrayList;
 	}
@@ -308,33 +303,30 @@ public class AdapterDatabase {
 			String nombreTabla, String[] camposIguales,
 			String[] valoresIguales, String[] camposIntervalo,
 			String[] minIntervalo, String[] maxIntervalo, String ordenadoPor) {
+		
 		SQLiteDatabase db = DBHelper.getWritableDatabase();
 		String SQLCODE = generarCodigoIgual(camposIguales, valoresIguales);
 
-		SQLCODE = SQLCODE
-				+ "AND "
-				+ generarCodigoIntervalo(minIntervalo, camposIntervalo,
-						maxIntervalo);
+		SQLCODE = SQLCODE+ "AND "+ generarCodigoIntervalo(minIntervalo, camposIntervalo, maxIntervalo);
 		if (SQLCODE.trim().endsWith("AND")) {
 			SQLCODE = SQLCODE.trim().substring(0, SQLCODE.length() - 4);
 		}
+		if(SQLCODE.trim().startsWith("AND")){
+			SQLCODE = SQLCODE.trim().substring(3, SQLCODE.length());
+		}
 		System.out.println("\n SQLCODE: " + SQLCODE);
-		Cursor mCursor = db.query(nombreTabla, getNombresCampos(nombreTabla),
-				SQLCODE, null, null, null, ordenadoPor);
+		Cursor mCursor = db.query(nombreTabla, getNombresCampos(nombreTabla),SQLCODE.trim(), null, null, null, ordenadoPor);
 
-		if (mCursor != null) // HASTA ACA VOY BIEN 1
-		{
-
+		if (mCursor != null) 
 			mCursor.moveToFirst();
 
-		}
-
-		ArrayList<T> listaInstancias = obtenerInstancias(_class, nombreTabla,
-				mCursor);
-
+		
+		
+		ArrayList<T> listaInstancias = obtenerInstancias(_class, nombreTabla,mCursor);
+		mCursor.close();
 		db.close();
 		DBHelper.close();
-		mCursor.close();
+		
 
 		return listaInstancias;
 	}
@@ -351,7 +343,8 @@ public class AdapterDatabase {
 		if (campos != null) {
 			String txt = "";
 			for (int i = 0; i < campos.length; i++) {
-				txt += campos[i] + "= '" + valores[i] + "' AND ";
+				if(valores[i]!=null)
+					txt += campos[i] + "= '" + valores[i] + "' AND ";
 			}
 
 			return txt.substring(0, txt.length() - 4);
@@ -381,8 +374,7 @@ public class AdapterDatabase {
 					txt += " " + campos[i] + " <= '" + max[i] + "' AND";
 			}
 
-			System.out.println("codigoIntervalo= "
-					+ txt.substring(0, txt.length() - 4));
+			System.out.println("codigoIntervalo= "+ txt.substring(0, txt.length() - 4));
 			return txt.substring(0, txt.length() - 4);
 
 		} else {
