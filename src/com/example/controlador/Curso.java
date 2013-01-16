@@ -46,23 +46,23 @@ public class Curso extends Modelo {
 
 	}
 
-	public String obtenerId() {
+	public String getId() {
 		return (String) this.params.get("iidC");
 	}
 
-	public String obtenerNombre() {
+	public String getNombre() {
 		return (String) this.params.get("nombre");
 	}
 
-	public String obtenerIdMaster() {
+	public String getIdMaster() {
 		return (String) this.params.get("idC");
 	}
 
-	public String obtenerIdP() {
+	public String getIdP() {
 		return (String) this.params.get("idP");
 	}
 
-	public String obtenerComentable() {
+	public String getComentable() {
 		return (String) this.params.get("comentable");
 	}
 
@@ -74,13 +74,13 @@ public class Curso extends Modelo {
 		return this.params.get("idC").equals("0");
 	}
 
-	public String obtenerColor() {
+	public String getColor() {
 		return (String) this.params.get("color");
 	}
 
 	public boolean actualizar(Context context) throws Exception {
 		Server s = new Server();
-		boolean b = s.actualizarCurso(obtenerIdMaster(), context);// seba va a
+		boolean b = s.actualizarCurso(getIdMaster(), context);// seba va a
 																	// arreglar
 		return b;
 	}
@@ -90,7 +90,7 @@ public class Curso extends Modelo {
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
 
-		if (db.deleteRecord(nombreTabla, Long.parseLong(obtenerId()))) {
+		if (db.deleteRecord(nombreTabla, Long.parseLong(getId()))) {
 			return true;
 		}
 
@@ -106,7 +106,7 @@ public class Curso extends Modelo {
 		AdapterDatabase db = new AdapterDatabase(context);
 
 		boolean b = db.getRecordWhere(Curso.class, "Cursos",
-				new String[] { "idC" }, new String[] { obtenerIdMaster() },
+				new String[] { "idC" }, new String[] { getIdMaster() },
 				null, null, null, null).size() == 0;
 
 		return !b;
@@ -133,7 +133,7 @@ public class Curso extends Modelo {
 
 	}
 
-	public static Curso obtenerCurso(Context context, String id) // DEPRECATED???
+	public static Curso getCurso(Context context, String id) // DEPRECATED???
 	{
 		AdapterDatabase ad = new AdapterDatabase(context);
 
@@ -141,7 +141,7 @@ public class Curso extends Modelo {
 		return c;
 	}
 
-	public static ArrayList<Curso> obtenerCursosOrdenados(Context context)// por
+	public static ArrayList<Curso> getCursosOrdenados(Context context)// por
 																			// esEditable
 																			// ==
 																			// idC=0
@@ -159,7 +159,7 @@ public class Curso extends Modelo {
 		return ordenados;
 	}
 
-	public static ArrayList<Curso> obtenerCursosComentables(Context context) {
+	public static ArrayList<Curso> getCursosComentables(Context context) {
 
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Curso> cursos = db.getRecordWhere(Curso.class, nombreTabla,
@@ -170,7 +170,7 @@ public class Curso extends Modelo {
 
 	}
 
-	public static ArrayList<Curso> obtenerCursosEditables(Context context) {
+	public static ArrayList<Curso> getCursosEditables(Context context) {
 		// TODO Auto-generated method stub //idC=0
 
 		AdapterDatabase db = new AdapterDatabase(context);
