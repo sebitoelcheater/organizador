@@ -34,6 +34,7 @@ public class Functions {
 	public static int getDia(int minutos){
 		return minutos/minutosDeUnDia;
 	}
+	
 	public static int getHoraDelDiaEnMinutos(int minutos)
 	{
 		return minutos%minutosDeUnDia;

@@ -62,24 +62,25 @@ public class Modulo extends Modelo {
 		return modulos;
 	}
 
+	/**Seba lo hace**/
 	static public Modulo ultimoModulo(Context context, Curso c) {
 
 		AdapterDatabase ad = new AdapterDatabase(context);
-		ArrayList<Modulo>ad.getRecordWhere(Modulo, nombreTabla, camposIguales, valoresIguales, camposIntervalo, minIntervalo, maxIntervalo, ordenadoPor)
+		ArrayList<Modulo> modulos=obtenerModulosPorIdCurso(context, c.obtenerId());
 		
-		return anterior;
+
 	}
 
 	static public boolean puedoCambiarModulo(Context context, int dds,
-			Calendar inicio, Calendar fin, Modulo moduloAEditar) {
+			int inicio, int fin, Modulo moduloAEditar) {
 		AdapterDatabase db = new AdapterDatabase(context);
-		String stringInicio = agregarCeros(2, inicio.get(Calendar.HOUR_OF_DAY))
-				+ ":" + agregarCeros(2, inicio.get(Calendar.MINUTE));
-		String stringFin = agregarCeros(2, fin.get(Calendar.HOUR_OF_DAY)) + ":"
-				+ agregarCeros(2, fin.get(Calendar.MINUTE));
+		String stringInicio = agregarCeros(2, Functions.getHoraDelDia(inicio))
+				+ ":" + agregarCeros(2, Functions.getMinutosDelDia(inicio));
+		String stringFin = agregarCeros(2, Functions.getHoraDelDia(fin)) + ":"
+				+ agregarCeros(2, Functions.getMinutosDelDia(inicio));
 
-		;
-		ArrayList<Modulo> c = comprobarTopeHorario(context, dds + "",
+		
+		ArrayList<Modulo> c = getModulosEntreInicioYFin(context, dds + "",
 				stringInicio, stringFin);
 
 		boolean b = c.size() == 0;
@@ -98,21 +99,14 @@ public class Modulo extends Modelo {
 	}
 
 	static public ArrayList<Modulo> obtenerModulosSegunDiaOrdenadosSegunInicio(
-			Context context, int dia) // INEFICIENTE!!!!, el dia es de 1 a 7
-										// siendo 1 el domingo
+			Context context, int dia) 
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
-		ArrayList<Modulo> modulosNoOrdenados = db.getAllRecords(Modulo.class,
-				nombreTabla);
-		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
-		for (Modulo modulo : modulosNoOrdenados) {
-
-			if (modulo.obtenerDiaDeLaSemana().equals(dia + ""))
-				modulos.add(modulo);
-		}
-
-		quicksortModulo(modulos);
-		return modulos;
+		
+		ArrayList<Modulo> modulosOrdenados = db.getRecordWhere(Modulo.class, nombreTabla, null, null, new String[]{"inicio","fin"}, new String[]{dia*Functions.minutosDeUnDia+"",dia*Functions.minutosDeUnDia+""}, new String[]{(dia+1)*Functions.minutosDeUnDia+"",(dia+1)*Functions.minutosDeUnDia+""}, "inicio");
+	
+		
+		return modulosOrdenados;
 	}
 
 	/***
@@ -156,28 +150,10 @@ public class Modulo extends Modelo {
 	}
 
 	static public ArrayList<Modulo> obtenerModulosDelDia(Context context,
-			Calendar hoydia) // INEFICIENTE!!!!
+			int hoydia) // INEFICIENTE!!!!
 	{
-		ArrayList<Modulo> modulos;
-		AdapterDatabase db = new AdapterDatabase(context);
 
-		// ArrayList<Modulo> modulosNoOrdenados =
-		// db.getAllRecords(Modulo.class,nombreTabla);
-		//
-		// for(Modulo modulo: modulosNoOrdenados)
-		// {
-		// if
-		// (modulo.obtenerDiaDeLaSemana().equals(hoydia.get(Calendar.DAY_OF_WEEK)+""))
-		// modulos.add(modulo);
-		//
-		// }
-		//
-		modulos = db.getRecordWhere(Modulo.class, nombreTabla,
-				new String[] { "dds" },
-				new String[] { "" + hoydia.get(Calendar.DAY_OF_WEEK) }, null,
-				null, null, null);
-
-		return modulos;
+		return obtenerModulosSegunDiaOrdenadosSegunInicio(context, hoydia);
 	}
 
 	/**
@@ -330,43 +306,19 @@ public class Modulo extends Modelo {
 	}
 
 	static public ArrayList<Modulo> obtenerLosSiguientesModulosDelDia(
-			Context context, Calendar ahora, int largo) {
-
-		String hora = agregarCeros(2, ahora.get(Calendar.HOUR_OF_DAY)) + ":"
-				+ agregarCeros(2, ahora.get(Calendar.MINUTE));
+			Context context, int minAhora, int largo) {
 		AdapterDatabase db = new AdapterDatabase(context);
-
-		ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla,
-				new String[] { "dds" },
-				new String[] { "" + ahora.get(Calendar.DAY_OF_WEEK) },
-				new String[] { "inicio" }, new String[] { hora }, null, largo
-						+ "");
+		ArrayList<Modulo> c = db.getRecordWhere(Modulo.class, nombreTabla, null, null, new String[]{"inicio"}, new String[]{minAhora+""},null, "inicio");
 
 		return c;
 	}
 
 	static public ArrayList<Modulo> obtenerLosSiguientesModulos(
-			Context context, Calendar ahora, int largo) {
+			Context context, int ahoraEnMinutos) {
 
-		String hora = agregarCeros(2, ahora.get(Calendar.HOUR_OF_DAY)) + ":"
-				+ agregarCeros(2, ahora.get(Calendar.MINUTE));
 		AdapterDatabase db = new AdapterDatabase(context);
 
-		ArrayList<Modulo> modulosMismoDia = db.getRecordWhere(Modulo.class,
-				nombreTabla, new String[] { "dds" },
-				new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" },
-				new String[] { "inicio" }, new String[] { hora }, null, null);
-		ArrayList<Modulo> modulosDiasSiguientes = db.getRecordWhere(
-				Modulo.class, nombreTabla, null, null, new String[] { "dds" },
-				new String[] { ahora.get(Calendar.DAY_OF_WEEK) + "" }, null,
-				null);
-
-		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
-		if (modulosMismoDia != null)
-			modulos.addAll(modulosMismoDia);
-
-		if (modulosDiasSiguientes != null)
-			modulos.addAll(modulosDiasSiguientes);
+		ArrayList<Modulo> modulos= db.getRecordWhere(Modulo.class, nombreTabla, null, null, new String[]{"inicio"}, new String[]{ahoraEnMinutos+""}, null, "inicio");
 
 		return modulos;
 	}
@@ -380,31 +332,15 @@ public class Modulo extends Modelo {
 	 * @param fin
 	 * @return
 	 */
-	public static ArrayList<Modulo> comprobarTopeHorario(Context ctx,
-			String diaDeLaSemana, String inicio, String fin) {
+	public static ArrayList<Modulo> getModulosEntreInicioYFin(Context ctx,
+			 int inicio, int fin) {
 		AdapterDatabase ad = new AdapterDatabase(ctx);
 
-		// String fInicio = "'"+inicio+"'";
-		// String fFin = "'"+fin+"'";
-		// String KEY_INICIO="inicio";
-		// String KEY_FIN = "fin";
-		//
-		// Cursor mCursor =
-		// db.query(true, nombreTabla, getNombresCampos("Horarios"),
-		// "dds" + "=" + diaDeLaSemana+
-		// " AND (("+KEY_INICIO+"<"+fInicio+" AND "+
-		// KEY_FIN+">"+fFin+") OR ("+KEY_INICIO+">="+fInicio+" AND "+
-		// KEY_INICIO+"<"+fFin+") OR ("+KEY_FIN+">"+fInicio+" AND "+
-		// KEY_FIN+"<="+fFin+")"+")", null, null, null, null, null);
-		// if (mCursor != null) {
-		// mCursor.moveToFirst();
-		// }
-		// db.close() ; DBHelper.close(); mCursor.close();
 		ArrayList<Modulo> modulos = ad
 				.getRecordWhere(Modulo.class, nombreTabla,
-						new String[] { "dds" }, new String[] { diaDeLaSemana },
+						null, null ,
 						new String[] { "inicio", "fin" }, new String[] {
-								inicio, null }, new String[] { null, fin },
+								""+inicio, null }, new String[] { null, ""+fin },
 						null);
 
 		return modulos;
@@ -514,34 +450,6 @@ public class Modulo extends Modelo {
 		return numero;
 	}
 
-	/**
-	 * Ver si es necesario este metodo
-	 * 
-	 * @param ctx
-	 * @param diaDeLaSemana
-	 * @param hora
-	 * @param limit
-	 * @return
-	 */
-	public static ArrayList<Modulo> getModulosSiguientesHORARIOS(Context ctx,
-			String diaDeLaSemana, String hora, String limit) {
-		// // TODO Auto-generated method stub
-		// AdapterDatabase ad = new AdapterDatabase(ctx);
-		//
-		// ArrayList<Modulo> modulos = ad.getRecordWhere(Modulo.class,
-		// nombreTabla, new String[]{"dds"}, new String[]{diaDeLaSemana],
-		// camposIntervalo, minIntervalo, maxIntervalo, ordenadoPor)
-		// Cursor mCursor = db.query("Horarios", null,
-		// "("+"dds"+"="+diaDeLaSemana+" and " +"inicio"+">='"+hora+"')"+" or "
-		// + "dds"+">="+diaDeLaSemana, null, null, null,
-		// "dds"+","+"inicio",limit);
-		// ArrayList<Modulo> ret = obtenerInstancias(Modulo.class,"Horarios",
-		// mCursor);
-		//
-		// db.close() ; DBHelper.close(); mCursor.close();
-		// return ret;
-
-		return null;
-	}
-
+	
+	
 }
