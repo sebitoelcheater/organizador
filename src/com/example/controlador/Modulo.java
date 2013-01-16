@@ -1,13 +1,8 @@
 package com.example.controlador;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
-import android.annotation.SuppressLint;
+import java.util.*;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.example.data.*;
 
@@ -108,8 +103,7 @@ public class Modulo extends Modelo {
 
 	static public boolean puedoCambiarModulo(Context context,
 			int inicio, int fin, Modulo moduloAEditar) {
-		AdapterDatabase db = new AdapterDatabase(context);
-		
+
 		ArrayList<Modulo> c = getModulosEntreInicioYFin(context,
 				inicio, fin);
 
@@ -411,4 +405,17 @@ public class Modulo extends Modelo {
 	}
 
 
+	public static void setKeys(String[] keys,String nombreTabla) {
+		Modulo.keys = keys;
+		Modulo.nombreTabla=nombreTabla;
+	}
+	
+	@Override
+	public void setData(String id, Object[] params) {
+		
+		for (int i = 0; i < keys.length; i++) {
+			this.params.put(this.keys[i], (String) params[i]);
+		}
+		
+	}
 }

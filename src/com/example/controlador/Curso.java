@@ -17,10 +17,6 @@ public class Curso extends Modelo {
 	}
 
 
-	public static void setKeys(String[] keys) {
-		Curso.keys = keys;
-	}
-
 	private static String nombreTabla = "Cursos";
 
 	public static String getNombreTabla() {
@@ -95,11 +91,7 @@ public class Curso extends Modelo {
 		return false;
 	}
 
-	public boolean existeCursoComentable(Context context)// Le das el idmaster y
-															// te dice si ya lo
-															// tienes en ls base
-															// de datos interna
-															// :)
+	public boolean existeCursoComentable(Context context)
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
 
@@ -111,25 +103,7 @@ public class Curso extends Modelo {
 
 	}
 
-	@Override
-	public void setData(String id, Object[] params) {
 
-		// this.id = id;
-		// private String id; //iidC
-		// private String idC;
-		// private String idP;
-		// private String nombre;
-		// private boolean comentable;
-		// private String color;
-		// private static String nombreTabla="Cursos";
-
-		// "iidC integer primary key autoincrement, idC integer, iidP integer, title VARCHAR not null, comentable integer, color VARCHAR not null"));
-		this.NombreTabla = nombreTabla;
-		for (int i = 0; i < keys.length; i++) {
-			this.params.put(this.keys[i], (String) params[i]);
-		}
-
-	}
 
 	public static Curso getCurso(Context context, String id) // DEPRECATED???
 	{
@@ -177,6 +151,32 @@ public class Curso extends Modelo {
 				new String[] { keys[2] }, new String[] { "0" }, null, null,
 				null, null);
 
+	}
+	
+	@Override
+	public void setData(String id, Object[] params) {
+
+		// this.id = id;
+		// private String id; //iidC
+		// private String idC;
+		// private String idP;
+		// private String nombre;
+		// private boolean comentable;
+		// private String color;
+		// private static String nombreTabla="Cursos";
+
+		// "iidC integer primary key autoincrement, idC integer, iidP integer, title VARCHAR not null, comentable integer, color VARCHAR not null"));
+		this.NombreTabla = nombreTabla;
+		for (int i = 0; i < keys.length; i++) {
+			this.params.put(this.keys[i], (String) params[i]);
+		}
+
+	}
+	
+	public static void setKeys(String[] keys,String nombreTabla) {
+		
+		Curso.keys = keys;
+		Curso.nombreTabla=nombreTabla;
 	}
 
 }
