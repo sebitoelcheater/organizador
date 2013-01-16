@@ -36,13 +36,35 @@ public class Modulo extends Modelo {
 	//
 	public Modulo() {
 
+		this.NombreTabla = nombreTabla;
 	}
 
 	public Modulo(Context context, int idH, int iidC, int inicio,
 			int fin, String ubicacion) throws Exception {
 		super(nombreTabla, getKeys(), new Object[] { idH, iidC, inicio,
 				fin, ubicacion });
+
+		this.NombreTabla=nombreTabla;
 		
+
+	}
+	
+	@Override
+	public boolean save(Context ctx)
+	{
+		AdapterDatabase db = new AdapterDatabase(ctx);
+
+		
+		String stringInicio = getStringInicio();
+		String stringFin = getStringFin();
+		
+
+		boolean b = comprobarTopeHorario(ctx, getDiaDeLaSemana(), stringInicio,
+				stringFin).size() == 0;
+		if (b)
+			db.insertRecord(nombreTabla, this.params.values().toArray());
+		
+		return b;
 	}
 
 	/**
@@ -499,10 +521,6 @@ public class Modulo extends Modelo {
 
 	public String getUbicacion() {
 		return (String) this.params.get(getKeys()[6]);
-	}
-
-	public String getDiaDeLaSemana() {
-		return (String) this.params.get(getKeys()[3]);
 	}
 
 	public String getNombreDiaDeLaSemana() {

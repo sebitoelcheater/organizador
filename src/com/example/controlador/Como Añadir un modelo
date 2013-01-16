@@ -1,0 +1,6 @@
+Para agregar un  nuevo modelo  se debe:
+
+*Hacer que herede de modelo: - implementar setData()
+   							- implementar setKeys()
+*Hacer un constructor vacio y otro normal: En ambos debe estar this.NombreTabla = nombreTabla
+*Pensar si hay que sobre-escribir metodo save();

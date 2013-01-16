@@ -136,7 +136,7 @@ public class AdapterDatabase {
 	 *            OrdenParametros.txt
 	 * @return
 	 */
-	public long insertRecord(String nombreTabla, String[] params) {
+	public long insertRecord(String nombreTabla, Object[] params) {
 		Tabla t = tablas.get(nombreTabla);
 		String[] nombresCampos = getNombresCampos(nombreTabla);
 
@@ -144,7 +144,7 @@ public class AdapterDatabase {
 		SQLiteDatabase db = DBHelper.getWritableDatabase();
 
 		for (int i = 0; i < nombresCampos.length - 1; i++) {
-			initialValues.put(nombresCampos[i + 1], params[i]);
+			initialValues.put(nombresCampos[i + 1], params[i].toString());
 
 		}
 		long ret = db.insert(nombreTabla, null, initialValues);
