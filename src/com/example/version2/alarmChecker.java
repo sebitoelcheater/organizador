@@ -11,7 +11,6 @@ import org.apache.http.NoHttpResponseException;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.data.AdapterDatabase;
 import com.example.server.Server.NoExisteCursoException;
 import com.example.version2.ActividadHorario;
 import com.example.version2.R;
@@ -103,11 +102,7 @@ public class alarmChecker extends Service implements Runnable {
 		// Esta será la actividad de verdad que llamara la aplicacion
 		if (proximosInicios.size() != 0) {
 			Modulo m = proximosInicios.get(0);
-
-			AdapterDatabase ad = new AdapterDatabase(this);
-
-			Curso c = ad.getRecord(Curso.class, "Cursos",
-					Long.parseLong(m.getIdCurso()));
+			Curso c = Curso.getCurso(this,m.getIdCurso());
 			if (c.getComentable().equals("1")) {
 				if (!(c.getNombre().endsWith(" "))) {
 
@@ -153,9 +148,7 @@ public class alarmChecker extends Service implements Runnable {
 		if (anterioresFinales.size() != 0) {
 			Modulo m = anterioresFinales.get(0);
 
-			AdapterDatabase ad = new AdapterDatabase(this);
-			Curso c = ad.getRecord(Curso.class, "Cursos",
-					Long.parseLong(m.getIdCurso()));
+			Curso c = Curso.getCurso(this,m.getIdCurso());
 			if ((c.getNombre().endsWith(" "))) {
 				// c.establecerNombre(this, c.getNombre().trim());
 				c.actualizar(this);

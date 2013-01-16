@@ -8,7 +8,6 @@ import java.util.List;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.data.AdapterDatabase;
 import com.example.version2.ActividadEdicionRamo.MiModuloEditandoArrayAdapter;
 
 import android.net.Uri;
@@ -67,11 +66,8 @@ public class ActividadFeedBackear extends Activity implements
 			// Chronometer
 			// cronometro=(Chronometer)fila.findViewById(R.id.chronometer1);
 			try {
-				AdapterDatabase ad = new AdapterDatabase(
-						convertView.getContext());
 
-				Curso c = ad.getRecord(Curso.class, "Cursos", Long
-						.parseLong(modulosPorFeedBackear.get(position).getIdCurso()));
+				Curso c = Curso.getCurso(convertView.getContext(),modulosPorFeedBackear.get(position).getIdCurso());
 
 				String nombreCurso = c.getNombre();
 

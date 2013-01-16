@@ -28,7 +28,6 @@ import android.widget.ListView;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.data.AdapterDatabase;
 import com.example.version2.ActividadRamos.MiArrayAdapter;
 
 public class ActividadDatosDelRamo extends ListActivity implements
@@ -90,8 +89,7 @@ public class ActividadDatosDelRamo extends ListActivity implements
 		// Aquí recibe la id (como string) del ramo a editar
 		idRamoAEditar = intent.getStringExtra("id");
 
-		AdapterDatabase ad = new AdapterDatabase(this);
-		Curso cursoAVer = ad.getRecord(Curso.class, "Cursos",Long.parseLong(idRamoAEditar));
+		Curso cursoAVer = Curso.getCurso(this,idRamoAEditar);
 
 		String nombreOriginal = cursoAVer.getNombre();
 		Curso curso = Curso.getCurso(this, idRamoAEditar);
@@ -159,10 +157,8 @@ public class ActividadDatosDelRamo extends ListActivity implements
 		 */
 		// Primero actualiza el nombre
 
-		AdapterDatabase ad = new AdapterDatabase(this);
 
-		cursoAVer = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(idRamoAEditar));
+		cursoAVer = Curso.getCurso(this,idRamoAEditar);
 
 		String nombreOriginal = cursoAVer.getNombre(); // Re-obtiene el
 															// nombre del ramo
@@ -222,10 +218,8 @@ public class ActividadDatosDelRamo extends ListActivity implements
 				.findViewById(R.id.button2);
 
 		String id_curso = b.getString("idCurso");
-		AdapterDatabase ad = new AdapterDatabase(this);
 
-		Curso cursoAEditar = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(id_curso));
+		Curso cursoAEditar = Curso.getCurso(this,id_curso);
 
 		TextView nombreCurso = (TextView) d.findViewById(R.id.nombreCurso);
 
@@ -245,10 +239,8 @@ public class ActividadDatosDelRamo extends ListActivity implements
 				.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
 						/* TODO: Controlador.eliminarModulo(id_modulo); */
-						AdapterDatabase ad = new AdapterDatabase(v.getContext());
 
-						Curso c = ad.getRecord(Curso.class, "Cursos",
-								Long.parseLong(idRamoAEditar));
+						Curso c = Curso.getCurso(v.getContext(),idRamoAEditar);
 						c.borrarCurso(v.getContext());
 						setResult(RESULT_OK);
 						finish();
