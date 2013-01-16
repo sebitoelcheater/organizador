@@ -297,6 +297,7 @@ public class Modulo extends Modelo {
 		return modulos;
 	}
 
+	
 	public boolean actualizar(Context ctx, int minInicio, int minFin,
 			String ubicacion) {
 
