@@ -72,4 +72,28 @@ public class Functions {
 		int minutos = calendar.get(Calendar.MINUTE);
 		return dia * 24 * 60 + hora * 60 + minutos;
 	}
+	
+	public static String getHoraYMinutos(int minutos) {
+		return ""+getHoraDelDia(minutos)+":"+getMinutosDelDia(minutos);
+	}
+	
+	public static int booleanToInt(boolean b) {
+		if (b==true){
+			return 1;
+		}
+		else if (b==false){
+			return 0;
+		}
+		return (Integer) null;
+	}
+	
+	public static boolean intToBoolean(int i) {
+		if (i==1){
+			return true;
+		}
+		else if (i==0){
+			return false;
+		}
+		return false;
+	}
 }

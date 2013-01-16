@@ -34,8 +34,7 @@ public class Modulo extends Modelo {
 		this.NombreTabla = nombreTabla;
 	}
 
-	public Modulo(Context context, int idH, int iidC, int inicio,
-			int fin, String ubicacion) throws Exception {
+	public Modulo(Context context, int idH, int iidC, int inicio, int fin, String ubicacion) throws Exception {
 		super(nombreTabla, getKeys(), new Object[] { idH, iidC, inicio,
 				fin, ubicacion });
 
@@ -123,7 +122,7 @@ public class Modulo extends Modelo {
 	}
 
 
-	static public ArrayList<Modulo> obtenerModulosSegunDiaOrdenadosSegunInicio(
+	static public ArrayList<Modulo> getModulosSegunDiaOrdenadosSegunInicio(
 			Context context, int dia) 
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
@@ -146,7 +145,7 @@ public class Modulo extends Modelo {
 	{
 
 
-		return obtenerModulosSegunDiaOrdenadosSegunInicio(context, hoydia);
+		return getModulosSegunDiaOrdenadosSegunInicio(context, hoydia);
 	}
 	 //ACA HAY UN DDS !
 	/**
@@ -280,7 +279,7 @@ public class Modulo extends Modelo {
 
 
 
-	static public ArrayList<Modulo> obtenerLosSiguientesModulos(
+	static public ArrayList<Modulo> getLosSiguientesModulos(
 			Context context, int ahoraEnMinutos) {
 
 

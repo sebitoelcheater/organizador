@@ -71,22 +71,20 @@ public class ActividadFeedBackear extends Activity implements
 						convertView.getContext());
 
 				Curso c = ad.getRecord(Curso.class, "Cursos", Long
-						.parseLong(modulosPorFeedBackear.get(position)
-								.obtenerIdCurso()));
+						.parseLong(modulosPorFeedBackear.get(position).getIdCurso()));
 
-				String nombreCurso = c.obtenerNombre();
+				String nombreCurso = c.getNombre();
 
 				nombre.setText(nombreCurso);
 
 				Modulo m = modulosPorFeedBackear.get(position);
 				Calendar ahora = Calendar.getInstance();
-				Calendar fin = m.obtenerFin();
+				int fin = m.getFin();
 
 				Calendar clon = (Calendar) ahora.clone();
-
-				clon.set(Calendar.HOUR_OF_DAY, fin.get(Calendar.HOUR_OF_DAY)
+				clon.set(Calendar.HOUR_OF_DAY, Functions.getHoraDelDia(fin)
 						+ horas);
-				clon.set(Calendar.MINUTE, fin.get(Calendar.MINUTE));
+				clon.set(Calendar.MINUTE, Functions.getMinutosDelDia(fin));
 
 				long diferencia = clon.getTimeInMillis()
 						- ahora.getTimeInMillis();
@@ -106,7 +104,7 @@ public class ActividadFeedBackear extends Activity implements
 			} catch (NullPointerException e) {
 			}
 
-			// fecha.setText(modulosPorFeedBackear.get(position).obtenerNombreDiaDeLaSemana()+" "+modulosPorFeedBackear.get(position).obtenerStringInicio()+" - "+modulosPorFeedBackear.get(position).obtenerStringFin());
+			// fecha.setText(modulosPorFeedBackear.get(position).getNombreDiaDeLaSemana()+" "+modulosPorFeedBackear.get(position).getStringInicio()+" - "+modulosPorFeedBackear.get(position).getStringFin());
 
 			// ACA VA EL MANEJO DEL CRONOMETRO
 			// cronometro.start();
@@ -141,8 +139,7 @@ public class ActividadFeedBackear extends Activity implements
 
 		ListView lista = (ListView) findViewById(R.id.listView1);
 
-		modulosAFeedBackear = Functions.obtenerLosFeedBackeables(this,
-				Calendar.getInstance());
+		modulosAFeedBackear = Modulo.getLosFeedBackeables(this);
 
 		lista.setAdapter(new MiModuloFeedBackeandoArrayAdapter(this,
 				R.layout.item_modulo_editando, modulosAFeedBackear));
@@ -158,7 +155,7 @@ public class ActividadFeedBackear extends Activity implements
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, ActividadFeedback.class);
-		intent.putExtra("ID", modulosAFeedBackear.get(arg2).obtenerId());
+		intent.putExtra("ID", modulosAFeedBackear.get(arg2).getId());
 
 		startActivity(intent);
 	}

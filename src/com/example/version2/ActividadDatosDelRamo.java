@@ -67,11 +67,10 @@ public class ActividadDatosDelRamo extends ListActivity implements
 			TextView horaInicio = (TextView) fila.findViewById(R.id.horaInicio);
 			TextView horaFin = (TextView) fila.findViewById(R.id.horaFin);
 			// Le pone el nombre al campo de texto del nombre del ramo
-			diaModulo.setText(objects.get(position)
-					.obtenerNombreDiaDeLaSemana());
-			horaInicio.setText(objects.get(position).obtenerStringInicio());
-			horaFin.setText(objects.get(position).obtenerStringFin());
-			salaModulo.setText(" " + objects.get(position).obtenerUbicacion());
+			diaModulo.setText(objects.get(position).getNombreDiaDeLaSemana());
+			horaInicio.setText(Functions.getHoraYMinutos(objects.get(position).getInicio()));
+			horaFin.setText(Functions.getHoraYMinutos(objects.get(position).getFin()));
+			salaModulo.setText(" " + objects.get(position).getUbicacion());
 
 			return fila;
 		}
@@ -92,17 +91,15 @@ public class ActividadDatosDelRamo extends ListActivity implements
 		idRamoAEditar = intent.getStringExtra("id");
 
 		AdapterDatabase ad = new AdapterDatabase(this);
+		Curso cursoAVer = ad.getRecord(Curso.class, "Cursos",Long.parseLong(idRamoAEditar));
 
-		Curso cursoAVer = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(idRamoAEditar));
-
-		String nombreOriginal = cursoAVer.obtenerNombre();
-		ArrayList<Modulo> array_modulos = Functions.obtenerModulosPorIdCurso(
-				this, idRamoAEditar);
+		String nombreOriginal = cursoAVer.getNombre();
+		Curso curso = Curso.getCurso(this, idRamoAEditar);
+		ArrayList<Modulo> array_modulos = Modulo.getModulosPorIdCurso(this, curso);
 
 		setContentView(R.layout.activity_actividad_datos_del_ramo);
 		Button botonColor = (Button) findViewById(R.id.button2);
-		String color = cursoAVer.obtenerColor();
+		String color = cursoAVer.getColor();
 		int intColor = Color.rgb(Functions.getRed(color),
 				Functions.getGreen(color), Functions.getBlue(color));
 		botonColor.setBackgroundColor(intColor);
@@ -151,7 +148,7 @@ public class ActividadDatosDelRamo extends ListActivity implements
 
 	public void editarRamo(View view) {
 		Intent intentEditarRamo = new Intent(this, ActividadEdicionRamo.class);
-		intentEditarRamo.putExtra("id", cursoAVer.obtenerId());
+		intentEditarRamo.putExtra("id", cursoAVer.getId());
 		startActivityForResult(intentEditarRamo, REQUEST_EDITAR_O_AGREGAR);
 	}
 
@@ -167,17 +164,16 @@ public class ActividadDatosDelRamo extends ListActivity implements
 		cursoAVer = ad.getRecord(Curso.class, "Cursos",
 				Long.parseLong(idRamoAEditar));
 
-		String nombreOriginal = cursoAVer.obtenerNombre(); // Re-obtiene el
+		String nombreOriginal = cursoAVer.getNombre(); // Re-obtiene el
 															// nombre del ramo
 		/*
-		 * Este método se utiliza gracias a que obtenerNombre() se conecta con
+		 * Este método se utiliza gracias a que getNombre() se conecta con
 		 * la base de datos la cual ya está actualizada
 		 */
 		TextView campoTextoNombre = (TextView) findViewById(R.id.nombreRamoAVer);
 		campoTextoNombre.setText(nombreOriginal);
-
-		ArrayList<Modulo> nuevo_array_modulos = Functions
-				.obtenerModulosPorIdCurso(this, idRamoAEditar);
+		Curso curso = Curso.getCurso(this, idRamoAEditar);
+		ArrayList<Modulo> nuevo_array_modulos = Modulo.getModulosPorIdCurso(this, curso);
 
 		adaptador.clear();
 		for (Modulo modulo : nuevo_array_modulos) {
@@ -233,7 +229,7 @@ public class ActividadDatosDelRamo extends ListActivity implements
 
 		TextView nombreCurso = (TextView) d.findViewById(R.id.nombreCurso);
 
-		nombreCurso.setText(cursoAEditar.obtenerNombre());
+		nombreCurso.setText(cursoAEditar.getNombre());
 
 		boton_cancelar_eliminar_modulo
 				.setOnClickListener(new View.OnClickListener() {

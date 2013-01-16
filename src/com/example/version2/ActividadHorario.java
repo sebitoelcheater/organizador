@@ -194,9 +194,9 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 	 * METODO ANTIGUO private void generaModulos(int selectedItemPosition) { //
 	 * TODO Auto-generated method stub
 	 * 
-	 * ArrayList<Modulo> modulos = Controlador.obtenerModulosSegunDia(this,
+	 * ArrayList<Modulo> modulos = Controlador.getModulosSegunDia(this,
 	 * selectedItemPosition+1); this.array_modulos= new ArrayList<String>();
-	 * for(Modulo m : modulos) array_modulos.add(m.obtenerNombre());
+	 * for(Modulo m : modulos) array_modulos.add(m.getNombre());
 	 * 
 	 * 
 	 * }
@@ -209,20 +209,19 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 		String a = "";
 		if (hoy != viendo) {
 			a = "Mira mi Horario de " + stringDDS(viendo) + " : ";
-			ArrayList<Modulo> modulos = Functions
-					.obtenerModulosSegunDiaOrdenadosSegunInicio(this, viendo);
+			ArrayList<Modulo> modulos = Modulo
+					.getModulosSegunDiaOrdenadosSegunInicio(this, viendo);
 			for (Modulo m : modulos) {
 
 				Curso c = ad.getRecord(Curso.class, "Cursos",
-						Long.parseLong(m.obtenerIdCurso()));
+						Long.parseLong(m.getIdCurso()));
 
-				a += " " + c.obtenerNombre() + "(" + m.obtenerStringInicio()
-						+ "-" + m.obtenerStringFin() + ")" + " ";
+				a += " " + c.getNombre() + "(" + m.getInicio()
+						+ "-" + m.getFin() + ")" + " ";
 			}
 		} else {
-			ArrayList<Modulo> modulos = Functions
-					.obtenerLosSiguientesModulosDelDia(this,
-							Calendar.getInstance(), 5);
+			ArrayList<Modulo> modulos = Modulo
+					.getLosSiguientesModulosDelDia(this,Functions.getAhoraEnMinutos(), 5);
 			if (modulos.size() != 0) {
 				a = "Lo que me queda por hacer hoy "
 						+ stringDDS(Calendar.getInstance().get(
@@ -230,11 +229,11 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 				for (Modulo m : modulos) {
 
 					Curso c = ad.getRecord(Curso.class, "Cursos",
-							Long.parseLong(m.obtenerIdCurso()));
+							Long.parseLong(m.getIdCurso()));
 
-					a += " " + c.obtenerNombre() + "("
-							+ m.obtenerStringInicio() + "-"
-							+ m.obtenerStringFin() + ")" + " ";
+					a += " " + c.getNombre() + "("
+							+ m.getInicio() + "-"
+							+ m.getFin() + ")" + " ";
 				}
 			} else {
 				a = "Terminaron las clases por hoy";
@@ -282,13 +281,12 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 		ArrayList<Modulo> modulos;
 		TextView titulo = (TextView) findViewById(R.id.textView1);
 		if (hoy == viendo) {
-			modulos = Functions.obtenerLosSiguientesModulosDelDia(this,
-					Calendar.getInstance(), 5);// HASTA ACA VOY BIEN 3
+			modulos = Modulo.getLosSiguientesModulosDelDia(this,Functions.getAhoraEnMinutos(), 5);// HASTA ACA VOY BIEN 3
 			titulo.setText("Siguientes clases(HOY)");
 		}
 
 		else {
-			modulos = Functions.obtenerModulosSegunDiaOrdenadosSegunInicio(
+			modulos = Modulo.getModulosSegunDiaOrdenadosSegunInicio(
 					this, viendo);
 			titulo.setText(stringDDS(viendo));
 		}
@@ -297,17 +295,17 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 		for (Modulo m : modulos) {
 
 			Curso c = ad.getRecord(Curso.class, "Cursos",
-					Long.parseLong(m.obtenerIdCurso()));
+					Long.parseLong(m.getIdCurso()));
 
 			HashMap<String, String> mapa = new HashMap<String, String>();
-			if (m.obtenerUbicacion().toUpperCase()
-					.equals(c.obtenerNombre().toUpperCase())) // ARREGLAR
+			if (m.getUbicacion().toUpperCase()
+					.equals(c.getNombre().toUpperCase())) // ARREGLAR
 																// ESTO!!!!!
-				mapa.put("Nombre", m.obtenerUbicacion());
+				mapa.put("Nombre", m.getUbicacion());
 			else
 				mapa.put("Nombre",
-						c.obtenerNombre() + " - " + m.obtenerUbicacion());
-			mapa.put("Hora", m.obtenerStringInicio());
+						c.getNombre() + " - " + m.getUbicacion());
+			mapa.put("Hora", Integer.toString(Functions.getHoraDelDia(m.getInicio())));
 			array_modulos.add(mapa);
 		}
 		ListView listaModulos = (ListView) findViewById(R.id.listView1);

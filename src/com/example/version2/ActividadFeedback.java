@@ -21,9 +21,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.controlador.Curso;
+import com.example.controlador.Modulo;
+
 import com.example.controlador.*;
 import com.example.data.*;
-import com.example.server.Server;
+import com.example.server.server;
 
 public class ActividadFeedback extends Activity {
 	private ArrayList<String> cursos;
@@ -44,16 +47,19 @@ public class ActividadFeedback extends Activity {
 		setTitle("Organizador");
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		Bundle b = getIntent().getExtras();
-		aFB = new Modulo(this, getIntent().getStringExtra("ID"));
+		String id = getIntent().getStringExtra("ID");
+		
+		AdapterDatabase ad = new AdapterDatabase(this);
+
+		Modulo aFB = ad.getRecord(Modulo.class, "Modulos",Long.parseLong(id));
 
 		// cargarDatos();
 		TextView nombreCurso = (TextView) findViewById(R.id.nombreCusoAFeedbackear);
-		AdapterDatabase ad = new AdapterDatabase(this);
 
 		Curso c = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(aFB.obtenerIdCurso()));
+				Long.parseLong(aFB.getIdCurso()));
 
-		nombreCurso.setText(c.obtenerNombre());
+		nombreCurso.setText(c.getNombre());
 
 		// Spinner numeroDeNotas = (Spinner)findViewById(R.id.spinner1);
 		// numeroDeNotas.setAdapter(new
@@ -72,18 +78,18 @@ public class ActividadFeedback extends Activity {
 	 */
 	private void cargarDatos() {
 
-		cursosComentables = Functions.obtenerCursosComentables(this); // ACA
+		cursosComentables = Curso.getCursosComentables(this); // ACA
 																		// DEBERIA
 																		// IR UN
 																		// METODO
 																		// LLAMADO
-																		// OBTENERCURSOSCOMENTABLES...
+																		// getCURSOSCOMENTABLES...
 																		// NO
 																		// OLVIDAR
 																		// PEDIRMELO!
 		cursos = new ArrayList<String>();
 		for (Curso c : cursosComentables)
-			cursos.add(c.obtenerNombre());
+			cursos.add(c.getNombre());
 	}
 
 	public void enviarComentario(View view) {
@@ -92,7 +98,7 @@ public class ActividadFeedback extends Activity {
 		AdapterDatabase ad = new AdapterDatabase(this);
 
 		Curso c = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(aFB.obtenerIdCurso()));
+				Long.parseLong(aFB.getIdCurso()));
 
 		// Capturar comentario
 		comentario = (EditText) findViewById(R.id.editText1);
@@ -100,18 +106,18 @@ public class ActividadFeedback extends Activity {
 		if (!stringComentario.trim().equals("")) {
 			// Crear objeto de la clase post y posteriormente ejecutar m�todo
 			// comentar
-			Server objeto1 = new Server();
+			server objeto1 = new server();
 
 			try {
 
-				objeto1.comentar2(view, c, Functions.ultimoModulo(this, c),
+				objeto1.comentar2(view, c, Modulo.ultimoModulo(this, c),
 						stringComentario);
 
 				// Gracias por el feedback
 				Toast toast = Toast.makeText(getApplicationContext(),
 						"Gracias por tu feedback!", Toast.LENGTH_SHORT);
 				toast.show();
-				showDialog(obtenerIdUnica(), new Bundle());
+				showDialog(getIdUnica(), new Bundle());
 
 			} catch (Exception e) {
 				Toast.makeText(
@@ -184,9 +190,9 @@ public class ActividadFeedback extends Activity {
 		AdapterDatabase ad = new AdapterDatabase(this);
 
 		Curso c = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(aFB.obtenerIdCurso()));
+				Long.parseLong(aFB.getIdCurso()));
 
-		return "FeedBack de " + c.obtenerNombre() + ", \"" + stringComentario2
+		return "FeedBack de " + c.getNombre() + ", \"" + stringComentario2
 				+ "\"" + "-Desde Organizador";
 	}
 
@@ -223,7 +229,7 @@ public class ActividadFeedback extends Activity {
 
 	}
 
-	public static int obtenerIdUnica() {
+	public static int getIdUnica() {
 
 		/* Entrega una id única. Vital para crear dialogos únicos */
 		Calendar now = Calendar.getInstance();

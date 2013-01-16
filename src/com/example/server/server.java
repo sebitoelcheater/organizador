@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
+import com.example.controlador.Profesor;
 import com.example.data.AdapterDatabase;
 
 import android.app.Activity;
@@ -31,7 +32,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-public class Server extends Activity {
+public class server extends Activity {
 
 	public void comentar(View view, int i, String comentario) throws Exception {
 		// Create a new HttpClient and Post Header
@@ -57,7 +58,7 @@ public class Server extends Activity {
 	}
 
 	public void comentar2(View view, Curso c, Modulo m, String comentario) {
-		int idH = Integer.parseInt(m.obtenerIdMaster());
+		int idH = Integer.parseInt(m.getIdMaster());
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
 		comentario = comentario.replaceAll(" ", "%20");
@@ -143,8 +144,7 @@ public class Server extends Activity {
 			String nombre = Profesor.get(i).getString("nombre");
 			String apellido = Profesor.get(i).getString("apellido");
 
-			iidP = Functions.insertarProfesor(ctx, idP, usuario, contrasena,
-					nombre, apellido);
+			Profesor profe = new Profesor(ctx, Integer.parseInt(idP), usuario, contrasena, nombre, apellido);
 			// introducir nuevo profesor (si no est‡ introducido). Lo obtengo a
 			// partir de un for, pero es claro que arrojar‡ s—lo un elemento
 		}
@@ -156,11 +156,9 @@ public class Server extends Activity {
 					.trim();
 			String comentable = Curso.getString("comentable");
 			String color = Curso.getString("color");
-			Curso c = Functions.crearNuevoCurso(ctx, Integer.parseInt(idC),
-					Integer.parseInt(iidP == null ? "0" : iidP), titulo,
-					comentable.equals("1"), color);
+			Curso c = new Curso(ctx, Integer.parseInt(idC), Integer.parseInt(iidP == null ? "0" : iidP), titulo, Integer.toString(Functions.booleanToInt(comentable.equals("1"))), color);
 			if (c != null)
-				iidC = c.obtenerId();
+				iidC = c.getId();
 			// introducir nuevo curso con funciones hechas por Ariel, con los
 			// par‡metros declarados en este for. Lo mismo para profe,horarios y
 			// comentarios
@@ -197,10 +195,8 @@ public class Server extends Activity {
 				} catch (ParseException e) {
 				}
 
-				boolean pudeCrearlo = Functions.crearNuevoModulo(ctx,
-						Integer.parseInt(idH),
-						Integer.parseInt(iidC == null ? "0" : iidC),
-						Integer.parseInt(dds), cInicio, cFin, ubicacion);
+				Modulo m = new Modulo(ctx, Integer.parseInt(idH), Integer.parseInt(iidC == null ? "0" : iidC), Integer.parseInt(inicio), Integer.parseInt(fin), ubicacion); // gonza esto no lo resolv�!
+				boolean pudeCrearlo = (m.save(ctx));
 
 				if (!pudeCrearlo) {
 					b = false;
@@ -220,7 +216,7 @@ public class Server extends Activity {
 		 * comentarios }
 		 */
 		return b;
-		// forma de obtener el campo "name" del usuario de idP 1
+		// forma de get el campo "name" del usuario de idP 1
 		// Profesor.get(1).getString("name");
 
 	}
@@ -258,7 +254,7 @@ public class Server extends Activity {
 		boolean suscrito = false;
 		// if(delete==true)
 		AdapterDatabase ad = new AdapterDatabase(this);
-		String[] params = getParamsCurso(Integer.parseInt(id));
+		String[] params = getParamsCurso(Integer.parseInt(id)); //preguntar a gonza
 		ad.updateRecord("Cursos", params);
 
 		return suscrito;
@@ -303,7 +299,7 @@ public class Server extends Activity {
 		// Integer.parseInt(iidP==null?"0":iidP), titulo,
 		// comentable.equals("1"),color);
 		// if(c!=null)
-		// iidC = c.obtenerId();
+		// iidC = c.getId();
 		// // introducir nuevo curso con funciones hechas por Ariel, con los
 		// par‡metros declarados en este for. Lo mismo para profe,horarios y
 		// comentarios
@@ -359,7 +355,7 @@ public class Server extends Activity {
 		// // introducir nuevo comentarios
 		// }*/
 		// return b;
-		// forma de obtener el campo "name" del usuario de idP 1
+		// forma de get el campo "name" del usuario de idP 1
 		// Profesor.get(1).getString("name");
 
 	}
