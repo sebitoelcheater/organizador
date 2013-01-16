@@ -128,6 +128,14 @@ public class Modulo extends Modelo {
 		return modulosOrdenados;
 
 	}
+	
+	public static Modulo getModulo(Context context, String id) // DEPRECATED???
+	{
+		AdapterDatabase ad = new AdapterDatabase(context);
+
+		Modulo m = ad.getRecord(Modulo.class, nombreTabla, Long.parseLong(id));
+		return m;
+	}
 
 	/***
 	 * Ordena segun hora de inicio

@@ -25,7 +25,6 @@ import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
 
 import com.example.controlador.*;
-import com.example.data.*;
 import com.example.server.Server;
 
 public class ActividadFeedback extends Activity {
@@ -49,15 +48,12 @@ public class ActividadFeedback extends Activity {
 		Bundle b = getIntent().getExtras();
 		String id = getIntent().getStringExtra("ID");
 		
-		AdapterDatabase ad = new AdapterDatabase(this);
-
-		Modulo aFB = ad.getRecord(Modulo.class, "Modulos",Long.parseLong(id));
+		Modulo aFB = Modulo.getModulo(this, id);
 
 		// cargarDatos();
 		TextView nombreCurso = (TextView) findViewById(R.id.nombreCusoAFeedbackear);
 
-		Curso c = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(aFB.getIdCurso()));
+		Curso c = Curso.getCurso(this,aFB.getIdCurso());
 
 		nombreCurso.setText(c.getNombre());
 
@@ -95,10 +91,8 @@ public class ActividadFeedback extends Activity {
 	public void enviarComentario(View view) {
 		// Hola, soy Seba. Capturar spinner
 		// Spinner mySpinner = (Spinner)findViewById(R.id.spinner1);
-		AdapterDatabase ad = new AdapterDatabase(this);
 
-		Curso c = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(aFB.getIdCurso()));
+		Curso c = Curso.getCurso(this,aFB.getIdCurso());
 
 		// Capturar comentario
 		comentario = (EditText) findViewById(R.id.editText1);
@@ -187,10 +181,8 @@ public class ActividadFeedback extends Activity {
 
 	protected String formatearComentario(String stringComentario2) {
 		// TODO Auto-generated method stub
-		AdapterDatabase ad = new AdapterDatabase(this);
 
-		Curso c = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(aFB.getIdCurso()));
+		Curso c = Curso.getCurso(this,aFB.getIdCurso());
 
 		return "FeedBack de " + c.getNombre() + ", \"" + stringComentario2
 				+ "\"" + "-Desde Organizador";

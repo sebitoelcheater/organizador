@@ -131,5 +131,10 @@ public class Functions {
 		}
 		return false;
 	}
+	
+	 public static int dateToMin(int dia,int hora,int minuto) {
+		 int inicio = dia*Functions.minutosDeUnDia + hora*60 + minuto;
+		 return inicio;
+	 }
 
 }

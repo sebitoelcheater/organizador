@@ -29,7 +29,6 @@ import android.widget.Toast;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.data.AdapterDatabase;
 import com.example.version2.ActividadRamos.MiArrayAdapter;
 import com.example.version2.ColorPickerDialog.OnColorChangedListener;
 
@@ -121,10 +120,7 @@ public class ActividadEdicionRamo extends ListActivity implements
 		// Aqu√≠ recibe la id (como string) del ramo a editar
 		idRamoAEditar = intent.getStringExtra("id");
 
-		AdapterDatabase ad = new AdapterDatabase(this);
-
-		Curso c = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(idRamoAEditar));
+		Curso c = Curso.getCurso(this, idRamoAEditar);
 
 		cursoAEditar = c;
 
@@ -198,10 +194,7 @@ public class ActividadEdicionRamo extends ListActivity implements
 
 	public void actualizarModulos() {
 		
-		AdapterDatabase ad = new AdapterDatabase(this);
-
-		Curso c = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(idRamoAEditar));
+		Curso c = Curso.getCurso(this,idRamoAEditar);
 
 		ArrayList<Modulo> nuevo_array_modulos = Modulo
 				.getModulosPorIdCurso(this, c);
@@ -294,8 +287,7 @@ public class ActividadEdicionRamo extends ListActivity implements
 					.findViewById(R.id.botonAceptarEliminarModulo);
 			String id_modulo = b.getString("idModulo");
 			
-			AdapterDatabase ad = new AdapterDatabase(this);
-			final Modulo moduloAEditar = ad.getRecord(Modulo.class, "Horarios",Long.parseLong(id_modulo));
+			final Modulo moduloAEditar = Modulo.getModulo(this,id_modulo);
 			
 			TextView diaModulo = (TextView) d.findViewById(R.id.diaModulo);
 			TextView horaInicio = (TextView) d.findViewById(R.id.horaInicio);
@@ -358,8 +350,7 @@ public class ActividadEdicionRamo extends ListActivity implements
 			EditText campoTextoLugar = (EditText) d
 					.findViewById(R.id.salaModuloAEditar);
 			
-			AdapterDatabase ad = new AdapterDatabase(this);
-			final Modulo moduloAEditar = ad.getRecord(Modulo.class, "Horarios",Long.parseLong(id_modulo));
+			final Modulo moduloAEditar = Modulo.getModulo(this,id_modulo);
 			String salaOriginal = moduloAEditar.getUbicacion();
 			campoTextoLugar.setText(salaOriginal);
 			// campoTextoLugar.setText(moduloAEditar.getNombreDiaDeLaSemana());
@@ -409,12 +400,12 @@ public class ActividadEdicionRamo extends ListActivity implements
 					// nuevoLugar);
 					
 
-					int inicio = (spinnerDias.getSelectedItemPosition() + 1)*Functions.minutosDeUnDia + tPInicio.getCurrentHour()*60 + tPInicio.getCurrentMinute();
-					int fin = (spinnerDias.getSelectedItemPosition() + 1)*Functions.minutosDeUnDia + tPFin.getCurrentHour()*60 + tPFin.getCurrentMinute();
-
+					int inicio = Functions.dateToMin(spinnerDias.getSelectedItemPosition() + 1,tPInicio.getCurrentHour(),tPInicio.getCurrentMinute());
+					int fin = Functions.dateToMin(spinnerDias.getSelectedItemPosition() + 1,tPFin.getCurrentHour(),tPFin.getCurrentMinute());
+					
 					if (inicio<fin) {
 						if (Modulo.puedoCambiarModulo(v.getContext(),inicio, fin, moduloAEditar)) {
-							moduloAEditar.actualizar(this, inicio, fin, nuevoLugar);
+							moduloAEditar.actualizar(v.getContext(), inicio, fin, nuevoLugar);
 							d.dismiss();
 							// Cierra el di√°logo
 						} else {
@@ -529,8 +520,8 @@ public class ActividadEdicionRamo extends ListActivity implements
 					TimePicker tPFin = (TimePicker) d
 							.findViewById(R.id.timePicker2);
 					
-					int inicio = (spinnerDias.getSelectedItemPosition() + 1)*Functions.minutosDeUnDia + tPInicio.getCurrentHour()*60 + tPInicio.getCurrentMinute();
-					int fin = (spinnerDias.getSelectedItemPosition() + 1)*Functions.minutosDeUnDia + tPFin.getCurrentHour()*60 + tPFin.getCurrentMinute();
+					int inicio = Functions.dateToMin(spinnerDias.getSelectedItemPosition() + 1,tPInicio.getCurrentHour(),tPInicio.getCurrentMinute());
+					int fin = Functions.dateToMin(spinnerDias.getSelectedItemPosition() + 1,tPFin.getCurrentHour(),tPFin.getCurrentMinute());
 
 
 					EditText campoTextoLugar = (EditText) d
@@ -540,7 +531,16 @@ public class ActividadEdicionRamo extends ListActivity implements
 
 					if (inicio<fin) {
 						
-						Modulo m = new Modulo(v.getContext(), 0,Integer.parseInt(cursoAEditar.getId()), inicio, fin, lugar); // gonza esto no lo resolví!
+						Modulo m = null;
+						try {
+							m = new Modulo(v.getContext(), 0,Integer.parseInt(cursoAEditar.getId()), inicio, fin, lugar);
+						} catch (NumberFormatException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} // gonza esto no lo resolví!
 						if (m.save(v.getContext())) {
 
 							actualizarModulos();
@@ -603,10 +603,8 @@ public class ActividadEdicionRamo extends ListActivity implements
 					.findViewById(R.id.button2);
 
 			String id_curso = b.getString("idCurso");
-			AdapterDatabase ad = new AdapterDatabase(this);
 
-			Curso c = ad.getRecord(Curso.class, "Cursos",
-					Long.parseLong(id_curso));
+			Curso c = Curso.getCurso(this, id_curso);
 
 			TextView nombreCurso = (TextView) d.findViewById(R.id.nombreCurso);
 
@@ -626,11 +624,8 @@ public class ActividadEdicionRamo extends ListActivity implements
 					.setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
 							/* TODO: Controlador.eliminarModulo(id_modulo); */
-							AdapterDatabase ad = new AdapterDatabase(v
-									.getContext());
 
-							Curso c = ad.getRecord(Curso.class, "Cursos",
-									Long.parseLong(idRamoAEditar));
+							Curso c = Curso.getCurso(v.getContext(),idRamoAEditar);
 
 							c.borrarCurso(v.getContext());
 							setResult(RESULT_OK);
