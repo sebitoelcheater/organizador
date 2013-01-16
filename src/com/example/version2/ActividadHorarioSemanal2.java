@@ -7,12 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.controlador.Functions;
-import com.example.controlador.Curso;
-import com.example.controlador.DisplaySupport;
-import com.example.controlador.Modulo;
-import com.example.controlador.TweetHelper;
-import com.example.data.AdapterDatabase;
+import com.example.controlador.*;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -192,9 +187,8 @@ public class ActividadHorarioSemanal2 extends Activity implements
 					+ stringDDS(Calendar.getInstance()
 							.get(Calendar.DAY_OF_WEEK)) + " : ";
 			for (Modulo m : modulos) {
-				AdapterDatabase ad = new AdapterDatabase(this);
-				Curso curso = ad.getRecord(Curso.class, "Cursos",
-						Long.parseLong(m.getIdCurso()));
+			
+				Curso curso = Curso.getCurso(this, m.getIdCurso());
 				a += " " + curso.getNombre() + "("
 						+ Functions.getHoraYMinutos(m.getInicio()) + "-"
 						+ Functions.getHoraYMinutos(m.getFin()) + ")" + " ";
@@ -264,9 +258,8 @@ public class ActividadHorarioSemanal2 extends Activity implements
 			// EDITANDO
 			for (Modulo m : modulosDia) {
 
-				AdapterDatabase ad = new AdapterDatabase(this);
-				Curso curso = ad.getRecord(Curso.class, "Cursos",
-						Long.parseLong(m.getIdCurso()));
+				
+				Curso curso = Curso.getCurso(this, m.getIdCurso());
 
 				int minutosInicio = m.getInicio();
 				int minutosFin = m.getFin();
@@ -292,8 +285,7 @@ public class ActividadHorarioSemanal2 extends Activity implements
 				ViewModulo a = new ViewModulo(this);
 				// a.setHoraInicio(m.getStringInicio());
 				// a.setHoraFin(m.getStringFin());
-				Curso curso2 = ad.getRecord(Curso.class, "Cursos",
-						Long.parseLong(m.getIdCurso()));
+				Curso curso2 = Curso.getCurso(this, m.getIdCurso());
 				if (curso2.esEditable()) {
 
 					a.setOnClickListener(this);
@@ -337,10 +329,9 @@ public class ActividadHorarioSemanal2 extends Activity implements
 		String[] diasDeLaSemana = { "Domingo", "Lunes", "Martes", "Miércoles",
 				"Jueves", "Viernes", "Sábado" };// CORRERSE EN UN
 												// INDICE...DOMINGO ==1
-		AdapterDatabase ad = new AdapterDatabase(this);
-		Curso curso = ad.getRecord(Curso.class, "Cursos",
-				Long.parseLong(moduloAEditar.getIdCurso()));
-
+		
+		Curso curso = Curso.getCurso(this,moduloAEditar.getIdCurso());
+		
 		d.setContentView(R.layout.dialogo_modulo_bkn);
 		d.setTitle(curso.getNombre());
 		Button boton_cancelar = (Button) d.findViewById(R.id.button2);

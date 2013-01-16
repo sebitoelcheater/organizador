@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.controlador.*;
-import com.example.data.*;
 
 public class ActividadPrincipal extends Activity {
 	public final static String MENSAJE_EXTRA = "com.example.version0.MESSAGE";

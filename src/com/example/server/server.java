@@ -21,11 +21,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.controlador.Functions;
-import com.example.controlador.Curso;
-import com.example.controlador.Modulo;
-import com.example.controlador.Profesor;
-import com.example.data.AdapterDatabase;
+import com.example.controlador.*;
 
 import android.app.Activity;
 import android.content.Context;
