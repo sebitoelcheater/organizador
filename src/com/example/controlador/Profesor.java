@@ -39,5 +39,7 @@ public class Profesor extends Modelo {
 		Profesor.keys = keys;
 		Profesor.nombreTabla = nombreTabla;
 	}
+	
+	
 
 }

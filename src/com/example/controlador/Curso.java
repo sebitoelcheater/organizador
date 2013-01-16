@@ -162,5 +162,29 @@ public class Curso extends Modelo {
 		Curso.keys = keys;
 		Curso.nombreTabla = nombreTabla;
 	}
+	
+	public boolean actualizar(Context ctx, String color, String title, boolean comentable) {
+
+		
+		String[] params = (String[]) this.params.values().toArray();
+
+		boolean actualizar = false;
+
+		if (this.getColor() != color || this.getNombre() != title || this.getComentable() != Integer.toString(Functions.booleanToInt(comentable)) ) {
+			actualizar = true;
+			params[2] = "" + title;
+			params[3] = "" + comentable;
+			params[4] = "" + color;
+		}
+
+		if (actualizar) {
+			AdapterDatabase ad = new AdapterDatabase(ctx);
+			ad.updateRecord(nombreTabla, params);
+
+		}
+
+		return actualizar;
+
+	}
 
 }

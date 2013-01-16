@@ -34,10 +34,8 @@ public class Modulo extends Modelo {
 		this.NombreTabla = nombreTabla;
 	}
 
-	public Modulo(Context context, int idH, int iidC, int inicio, int fin,
-			String ubicacion) throws Exception {
-		super(nombreTabla, getKeys(), new Object[] { idH, iidC, inicio, fin,
-				ubicacion });
+	public Modulo(Context context, int idH, int iidC, int inicio, int fin, String ubicacion) throws Exception {
+		super(nombreTabla, getKeys(), new Object[] { idH, iidC, inicio, fin, ubicacion });
 
 		this.NombreTabla = nombreTabla;
 
@@ -115,8 +113,9 @@ public class Modulo extends Modelo {
 		return modulos;
 	}
 
-	static public ArrayList<Modulo> obtenerModulosSegunDiaOrdenadosSegunInicio(
-			Context context, int dia) {
+	static public ArrayList<Modulo> getModulosSegunDiaOrdenadosSegunInicio(
+			Context context, int dia) 
+	{
 		AdapterDatabase db = new AdapterDatabase(context);
 
 		ArrayList<Modulo> modulosOrdenados = db.getRecordWhere(Modulo.class,
@@ -129,6 +128,14 @@ public class Modulo extends Modelo {
 		return modulosOrdenados;
 
 	}
+	
+	public static Modulo getModulo(Context context, String id) // DEPRECATED???
+	{
+		AdapterDatabase ad = new AdapterDatabase(context);
+
+		Modulo m = ad.getRecord(Modulo.class, nombreTabla, Long.parseLong(id));
+		return m;
+	}
 
 	/***
 	 * Ordena segun hora de inicio
@@ -138,8 +145,7 @@ public class Modulo extends Modelo {
 
 	static public ArrayList<Modulo> getModulosDelDia(Context context, int hoydia) // INEFICIENTE!!!!
 	{
-
-		return obtenerModulosSegunDiaOrdenadosSegunInicio(context, hoydia);
+		return getModulosSegunDiaOrdenadosSegunInicio(context, hoydia);
 	}
 
 	// ACA HAY UN DDS !
@@ -263,8 +269,8 @@ public class Modulo extends Modelo {
 
 		return c;
 	}
-
-	static public ArrayList<Modulo> obtenerLosSiguientesModulos(
+	
+	static public ArrayList<Modulo> getLosSiguientesModulos(
 			Context context, int ahoraEnMinutos) {
 
 		AdapterDatabase db = new AdapterDatabase(context);
