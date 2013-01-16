@@ -56,547 +56,526 @@ import android.view.WindowManager;
 
 //ESTO TRABAJA EN PIXELES
 
-public class ActividadHorarioSemanal2 extends Activity implements OnClickListener {
+public class ActividadHorarioSemanal2 extends Activity implements
+		OnClickListener {
 
-	
 	private Modulo moduloAEditar;
 	private TweetHelper tweet_hlp;
-	 private int TWITTER_AUTH=1;
-	 
-	 @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        tweet_hlp = new TweetHelper(this);
-        
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        FrameLayout fl = new FrameLayout(this);  
-        fl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-        setContentView(fl);
-        
-        dibujaLasLineas(fl);	
+	private int TWITTER_AUTH = 1;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		tweet_hlp = new TweetHelper(this);
+
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		FrameLayout fl = new FrameLayout(this);
+		fl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
+		setContentView(fl);
+
+		dibujaLasLineas(fl);
 		fl.addView(new ViewEstatica(this));
 		rellenarModulos();
 
-		
-		
-		
-		
-       
-        
-        
-        
-    }
-	 private static final int SHARE = Menu.FIRST+1;
-	    
-	    
-	    @Override
-	    public boolean onCreateOptionsMenu(Menu menu) {
+	}
 
-	        super.onCreateOptionsMenu(menu);
-	        /*menu.add(Menu.NONE, NEW_ITEM, 1, R.string.menu_newitem).setIcon(
-	                android.R.drawable.ic_menu_add);
-	        menu.add(Menu.NONE, RESET_ALL, 2, R.string.menu_resetall).setIcon(
-	                android.R.drawable.ic_menu_revert);
-	        menu.add(Menu.NONE, SHARE, 3, R.string.menu_share).setIcon(
-	                android.R.drawable.ic_menu_share);
-	        menu.add(Menu.NONE, PREFERENCES, 4, R.string.menu_preferences).setIcon(
-	                android.R.drawable.ic_menu_preferences);*/
-	        menu.add(Menu.NONE,SHARE,5,"Compartir!").setIcon(R.drawable.ic_twitter);
-	        return true;
-	    }
-	    
-	    @Override
-	    public boolean onOptionsItemSelected(MenuItem item) {
+	private static final int SHARE = Menu.FIRST + 1;
 
-	        switch (item.getItemId()) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 
-	        /*case NEW_ITEM:
-	            Intent call = new Intent(TallyphantActivity.this, ItemEdit.class);
-	            startActivityForResult(call, REQUEST_EDITITEM);
-	            return true;
+		super.onCreateOptionsMenu(menu);
+		/*
+		 * menu.add(Menu.NONE, NEW_ITEM, 1, R.string.menu_newitem).setIcon(
+		 * android.R.drawable.ic_menu_add); menu.add(Menu.NONE, RESET_ALL, 2,
+		 * R.string.menu_resetall).setIcon( android.R.drawable.ic_menu_revert);
+		 * menu.add(Menu.NONE, SHARE, 3, R.string.menu_share).setIcon(
+		 * android.R.drawable.ic_menu_share); menu.add(Menu.NONE, PREFERENCES,
+		 * 4, R.string.menu_preferences).setIcon(
+		 * android.R.drawable.ic_menu_preferences);
+		 */
+		menu.add(Menu.NONE, SHARE, 5, "Compartir!").setIcon(
+				R.drawable.ic_twitter);
+		return true;
+	}
 
-	        case RESET_ALL:
-	            db.resetAll();
-	            remoteNotifyAll();
-	            updateItemList();
-	            return true;
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 
-	        case SHARE:
-	            Intent i = new Intent(android.content.Intent.ACTION_SEND);
-	            i.setType("text/plain");
-	            i.putExtra(Intent.EXTRA_SUBJECT, R.string.share_subject);
-	            Vector<DB.Item> items = db.getItems();
-	            String msg = "";
-	            for (DB.Item titem : items)
-	                msg += titem.getFormatted() + "\n";
-	            i.putExtra(Intent.EXTRA_TEXT, msg);
-	            startActivity(Intent.createChooser(i,
-	                    getString(R.string.share_title)));
-	            return true;
+		switch (item.getItemId()) {
 
-	        case PREFERENCES:
-	            Intent prefs = new Intent(getBaseContext(), Preferences.class);
-	            startActivityForResult(prefs, REQUEST_PREFS);
-	            return true;*/
+		/*
+		 * case NEW_ITEM: Intent call = new Intent(TallyphantActivity.this,
+		 * ItemEdit.class); startActivityForResult(call, REQUEST_EDITITEM);
+		 * return true;
+		 * 
+		 * case RESET_ALL: db.resetAll(); remoteNotifyAll(); updateItemList();
+		 * return true;
+		 * 
+		 * case SHARE: Intent i = new
+		 * Intent(android.content.Intent.ACTION_SEND); i.setType("text/plain");
+		 * i.putExtra(Intent.EXTRA_SUBJECT, R.string.share_subject);
+		 * Vector<DB.Item> items = db.getItems(); String msg = ""; for (DB.Item
+		 * titem : items) msg += titem.getFormatted() + "\n";
+		 * i.putExtra(Intent.EXTRA_TEXT, msg);
+		 * startActivity(Intent.createChooser(i,
+		 * getString(R.string.share_title))); return true;
+		 * 
+		 * case PREFERENCES: Intent prefs = new Intent(getBaseContext(),
+		 * Preferences.class); startActivityForResult(prefs, REQUEST_PREFS);
+		 * return true;
+		 */
 
-	       
-	            
-	        case SHARE:
-	        	 LayoutInflater lis = LayoutInflater.from(this);
-	             View view1 = lis.inflate(R.layout.compartir, null);
+		case SHARE:
+			LayoutInflater lis = LayoutInflater.from(this);
+			View view1 = lis.inflate(R.layout.compartir, null);
 
-	             // Fill in the version...
-	            
-	             Builder p1 = new AlertDialog.Builder(this).setView(view1);
-	             final AlertDialog alrt1 = p1.create();
-	             alrt1.setIcon(R.drawable.ic_twitter);
-	             alrt1.setTitle("COMPARTIR MI HORARIO");//ACA HACER EL SWICTH SEGUN LA ACTIVIDAD
-	             alrt1.setButton(AlertDialog.BUTTON_NEUTRAL,
-	                     "COMPARTIR",
-	                     new DialogInterface.OnClickListener() {
-	                         public void onClick(DialogInterface dialog,
-	                                 int whichButton) {
-	                        	 try {
-	             					//validamos login de nuevo
-	                         		    
-	                         		validar_login();
-	             					// obtenemos texto de componente de texto
-	             					// enviamos tweet y obtenemos estado de envio
-	                         		boolean twt_snd_status = tweet_hlp.Send_Tweet(formatearComentario());
-	             					if (twt_snd_status)// OK enviado
-	             					{ // cambiamos imagen de estad a twitter_OK
-	             						Show_Toast("Tu tweet ha sido enviado");
-	             						
-	             					} else {
-	             						// cambiamos imagen de estad a twitter_fial
-	             						Show_Toast("Hubo un Error no se pudo enviar tu tweet.");
-	             						
-	             					}
+			// Fill in the version...
 
-	             				} catch (Exception e) {
-	             					// TODO Auto-generated catch block
-	             					//System.out.println(e.getMessage());
-	             					e.printStackTrace();
-	             				}
-	                         }
-	                     });
-	             alrt1.setButton(AlertDialog.BUTTON_NEGATIVE, "Salir",
-	                     new DialogInterface.OnClickListener() {
-	                         public void onClick(DialogInterface dialog,
-	                                 int whichButton) {
-	                         }
-	                     });
-	             alrt1.show();
-	             return true;
-	        
-	        }
-	        return super.onOptionsItemSelected(item);
-	    }
-    
-   
-	    protected String formatearComentario() {
-			// TODO Auto-generated method stub
-			//TRABAJO
-	    	
-	    	String a = "";
-	    	ArrayList<Modulo> modulos = Modulo.getLosSiguientesModulosDelDia(this, Functions.getAhoraEnMinutos(), 5);
-	    	if(modulos.size()!=0){
-    		a = "Lo que me queda por hacer hoy "+ stringDDS(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))+ " : ";
-	    	for(Modulo m : modulos)
-	    	{
-	    		AdapterDatabase ad = new AdapterDatabase(this);
-	    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.getIdCurso()));
-	    		a+= " "+curso.getNombre()+"("+Functions.getHoraYMinutos(m.getInicio())+"-"+Functions.getHoraYMinutos(m.getFin()) +")" +" ";
-	    	}}
-	    	else{a="Terminaron las clases por hoy";}
-	    	a+= "- Desde Organizador";
-	    	return a;
-	    	
-		}
+			Builder p1 = new AlertDialog.Builder(this).setView(view1);
+			final AlertDialog alrt1 = p1.create();
+			alrt1.setIcon(R.drawable.ic_twitter);
+			alrt1.setTitle("COMPARTIR MI HORARIO");// ACA HACER EL SWICTH SEGUN
+													// LA ACTIVIDAD
+			alrt1.setButton(AlertDialog.BUTTON_NEUTRAL, "COMPARTIR",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							try {
+								// validamos login de nuevo
 
-		public void Show_Toast(String txt){
-			
-			Toast.makeText(this,txt, Toast.LENGTH_SHORT).show();
-		}
-	    
-	    public void validar_login(){
-			//Verificar si existen claves alamacenadas en el telefono si no llamar al webview.
-					if(!tweet_hlp.verify_logindata())
-					{
-						Show_Toast("No se han encontrado claves en el telefono las descargaremos.");
-						//creamos intent y pasamos get_AuthenticationURL
-						Intent i = new Intent(ActividadHorarioSemanal2.this, TwitterWebActivity.class);
-						i.putExtra("URL", tweet_hlp.get_AuthenticationURL());
-						startActivityForResult(i, TWITTER_AUTH);
-						
-					} 
-		}
-	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-			//si el codigo obtenido es ok
-			if (resultCode == Activity.RESULT_OK) {
-				// Obtenemos oauth_verifier pasado por el webview
-				String oauthVerifier = (String) data.getExtras().get("oauth_verifier");
-				Log.e("oauthVerifier ->", oauthVerifier);
-				// Grabamos el valor de oauthVerifier en el shared preferences
-				tweet_hlp.Store_OAuth_verifier(oauthVerifier);
-				
-			}
+								validar_login();
+								// obtenemos texto de componente de texto
+								// enviamos tweet y obtenemos estado de envio
+								boolean twt_snd_status = tweet_hlp
+										.Send_Tweet(formatearComentario());
+								if (twt_snd_status)// OK enviado
+								{ // cambiamos imagen de estad a twitter_OK
+									Show_Toast("Tu tweet ha sido enviado");
+
+								} else {
+									// cambiamos imagen de estad a twitter_fial
+									Show_Toast("Hubo un Error no se pudo enviar tu tweet.");
+
+								}
+
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								// System.out.println(e.getMessage());
+								e.printStackTrace();
+							}
+						}
+					});
+			alrt1.setButton(AlertDialog.BUTTON_NEGATIVE, "Salir",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+						}
+					});
+			alrt1.show();
+			return true;
 
 		}
+		return super.onOptionsItemSelected(item);
+	}
 
-	    
-    private void dibujaLasLineas(FrameLayout fl) {
+	protected String formatearComentario() {
 		// TODO Auto-generated method stub
-    	LinearLayout ln = new LinearLayout(this);
-        ln.addView(new Lienzo(this));
-        fl.addView(ln);
-		
-	}
+		// TRABAJO
 
-
-	private void rellenarModulos()  //SOLO MODULOS>= 2hrs tienen sala, por un asunto estetico
-    {
-	   	// TODO Auto-generated method stub
-    	//LA RELACION ES 25dp  corresponde a 60 minutos 
-    	double factor= (185.0/500.0);
-    	
-    	
-    	
-    	for(int i=0;i<7;i++)
-    	{
-    	int enQueVoy = 480;
-    	int minutosFinAnterior=480;
-    	LinearLayout l = (LinearLayout) findViewById(R.id.LinearLayoutLunes);
-    	ArrayList<Modulo> modulosDia = Modulo.getModulosDelDia(this, i);
-		
-    	
-    	//EDITANDO
-    	for(Modulo m : modulosDia)
-		{
-    	
-    		AdapterDatabase ad = new AdapterDatabase(this);
-    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.getIdCurso()));
-    		
-    		int minutosInicio = m.getInicio();
-			int minutosFin = m.getFin();
-			int duracionEnMinutos =minutosInicio-minutosFin;
-			
-			
-			
-			if(minutosFinAnterior<minutosInicio)  //Y si enQueVoy=>minutos(ESTO NO DEBERIA PASAR....)
-			{
-				
-				
-				l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutosInicio-minutosFinAnterior)))));
-	
+		String a = "";
+		ArrayList<Modulo> modulos = Modulo.getLosSiguientesModulosDelDia(this,
+				Functions.getAhoraEnMinutos(), 5);
+		if (modulos.size() != 0) {
+			a = "Lo que me queda por hacer hoy "
+					+ stringDDS(Calendar.getInstance()
+							.get(Calendar.DAY_OF_WEEK)) + " : ";
+			for (Modulo m : modulos) {
+				AdapterDatabase ad = new AdapterDatabase(this);
+				Curso curso = ad.getRecord(Curso.class, "Cursos",
+						Long.parseLong(m.getIdCurso()));
+				a += " " + curso.getNombre() + "("
+						+ Functions.getHoraYMinutos(m.getInicio()) + "-"
+						+ Functions.getHoraYMinutos(m.getFin()) + ")" + " ";
 			}
-			minutosFinAnterior=minutosFin;
-				
-			ViewModulo a = new ViewModulo(this);
-			//a.setHoraInicio(m.getStringInicio());
-			//a.setHoraFin(m.getStringFin());
-			Curso curso2 =ad.getRecord(Curso.class, "Cursos", Long.parseLong(m.getIdCurso()));
-			if(curso2.esEditable()){
-				
-			a.setOnClickListener(this); 
-			a.setClickable(true);
-			a.setModulo(m);}
-			
-			
-			if(duracionEnMinutos>=120)  a.setSala(m.getUbicacion());
-			
-			if(duracionEnMinutos>=45) a.setNombre(curso.getNombre().substring(0,3));
-			
-			String color = curso.getColor();
-			a.setColor(Color.rgb(Functions.getRed(color), Functions.getGreen(color), Functions.getBlue(color)));
-			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
-			enQueVoy+=duracionEnMinutos;
+		} else {
+			a = "Terminaron las clases por hoy";
 		}
-		
-    	}
-		
-		
+		a += "- Desde Organizador";
+		return a;
+
 	}
 
+	public void Show_Toast(String txt) {
+
+		Toast.makeText(this, txt, Toast.LENGTH_SHORT).show();
+	}
+
+	public void validar_login() {
+		// Verificar si existen claves alamacenadas en el telefono si no llamar
+		// al webview.
+		if (!tweet_hlp.verify_logindata()) {
+			Show_Toast("No se han encontrado claves en el telefono las descargaremos.");
+			// creamos intent y pasamos get_AuthenticationURL
+			Intent i = new Intent(ActividadHorarioSemanal2.this,
+					TwitterWebActivity.class);
+			i.putExtra("URL", tweet_hlp.get_AuthenticationURL());
+			startActivityForResult(i, TWITTER_AUTH);
+
+		}
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// si el codigo obtenido es ok
+		if (resultCode == Activity.RESULT_OK) {
+			// Obtenemos oauth_verifier pasado por el webview
+			String oauthVerifier = (String) data.getExtras().get(
+					"oauth_verifier");
+			Log.e("oauthVerifier ->", oauthVerifier);
+			// Grabamos el valor de oauthVerifier en el shared preferences
+			tweet_hlp.Store_OAuth_verifier(oauthVerifier);
+
+		}
+
+	}
+
+	private void dibujaLasLineas(FrameLayout fl) {
+		// TODO Auto-generated method stub
+		LinearLayout ln = new LinearLayout(this);
+		ln.addView(new Lienzo(this));
+		fl.addView(ln);
+
+	}
+
+	private void rellenarModulos() // SOLO MODULOS>= 2hrs tienen sala, por un
+									// asunto estetico
+	{
+		// TODO Auto-generated method stub
+		// LA RELACION ES 25dp corresponde a 60 minutos
+		double factor = (185.0 / 500.0);
+
+		for (int i = 0; i < 7; i++) {
+			int enQueVoy = 480;
+			int minutosFinAnterior = 480;
+			LinearLayout l = (LinearLayout) findViewById(R.id.LinearLayoutLunes);
+			ArrayList<Modulo> modulosDia = Modulo.getModulosDelDia(this, i);
+
+			// EDITANDO
+			for (Modulo m : modulosDia) {
+
+				AdapterDatabase ad = new AdapterDatabase(this);
+				Curso curso = ad.getRecord(Curso.class, "Cursos",
+						Long.parseLong(m.getIdCurso()));
+
+				int minutosInicio = m.getInicio();
+				int minutosFin = m.getFin();
+				int duracionEnMinutos = minutosInicio - minutosFin;
+
+				if (minutosFinAnterior < minutosInicio) // Y si
+														// enQueVoy=>minutos(ESTO
+														// NO DEBERIA PASAR....)
+				{
+
+					l.addView(
+							new TextView(this),
+							new LayoutParams(
+									LayoutParams.FILL_PARENT,
+									DisplaySupport
+											.dipToPx(
+													getApplicationContext(),
+													(int) (factor * (minutosInicio - minutosFinAnterior)))));
+
+				}
+				minutosFinAnterior = minutosFin;
+
+				ViewModulo a = new ViewModulo(this);
+				// a.setHoraInicio(m.getStringInicio());
+				// a.setHoraFin(m.getStringFin());
+				Curso curso2 = ad.getRecord(Curso.class, "Cursos",
+						Long.parseLong(m.getIdCurso()));
+				if (curso2.esEditable()) {
+
+					a.setOnClickListener(this);
+					a.setClickable(true);
+					a.setModulo(m);
+				}
+
+				if (duracionEnMinutos >= 120)
+					a.setSala(m.getUbicacion());
+
+				if (duracionEnMinutos >= 45)
+					a.setNombre(curso.getNombre().substring(0, 3));
+
+				String color = curso.getColor();
+				a.setColor(Color.rgb(Functions.getRed(color),
+						Functions.getGreen(color), Functions.getBlue(color)));
+				l.addView(
+						a,
+						new LayoutParams(LayoutParams.FILL_PARENT,
+								DisplaySupport.dipToPx(getApplicationContext(),
+										(int) (factor * duracionEnMinutos))));
+				enQueVoy += duracionEnMinutos;
+			}
+
+		}
+
+	}
 
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		moduloAEditar = ((ViewModulo)v).getModulo();
+		moduloAEditar = ((ViewModulo) v).getModulo();
 		Bundle b = new Bundle();
-		showDialog(getIdUnica(),b);
-		
+		showDialog(getIdUnica(), b);
+
 	}
-	
-	
-	protected Dialog onCreateDialog(int id, Bundle b)
-	{
-		
+
+	protected Dialog onCreateDialog(int id, Bundle b) {
+
 		final Dialog d = new Dialog(this);
-    	
-		
-				String []diasDeLaSemana = {"Domingo","Lunes","Martes","Mi�rcoles","Jueves","Viernes","S�bado"};//CORRERSE EN UN INDICE...DOMINGO ==1
-				AdapterDatabase ad = new AdapterDatabase(this);
-	    		Curso curso =ad.getRecord(Curso.class, "Cursos", Long.parseLong(moduloAEditar.getIdCurso()));
-				
+
+		String[] diasDeLaSemana = { "Domingo", "Lunes", "Martes", "Mi�rcoles",
+				"Jueves", "Viernes", "S�bado" };// CORRERSE EN UN
+												// INDICE...DOMINGO ==1
+		AdapterDatabase ad = new AdapterDatabase(this);
+		Curso curso = ad.getRecord(Curso.class, "Cursos",
+				Long.parseLong(moduloAEditar.getIdCurso()));
+
 		d.setContentView(R.layout.dialogo_modulo_bkn);
 		d.setTitle(curso.getNombre());
 		Button boton_cancelar = (Button) d.findViewById(R.id.button2);
 		Button boton_aceptar = (Button) d.findViewById(R.id.button1);
-		Button boton_eliminar = (Button)  d.findViewById(R.id.button3);
+		Button boton_eliminar = (Button) d.findViewById(R.id.button3);
 		Spinner spinnerDias = (Spinner) d.findViewById(R.id.spinner1);
 		TimePicker tPInicio = (TimePicker) d.findViewById(R.id.timePicker1);
 		TimePicker tPFin = (TimePicker) d.findViewById(R.id.timePicker2);
-		
-		EditText campoTextoLugar = (EditText) d.findViewById(R.id.salaModuloAEditar);
 
-        String salaOriginal = moduloAEditar.getUbicacion();
-       campoTextoLugar.setText(salaOriginal);
-        //campoTextoLugar.setText(moduloAEditar.getNombreDiaDeLaSemana());
+		EditText campoTextoLugar = (EditText) d
+				.findViewById(R.id.salaModuloAEditar);
 
-        
-		///Agregando datos
-		spinnerDias.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,diasDeLaSemana));
-		spinnerDias.setSelection(Integer.parseInt(moduloAEditar.getDiaDeLaSemana())-1);
+		String salaOriginal = moduloAEditar.getUbicacion();
+		campoTextoLugar.setText(salaOriginal);
+		// campoTextoLugar.setText(moduloAEditar.getNombreDiaDeLaSemana());
+
+		// /Agregando datos
+		spinnerDias.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, diasDeLaSemana));
+		spinnerDias.setSelection(Integer.parseInt(moduloAEditar
+				.getDiaDeLaSemana()) - 1);
 		tPInicio.setIs24HourView(true);
-		int minInicio=moduloAEditar.getInicio();
+		int minInicio = moduloAEditar.getInicio();
 		int minFin = moduloAEditar.getFin();
 		tPInicio.setCurrentHour(Functions.getHoraDelDia(minInicio));
 		tPInicio.setCurrentMinute(Functions.getMinutosDelDia(minInicio));
 		tPFin.setIs24HourView(true);
 		tPFin.setCurrentHour(Functions.getHoraDelDia(minFin));
 		tPFin.setCurrentMinute(Functions.getMinutosDelDia(minFin));
-		///Agregando datos
-		
-        
-        		
+		// /Agregando datos
+
 		boton_cancelar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	/*TODO: Controlador.eliminarModulo(id_modulo);*/
-            	
-        		d.dismiss(); //Cierra el diálogo
+			public void onClick(View v) {
+				/* TODO: Controlador.eliminarModulo(id_modulo); */
 
-            	}
+				d.dismiss(); // Cierra el diálogo
+
+			}
 
 		});
-		
+
 		boton_aceptar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	
-            	/*TODO, recoger en el Buble la id del Módulo y eliminar el módulo*
-            	 * Además actualizar la lista de los módulos*/
-            	Spinner spinnerDias = (Spinner) d.findViewById(R.id.spinner1);
-            	TimePicker tPInicio = (TimePicker) d.findViewById(R.id.timePicker1);
-        		TimePicker tPFin = (TimePicker) d.findViewById(R.id.timePicker2);
-        		
-        		EditText campoTextoLugar = (EditText) d.findViewById(R.id.salaModuloAEditar);
+			public void onClick(View v) {
 
-        		
-        		String nuevoLugar = campoTextoLugar.getText().toString();
-        		moduloAEditar.setUbicacion( nuevoLugar);
-        		
-            	moduloAEditar.setDiaDeLaSemana(""+(spinnerDias.getSelectedItemPosition()+1));
-            	Calendar inicio = moduloAEditar.getInicio();
-            	inicio.set(Calendar.HOUR_OF_DAY, tPInicio.getCurrentHour());
-            	inicio.set(Calendar.MINUTE,tPInicio.getCurrentMinute());
-            	
-            	Calendar fin = moduloAEditar.getFin();
-            	fin.set(Calendar.HOUR_OF_DAY, tPFin.getCurrentHour());
-            	fin.set(Calendar.MINUTE,tPFin.getCurrentMinute());
-            	if(inicio.before(fin))
-            	{
-            		if(Functions.puedoCambiarModulo(v.getContext(), spinnerDias.getSelectedItemPosition()+1, inicio, fin,moduloAEditar))
-            		{
-            			moduloAEditar.setInicio( inicio);
-            			moduloAEditar.setFin(fin);
-            			actualizarModulos();
-            			d.dismiss();
-            			//Cierra el diálogo
-            		}
-            		else{
-            			Toast.makeText(v.getContext(), "Modulo ocupado", Toast.LENGTH_LONG).show();
-            		}
-            	}
-            	else
-            	{
-            		Toast.makeText(v.getContext(), "Inicio debe ser antes de Fin", Toast.LENGTH_LONG).show();
-            	}
+				/*
+				 * TODO, recoger en el Buble la id del Módulo y eliminar el
+				 * módulo* Además actualizar la lista de los módulos
+				 */
+				Spinner spinnerDias = (Spinner) d.findViewById(R.id.spinner1);
+				TimePicker tPInicio = (TimePicker) d
+						.findViewById(R.id.timePicker1);
+				TimePicker tPFin = (TimePicker) d
+						.findViewById(R.id.timePicker2);
 
-            	}
+				EditText campoTextoLugar = (EditText) d
+						.findViewById(R.id.salaModuloAEditar);
+
+				String nuevoLugar = campoTextoLugar.getText().toString();
+
+				int nuevoMinInicio = tPInicio.getCurrentHour() * 60
+						+ tPInicio.getCurrentMinute();
+				int nuevoMinFin = tPFin.getCurrentHour() * 60
+						+ tPFin.getCurrentMinute();
+
+				moduloAEditar.actualizar(v.getContext(), nuevoMinInicio,
+						nuevoMinFin, nuevoLugar);
+				//
+
+			}
 
 		});
-		
+
 		boton_eliminar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	/*TODO: Controlador.eliminarModulo(id_modulo);*/
-            	moduloAEditar.borrarModulo(v.getContext());
-            	actualizarModulos();
-            	d.dismiss();
-        		
-            	}
+			public void onClick(View v) {
+				/* TODO: Controlador.eliminarModulo(id_modulo); */
+				moduloAEditar.borrarModulo(v.getContext());
+				actualizarModulos();
+				d.dismiss();
+
+			}
 
 		});
-		
-		
-		//ESTO ES PARA QUE LOS PICKER NO SE PASEN DE LISTOS
-		tPInicio.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener(){
 
-			public void onTimeChanged(TimePicker view, int hourOfDay,int minute) {
+		// ESTO ES PARA QUE LOS PICKER NO SE PASEN DE LISTOS
+		tPInicio.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 				// TODO Auto-generated method stub
-				if(hourOfDay> 22)
+				if (hourOfDay > 22)
 					view.setCurrentHour(8);
-				if(hourOfDay<8)
+				if (hourOfDay < 8)
 					view.setCurrentHour(22);
 			}
-			
-			
-		});
-		tPFin.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener(){
 
-			public void onTimeChanged(TimePicker view, int hourOfDay,
-					int minute) {
+		});
+		tPFin.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 				// TODO Auto-generated method stub
-				if(hourOfDay> 22)
+				if (hourOfDay > 22)
 					view.setCurrentHour(8);
-				if(hourOfDay<8)
+				if (hourOfDay < 8)
 					view.setCurrentHour(22);
 			}
-			
-			
+
 		});
-		//ESTO ES PARA QUE LOS PICKER NO SE PASEN DE LISTOS
-		
+		// ESTO ES PARA QUE LOS PICKER NO SE PASEN DE LISTOS
+
 		return d;
-		/*TODO: Crear un layout para la edición de módulo
-		 * recoger todos los datos del módulo
-		 * colocarlos y permitir su edición
-		 * recopilar los cambios
-		 * hacer los cambios a través del controlador
-		 * actualizar la lista de módulos*/
-		
-		
+		/*
+		 * TODO: Crear un layout para la edición de módulo recoger todos los
+		 * datos del módulo colocarlos y permitir su edición recopilar los
+		 * cambios hacer los cambios a través del controlador actualizar la
+		 * lista de módulos
+		 */
 
 	}
-	
-	private String stringDDS(int dia)
-	{
-		if (dia==2){
+
+	private String stringDDS(int dia) {
+		if (dia == 2) {
 			return "Lunes";
-		}
-		else if (dia==3){
+		} else if (dia == 3) {
 			return "Martes";
-			
-		}
-		else if (dia==4){
+
+		} else if (dia == 4) {
 			return "Mi�rcoles";
-			
-		}
-		else if (dia==5){
+
+		} else if (dia == 5) {
 			return "Jueves";
-		}
-		else if (dia==6){
+		} else if (dia == 6) {
 			return "Viernes";
-			
-		}
-		else if (dia ==7){
+
+		} else if (dia == 7) {
 			return "S�bado";
-			
-		}
-		else if (dia==1){
+
+		} else if (dia == 1) {
 			return "Domingo";
-			
-		}
-		else {
-			return "DIA "+dia+" ";
+
+		} else {
+			return "DIA " + dia + " ";
 		}
 	}
 
-public static int getIdUnica(){
-    	
-    	/*Entrega una id única. Vital para crear dialogos únicos */
-    	Calendar now = Calendar.getInstance();
+	public static int getIdUnica() {
+
+		/* Entrega una id única. Vital para crear dialogos únicos */
+		Calendar now = Calendar.getInstance();
 		String year = String.valueOf(now.get(Calendar.YEAR));
-		String month = String.valueOf(now.get(Calendar.MONTH)); // Note: zero based!
-		String day = String.valueOf(now.get(Calendar.DAY_OF_MONTH)); //2
-		String hour = String.valueOf(now.get(Calendar.HOUR_OF_DAY));//2
-		String minute = String.valueOf(now.get(Calendar.MINUTE));//2
-		String second = String.valueOf(now.get(Calendar.SECOND));//2
-		String millis = String.valueOf(now.get(Calendar.MILLISECOND));//3
-		
-		//year + month + day +
-		//No puede quedar más largo, porque el rango de n
+		String month = String.valueOf(now.get(Calendar.MONTH)); // Note: zero
+																// based!
+		String day = String.valueOf(now.get(Calendar.DAY_OF_MONTH)); // 2
+		String hour = String.valueOf(now.get(Calendar.HOUR_OF_DAY));// 2
+		String minute = String.valueOf(now.get(Calendar.MINUTE));// 2
+		String second = String.valueOf(now.get(Calendar.SECOND));// 2
+		String millis = String.valueOf(now.get(Calendar.MILLISECOND));// 3
+
+		// year + month + day +
+		// No puede quedar más largo, porque el rango de n
 		String idunicaStr = hour + minute + second + millis;
-		 int idunicaInt	=  Integer.valueOf(idunicaStr);
+		int idunicaInt = Integer.valueOf(idunicaStr);
 		return (idunicaInt);
-    }
+	}
 
 	protected void actualizarModulos() {
 		// TODO Auto-generated method stub
-		FrameLayout fl = new FrameLayout(this);  
-	        fl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-	        setContentView(fl);
-	        
-	        dibujaLasLineas(fl);	
-			fl.addView(new ViewEstatica(this));
-			rellenarModulos();
+		FrameLayout fl = new FrameLayout(this);
+		fl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
+		setContentView(fl);
+
+		dibujaLasLineas(fl);
+		fl.addView(new ViewEstatica(this));
+		rellenarModulos();
 	}
 
-	 /*
-	  * Lo siguiente no tiene que estar, para que mande el menú de la actividad
-	  * que está como arriba de ella (awsome activity)
-	  * 
-	 @Override
-   public boolean onCreateOptionsMenu(Menu menu) {
-       getMenuInflater().inflate(R.menu.activity_actividad_configuracion, menu);
-       return true;
-   }
-      
-      */
+	/*
+	 * Lo siguiente no tiene que estar, para que mande el menú de la actividad
+	 * que está como arriba de ella (awsome activity)
+	 * 
+	 * @Override public boolean onCreateOptionsMenu(Menu menu) {
+	 * getMenuInflater().inflate(R.menu.activity_actividad_configuracion, menu);
+	 * return true; }
+	 */
 }
 
 class Lienzo extends View {
 
-    public Lienzo(Context context) {
-        super(context);
-    }
-    
-    @SuppressLint("DrawAllocation")
+	public Lienzo(Context context) {
+		super(context);
+	}
+
+	@SuppressLint("DrawAllocation")
 	protected void onDraw(Canvas canvas) {
-    	
-    	/*
-    	
-    			l.addView(new TextView(this),new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*(minutos-enQueVoy)))));
-				enQueVoy+= minutos-enQueVoy;
-			}
-				
-			ViewModulo a = new ViewModulo(this);
-			a.setHoraInicio(m.getStringInicio());
-			a.setHoraFin(m.getStringFin());
-			a.setSala(m.getNombre());
-			
-			a.setNombre(curso.getNombre().substring(0,3));
-			String color = curso.getColor();
-			a.setColor(Color.rgb(Controlador.getRed(color), Controlador.getGreen(color), Controlador.getBlue(color)));
-			l.addView(a,new LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx(getApplicationContext(),(int)(factor*duracionEnMinutos))));
-			enQueVoy+=duracionEnMinutos;
-		}*/
-    	//
-    	int dato0 = DisplaySupport.dipToPx(this.getContext(),365);
-    	int dato1 = DisplaySupport.dipToPx(this.getContext(),50);
-    	int dato2 = DisplaySupport.dipToPx(this.getContext(),53);
-    	int dato3 = DisplaySupport.dipToPx(this.getContext(),35);		
-    	int dato4 = DisplaySupport.dipToPx(this.getContext(),22);//TAMA�O DE UNA HORA
-    	
-    	canvas.drawRGB(255,255,255);
-        int ancho=canvas.getWidth();
-        int alto=canvas.getHeight();
-        
-        Paint pincel1=new Paint();
-        pincel1.setARGB(255,255,0,0);            
-        canvas.drawLine(dato1, 0, dato1, dato0, pincel1);
-        canvas.drawLine(dato2, 0, dato2, dato0, pincel1);
-        pincel1.setARGB(255,0,0,0);
-        int cantLineas=16;
-        for(int fila=0;fila<cantLineas;fila++) {
-        	canvas.drawLine(0, fila*dato4+dato3, ancho, fila*dato4+dato3, pincel1);
-        }
-    }}
+
+		/*
+		 * 
+		 * l.addView(new TextView(this),new
+		 * LayoutParams(LayoutParams.FILL_PARENT
+		 * ,DisplaySupport.dipToPx(getApplicationContext
+		 * (),(int)(factor*(minutos-enQueVoy))))); enQueVoy+= minutos-enQueVoy;
+		 * }
+		 * 
+		 * ViewModulo a = new ViewModulo(this);
+		 * a.setHoraInicio(m.getStringInicio()); a.setHoraFin(m.getStringFin());
+		 * a.setSala(m.getNombre());
+		 * 
+		 * a.setNombre(curso.getNombre().substring(0,3)); String color =
+		 * curso.getColor(); a.setColor(Color.rgb(Controlador.getRed(color),
+		 * Controlador.getGreen(color), Controlador.getBlue(color)));
+		 * l.addView(a,new
+		 * LayoutParams(LayoutParams.FILL_PARENT,DisplaySupport.dipToPx
+		 * (getApplicationContext(),(int)(factor*duracionEnMinutos))));
+		 * enQueVoy+=duracionEnMinutos; }
+		 */
+		//
+		int dato0 = DisplaySupport.dipToPx(this.getContext(), 365);
+		int dato1 = DisplaySupport.dipToPx(this.getContext(), 50);
+		int dato2 = DisplaySupport.dipToPx(this.getContext(), 53);
+		int dato3 = DisplaySupport.dipToPx(this.getContext(), 35);
+		int dato4 = DisplaySupport.dipToPx(this.getContext(), 22);// TAMA�O DE
+																	// UNA HORA
+
+		canvas.drawRGB(255, 255, 255);
+		int ancho = canvas.getWidth();
+		int alto = canvas.getHeight();
+
+		Paint pincel1 = new Paint();
+		pincel1.setARGB(255, 255, 0, 0);
+		canvas.drawLine(dato1, 0, dato1, dato0, pincel1);
+		canvas.drawLine(dato2, 0, dato2, dato0, pincel1);
+		pincel1.setARGB(255, 0, 0, 0);
+		int cantLineas = 16;
+		for (int fila = 0; fila < cantLineas; fila++) {
+			canvas.drawLine(0, fila * dato4 + dato3, ancho, fila * dato4
+					+ dato3, pincel1);
+		}
+	}
+}
