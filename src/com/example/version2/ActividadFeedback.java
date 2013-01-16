@@ -26,7 +26,7 @@ import com.example.controlador.Modulo;
 
 import com.example.controlador.*;
 import com.example.data.*;
-import com.example.server.server;
+import com.example.server.Server;
 
 public class ActividadFeedback extends Activity {
 	private ArrayList<String> cursos;
@@ -106,7 +106,7 @@ public class ActividadFeedback extends Activity {
 		if (!stringComentario.trim().equals("")) {
 			// Crear objeto de la clase post y posteriormente ejecutar m�todo
 			// comentar
-			server objeto1 = new server();
+			Server objeto1 = new Server();
 
 			try {
 

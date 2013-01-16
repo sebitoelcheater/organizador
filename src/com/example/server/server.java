@@ -32,7 +32,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-public class server extends Activity {
+public class Server extends Activity {
 
 	public void comentar(View view, int i, String comentario) throws Exception {
 		// Create a new HttpClient and Post Header
@@ -113,7 +113,7 @@ public class server extends Activity {
 		}
 	}
 
-	public ArrayList<JSONObject> getCursoFromDatabase(String idC,
+	public ArrayList<JSONObject> getRecordFromDatabase(String idC,
 			String elemento) throws Exception {
 		String URL = "http://www.cheaper.cl/android/suscribir.php?id=" + idC
 				+ "";
@@ -126,10 +126,10 @@ public class server extends Activity {
 	public boolean suscribirCurso(String id, Context ctx) throws Exception {
 
 		boolean b = true;
-		ArrayList<JSONObject> Profesor = getCursoFromDatabase(id, "Profesores");
-		JSONObject Curso = getCursoFromDatabase(id, "Cursos").get(0);
-		ArrayList<JSONObject> Horarios = getCursoFromDatabase(id, "Horarios");
-		ArrayList<JSONObject> Comentarios = getCursoFromDatabase(id,
+		ArrayList<JSONObject> Profesor = getRecordFromDatabase(id, "Profesores");
+		JSONObject Curso = getRecordFromDatabase(id, "Cursos").get(0);
+		ArrayList<JSONObject> Horarios = getRecordFromDatabase(id, "Horarios");
+		ArrayList<JSONObject> Comentarios = getRecordFromDatabase(id,
 				"Comentarios");
 
 		if (Profesor == null && Curso == null && Comentarios == null) {
@@ -145,6 +145,7 @@ public class server extends Activity {
 			String apellido = Profesor.get(i).getString("apellido");
 
 			Profesor profe = new Profesor(ctx, Integer.parseInt(idP), usuario, contrasena, nombre, apellido);
+			profe.save(ctx);
 			// introducir nuevo profesor (si no est‡ introducido). Lo obtengo a
 			// partir de un for, pero es claro que arrojar‡ s—lo un elemento
 		}
@@ -158,6 +159,7 @@ public class server extends Activity {
 			String color = Curso.getString("color");
 			Curso c = new Curso(ctx, Integer.parseInt(idC), Integer.parseInt(iidP == null ? "0" : iidP), titulo, Integer.toString(Functions.booleanToInt(comentable.equals("1"))), color);
 			if (c != null)
+				c.save(ctx);
 				iidC = c.getId();
 			// introducir nuevo curso con funciones hechas por Ariel, con los
 			// par‡metros declarados en este for. Lo mismo para profe,horarios y
@@ -254,18 +256,18 @@ public class server extends Activity {
 		boolean suscrito = false;
 		// if(delete==true)
 		AdapterDatabase ad = new AdapterDatabase(this);
-		String[] params = getParamsCurso(Integer.parseInt(id)); //preguntar a gonza
+		String[] params = getParamsCurso(getRecordFromDatabase(id,"Curso")); 
 		ad.updateRecord("Cursos", params);
 
 		return suscrito;
 
 		// boolean b = true;
 		// ArrayList<JSONObject> Profesor =
-		// getCursoFromDatabase(id,"Profesores");
-		// ArrayList<JSONObject> Curso = getCursoFromDatabase(id,"Cursos");
-		// ArrayList<JSONObject> Horarios = getCursoFromDatabase(id,"Horarios");
+		// getRecordFromDatabase(id,"Profesores");
+		// ArrayList<JSONObject> Curso = getRecordFromDatabase(id,"Cursos");
+		// ArrayList<JSONObject> Horarios = getRecordFromDatabase(id,"Horarios");
 		// ArrayList<JSONObject> Comentarios =
-		// getCursoFromDatabase(id,"Comentarios");
+		// getRecordFromDatabase(id,"Comentarios");
 		//
 		// if(Profesor == null && Curso == null && Comentarios == null)
 		// {
