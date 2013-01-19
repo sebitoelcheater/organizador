@@ -312,8 +312,7 @@ public class ActividadRamos extends ListActivity {
 			// (EditText)findViewById(R.id.idCursoASuscribir2);
 			// id_curso = idCurso.getText().toString();
 
-			boton_suscribir_curso
-					.setOnClickListener(new View.OnClickListener() {
+			boton_suscribir_curso.setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
 							EditText textoid = (EditText) d
 									.findViewById(R.id.idCursoASuscribir2);
@@ -322,12 +321,11 @@ public class ActividadRamos extends ListActivity {
 								return;
 							boolean noHayTope = true;
 						//	if (!Functions.existeCursoComentable(v.getContext(), id_curso)) {
-							if(Curso.getCurso(v.getContext(), id_curso).getComentable()!="1"){
+							if(Curso.getCurso(v.getContext(), id_curso)==null){
 							Server servidor = new Server();
 
 								try {
-									noHayTope = servidor.suscribirCurso(
-											id_curso, ActividadRamos.this);
+									noHayTope = servidor.suscribirCurso(id_curso, ActividadRamos.this);
 									Toast.makeText(v.getContext(),
 											"Curso Descargado",
 											Toast.LENGTH_LONG).show();
