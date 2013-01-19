@@ -29,7 +29,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class Server extends Activity {
-
+ 
 	public void comentar(View view, int i, String comentario) throws Exception {
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
