@@ -35,8 +35,7 @@ public class Server extends Activity {
 		HttpClient httpclient = new DefaultHttpClient();
 		comentario = comentario.replaceAll(" ", "%20");
 		HttpPost httppost = new HttpPost(
-				"http://www.cheaper.cl/android/comentar.php?ramo=" + i
-						+ "&comentario=" + comentario + "");
+				"http://www.cheaper.cl/android/comentar.php?ramo=" + i	+ "&comentario=" + comentario + "");
 
 		try {
 			// Execute HTTP Post Request
@@ -163,37 +162,15 @@ public class Server extends Activity {
 		}
 		if (Horarios != null) {
 			for (int i = 0; i < Horarios.size(); i++) {
-				String idH = Horarios.get(i).getString("idH");
-				String idC = Horarios.get(i).getString("idC");
-				String dds = Horarios.get(i).getString("dds");
-				String inicio = Horarios.get(i).getString("inicio");
-				String fin = Horarios.get(i).getString("fin");
-				String ubicacion = arreglarCotejamiento(Horarios.get(i)
-						.getString("ubicacion"));
+				JSONObject horarioActual = Horarios.get(i);
+				
+				String idH = horarioActual.getString("idH");
+				String idC = horarioActual.getString("idC");
+				String inicio = horarioActual.getString("inicio");
+				String fin = horarioActual.getString("fin");
+				String ubicacion = arreglarCotejamiento(Horarios.get(i)	.getString("ubicacion"));
 
-				inicio = arreglaLo(inicio);
-				fin = arreglaLo(fin);
-
-				SimpleDateFormat formato = new SimpleDateFormat("HHmmss");
-				Date a = new Date();
-				Calendar cInicio = new GregorianCalendar();
-				try {
-					a = formato.parse(inicio);
-					cInicio.setTime(a);
-				} catch (ParseException e) {
-				}
-
-				formato = new SimpleDateFormat("HHmmss");
-				a = new Date();
-				Calendar cFin = new GregorianCalendar();
-
-				try {
-					a = formato.parse(fin);
-					cFin.setTime(a);
-				} catch (ParseException e) {
-				}
-
-				Modulo m = new Modulo(ctx, Integer.parseInt(idH), Integer.parseInt(iidC == null ? "0" : iidC), Integer.parseInt(inicio), Integer.parseInt(fin), ubicacion); // gonza esto no lo resolv’!
+				Modulo m = new Modulo(ctx, Integer.parseInt(idH), Integer.parseInt(iidC == null ? "0" : iidC), Integer.parseInt(inicio), Integer.parseInt(fin), ubicacion);
 				boolean pudeCrearlo = (m.save(ctx));
 
 				if (!pudeCrearlo) {

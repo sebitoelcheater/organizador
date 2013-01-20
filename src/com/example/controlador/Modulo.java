@@ -45,8 +45,7 @@ public class Modulo extends Modelo {
 	public boolean save(Context ctx) {
 		AdapterDatabase db = new AdapterDatabase(ctx);
 
-		boolean b = getModulosEntreInicioYFin(ctx, this.getInicio(),
-				this.getFin()).size() == 0;
+		boolean b = getModulosEntreInicioYFin(ctx, this.getInicio(),this.getFin()).size() == 0;
 		if (b)
 			db.insertRecord(nombreTabla, this.params.values().toArray());
 
@@ -387,11 +386,11 @@ public class Modulo extends Modelo {
 	}
 
 	public int getInicio() {
-		return Integer.parseInt((String) this.params.get("inicio"));
+		return Integer.parseInt(this.params.get("inicio").toString());
 	}
 
 	public int getFin() {
-		return Integer.parseInt((String) this.params.get("fin"));
+		return Integer.parseInt(this.params.get("fin").toString());
 	}
 
 	// METODOS DE OBTENCION

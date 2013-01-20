@@ -326,9 +326,7 @@ public class ActividadRamos extends ListActivity {
 
 								try {
 									noHayTope = servidor.suscribirCurso(id_curso, ActividadRamos.this);
-									Toast.makeText(v.getContext(),
-											"Curso Descargado",
-											Toast.LENGTH_LONG).show();
+									Toast.makeText(v.getContext(), "Curso Descargado", Toast.LENGTH_LONG).show();
 								} catch (UnknownHostException uhe) {
 									Toast.makeText(
 											v.getContext(),

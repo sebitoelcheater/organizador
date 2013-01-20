@@ -18,20 +18,19 @@ public abstract class Modelo {// EX ISeteable
 
 	protected Modelo(String nombreTabla, String[] keys, Object[] values)
 			 {
-		if (keys.length != values.length) {
-			System.out.println(
-					"Modelo/constructor largo de llaves != a de valores");
+		if (keys.length -1 != values.length) {
+			System.out.println("Modelo/constructor largo de llaves -1 != a de valores");
 		}
 
-		for (int i = 0; i < keys.length; i++) {
-			params.put(keys[i], values[i]);
+		for (int i = 1; i < keys.length; i++) {
+			params.put(keys[i], values[i-1]);
 		}
 
-		if (keys.length != params.size()) {
+		if (keys.length-1 != params.size()) {
 			System.out.println("Modelo/constructor HashMap mato parametros");
 		}
 
-		this.NombreTabla = nombreTabla;
+		this.NombreTabla = nombreTabla; 
 
 	}
 
