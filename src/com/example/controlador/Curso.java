@@ -3,7 +3,7 @@ package com.example.controlador;
 import java.util.ArrayList;
 import android.content.Context;
 import com.example.data.*;
-import com.example.server.Server;
+import com.example.server.Server2;
 
 public class Curso extends Modelo {
 
@@ -71,7 +71,7 @@ public class Curso extends Modelo {
 	}
 
 	public boolean actualizar(Context context) throws Exception {
-		Server s = new Server();
+		Server2 s = new Server2();
 		boolean b = s.actualizarCurso(getIdMaster(), context);// seba va a
 																// arreglar
 		return b;
