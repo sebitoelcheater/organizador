@@ -136,5 +136,36 @@ public class Functions {
 		 int inicio = dia*Functions.minutosDeUnDia + hora*60 + minuto;
 		 return inicio;
 	 }
+	 
+	 public static String[] minToDate (int min){
+		 int dia = getDia(min);
+		 int hhmm = getHoraDelDia(min);
+		 return new String[] {dayToDia(dia),""+hhmm};
+	 }
+	 
+	 public static String dayToDia(int dia) {
+			if (dia==0) {
+				return "Lunes";
+			} else if (dia==0) {
+				return "Martes";
+
+			} else if (dia==0) {
+				return "Miercoles";
+
+			} else if (dia==3) {
+				return "Jueves";
+			} else if (dia==4) {
+				return "Viernes";
+
+			} else if (dia==5) {
+				return "Sabado";
+
+			} else if (dia==6) {
+				return "Domingo";
+
+			} else {
+				return "DIA " + dia + " ";
+			}
+		}
 
 }

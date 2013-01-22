@@ -358,8 +358,8 @@ public class ActividadEdicionRamo extends ListActivity implements
 			// /Agregando datos
 			spinnerDias.setAdapter(new ArrayAdapter<String>(this,
 					android.R.layout.simple_spinner_item, diasDeLaSemana));
-			spinnerDias.setSelection(Integer.parseInt(moduloAEditar
-					.getDiaDeLaSemana()) - 1);
+			System.out.println("holi"+moduloAEditar.getDiaDeLaSemana());
+			spinnerDias.setSelection(Integer.parseInt(moduloAEditar.getDiaDeLaSemana()) - 1);
 			tPInicio.setIs24HourView(true);
 			tPInicio.setCurrentHour(Functions.getHoraDelDia((moduloAEditar.getInicio())));
 			tPInicio.setCurrentMinute(Functions.getMinutosDelDia(((moduloAEditar.getInicio()))));
