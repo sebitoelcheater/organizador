@@ -63,7 +63,7 @@ public class Curso extends Modelo {
 	}
 
 	public boolean esDescargado() {
-		return this.params.get("idC").equals("0");
+		return !this.params.get("idC").equals("0");
 	}
 
 	public String getColor() {
