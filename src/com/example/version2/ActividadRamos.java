@@ -83,8 +83,9 @@ public class ActividadRamos extends ListActivity {
 			// Recoje textview donde va el nombre del ramo
 			TextView label = (TextView) fila.findViewById(R.id.textoNombreRamo);
 			// Le pone el nombre al campo de texto del nombre del ramo
+			System.out.println("holass"+position);
+			System.out.println("hola"+objects.get(position).getNombre());
 			label.setText(objects.get(position).getNombre());
-
 			/*
 			 * Aquí discrimina a los Cursos que son editables o noEn caso de
 			 * que sean editables, le coloca al botón la etiqueta de "Editar"y
@@ -235,6 +236,7 @@ public class ActividadRamos extends ListActivity {
 
 	public void actualizarListaRamos() {
 		ArrayList<Curso> nuevo_array_cursos = Curso.getCursosOrdenados(this);
+		System.out.println(nuevo_array_cursos.size());
 		adaptador.clear();
 		for (Curso curso : nuevo_array_cursos) {
 			adaptador.agregarCurso(curso);
@@ -312,8 +314,7 @@ public class ActividadRamos extends ListActivity {
 			// (EditText)findViewById(R.id.idCursoASuscribir2);
 			// id_curso = idCurso.getText().toString();
 
-			boton_suscribir_curso
-					.setOnClickListener(new View.OnClickListener() {
+			boton_suscribir_curso.setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
 							EditText textoid = (EditText) d
 									.findViewById(R.id.idCursoASuscribir2);
@@ -322,15 +323,12 @@ public class ActividadRamos extends ListActivity {
 								return;
 							boolean noHayTope = true;
 						//	if (!Functions.existeCursoComentable(v.getContext(), id_curso)) {
-							if(Curso.getCurso(v.getContext(), id_curso).getComentable()!="1"){
+							if(Curso.existeCursoWhereIdC(v.getContext(), id_curso)){
 							Server servidor = new Server();
 
 								try {
-									noHayTope = servidor.suscribirCurso(
-											id_curso, ActividadRamos.this);
-									Toast.makeText(v.getContext(),
-											"Curso Descargado",
-											Toast.LENGTH_LONG).show();
+									noHayTope = servidor.suscribirCurso(id_curso, ActividadRamos.this);
+									Toast.makeText(v.getContext(), "Curso Descargado", Toast.LENGTH_LONG).show();
 								} catch (UnknownHostException uhe) {
 									Toast.makeText(
 											v.getContext(),

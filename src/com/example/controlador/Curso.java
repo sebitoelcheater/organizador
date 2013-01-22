@@ -43,7 +43,7 @@ public class Curso extends Modelo {
 	}
 
 	public String getNombre() {
-		return (String) this.params.get("nombre");
+		return (String) this.params.get("title");
 	}
 
 	public String getIdMaster() {
@@ -107,6 +107,14 @@ public class Curso extends Modelo {
 		Curso c = ad.getRecord(Curso.class, nombreTabla, Long.parseLong(id));
 		return c;
 	}
+	
+	public static Curso getCursoWhereIdC(Context context, String idC) // DEPRECATED???
+	{
+		AdapterDatabase ad = new AdapterDatabase(context);
+
+		ArrayList<Curso> c = ad.getRecordWhere(Curso.class, nombreTabla, new String[] { "idC" }, new String[] { idC }, null, null,null, null);
+		return c.get(0);
+	}
 
 	public static ArrayList<Curso> getCursosOrdenados(Context context)// por
 																		// esEditable
@@ -115,10 +123,10 @@ public class Curso extends Modelo {
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Curso> cursos1 = db.getRecordWhere(Curso.class, nombreTabla,
-				new String[] { keys[2] }, new String[] { "0" }, null, null,
+				new String[] { keys[4] }, new String[] { "0" }, null, null,
 				null, null);
 		ArrayList<Curso> cursos2 = db.getRecordWhere(Curso.class, nombreTabla,
-				new String[] { keys[2] }, new String[] { "1" }, null, null,
+				new String[] { keys[4] }, new String[] { "1" }, null, null,
 				null, null);
 		ArrayList<Curso> ordenados = new ArrayList<Curso>();
 		ordenados.addAll(cursos1);
@@ -187,4 +195,14 @@ public class Curso extends Modelo {
 
 	}
 
+	public static boolean existeCursoWhereIdC(Context context, String idC) {
+		AdapterDatabase db = new AdapterDatabase(context);
+
+		boolean b = db.getRecordWhere(Curso.class, nombreTabla,
+				new String[] { "idC" }, new String[] { idC }, null,
+				null, null, null).size() == 0;
+
+		return b;
+
+	}
 }

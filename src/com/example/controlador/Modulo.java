@@ -45,8 +45,7 @@ public class Modulo extends Modelo {
 	public boolean save(Context ctx) {
 		AdapterDatabase db = new AdapterDatabase(ctx);
 
-		boolean b = getModulosEntreInicioYFin(ctx, this.getInicio(),
-				this.getFin()).size() == 0;
+		boolean b = getModulosEntreInicioYFin(ctx, this.getInicio(),this.getFin()).size() == 0;
 		if (b)
 			db.insertRecord(nombreTabla, this.params.values().toArray());
 
@@ -64,7 +63,7 @@ public class Modulo extends Modelo {
 			Curso c) {
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
-				nombreTabla, new String[] { "idC" },
+				nombreTabla, new String[] { "iidC" },
 				new String[] { c.getId() }, null, null, null, null);
 
 		return modulos;
@@ -81,7 +80,7 @@ public class Modulo extends Modelo {
 
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
-				nombreTabla, new String[] { "idC" },
+				nombreTabla, new String[] { "iidC" },
 				new String[] { c.getId() }, null, null, null, "inicio");
 
 		int tamanoModulos = modulos.size();
@@ -172,7 +171,7 @@ public class Modulo extends Modelo {
 			String idC = curso.getId();
 
 			ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class,
-					nombreTabla, new String[] { "idC" }, new String[] { idC },
+					nombreTabla, new String[] { "iidC" }, new String[] { idC },
 					new String[] { "fin" },
 					new String[] { Integer.toString(hoyMinutos) },
 					new String[] { Integer.toString(hoyMinutos + horas * 60) },
@@ -387,11 +386,11 @@ public class Modulo extends Modelo {
 	}
 
 	public int getInicio() {
-		return Integer.parseInt((String) this.params.get("inicio"));
+		return Integer.parseInt(this.params.get("inicio").toString());
 	}
 
 	public int getFin() {
-		return Integer.parseInt((String) this.params.get("fin"));
+		return Integer.parseInt(this.params.get("fin").toString());
 	}
 
 	// METODOS DE OBTENCION
