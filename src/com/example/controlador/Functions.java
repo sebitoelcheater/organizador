@@ -150,7 +150,7 @@ public class Functions {
 				return "Martes";
 
 			} else if (dia==0) {
-				return "Mircoles";
+				return "Miercoles";
 
 			} else if (dia==3) {
 				return "Jueves";
@@ -158,7 +158,7 @@ public class Functions {
 				return "Viernes";
 
 			} else if (dia==5) {
-				return "S‡bado";
+				return "Sabado";
 
 			} else if (dia==6) {
 				return "Domingo";
