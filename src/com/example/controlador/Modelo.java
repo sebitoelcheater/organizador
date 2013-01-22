@@ -1,6 +1,7 @@
 package com.example.controlador;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import android.content.Context;
 
@@ -9,7 +10,7 @@ import com.example.data.AdapterDatabase;
 public abstract class Modelo {// EX ISeteable
 
 	protected String NombreTabla;
-	protected HashMap<String, Object> params = new HashMap<String, Object>();
+	protected LinkedHashMap<String, Object> params = new LinkedHashMap<String, Object>();
 
 	protected Modelo() {
 		NombreTabla = null;

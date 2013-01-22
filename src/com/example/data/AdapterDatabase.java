@@ -153,11 +153,11 @@ public class AdapterDatabase {
 
 		ContentValues initialValues = new ContentValues();
 		SQLiteDatabase db = DBHelper.getWritableDatabase();
-
+		
 		for (int i = 1; i < nombresCampos.length; i++) {
 			initialValues.put(nombresCampos[i], params[i-1].toString());
-
 		}
+		
 		long ret = db.insert(nombreTabla, null, initialValues);
 		db.close();
 		DBHelper.close();
