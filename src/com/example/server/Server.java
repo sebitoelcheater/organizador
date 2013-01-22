@@ -121,23 +121,23 @@ public class Server extends Activity {
 	public boolean suscribirCurso(String id, Context ctx) throws Exception {
 
 		boolean b = true;
-		ArrayList<JSONObject> Profesor = getRecordFromDatabase(id, "Profesores");
-		JSONObject Curso = getRecordFromDatabase(id, "Cursos").get(0);
+		ArrayList<JSONObject> jsonProfesor = getRecordFromDatabase(id, "Profesores");
+		JSONObject jsonCurso = getRecordFromDatabase(id, "Cursos").get(0);
 		ArrayList<JSONObject> Horarios = getRecordFromDatabase(id, "Horarios");
 		ArrayList<JSONObject> Comentarios = getRecordFromDatabase(id,
 				"Comentarios");
 
-		if (Profesor == null && Curso == null && Comentarios == null) {
+		if (jsonProfesor == null && jsonCurso == null && Comentarios == null) {
 			throw new NoExisteCursoException("No existe CUrso");
 		}
 		String iidC = null, iidP = null, iidH = null, iidCom = null;
 
-		for (int i = 0; i < Profesor.size(); i++) {
-			String idP = Profesor.get(i).getString("idP");
-			String usuario = Profesor.get(i).getString("usuario");
-			String contrasena = Profesor.get(i).getString("contrasena");
-			String nombre = Profesor.get(i).getString("nombre");
-			String apellido = Profesor.get(i).getString("apellido");
+		for (int i = 0; i < jsonProfesor.size(); i++) {
+			String idP = jsonProfesor.get(i).getString("idP");
+			String usuario = jsonProfesor.get(i).getString("usuario");
+			String contrasena = jsonProfesor.get(i).getString("contrasena");
+			String nombre = jsonProfesor.get(i).getString("nombre");
+			String apellido = jsonProfesor.get(i).getString("apellido");
 
 			Profesor profe = new Profesor(ctx, Integer.parseInt(idP), usuario, contrasena, nombre, apellido);
 			profe.save(ctx);
@@ -146,12 +146,15 @@ public class Server extends Activity {
 		}
 
 		{
-			String idC = Curso.getString("idC");
-			String idP = Curso.getString("idP");
-			String titulo = arreglarCotejamiento(Curso.getString("titulo"))
-					.trim();
-			String comentable = Curso.getString("comentable");
-			String color = Curso.getString("color");
+			String idC = jsonCurso.getString("idC");
+			String idP = jsonCurso.getString("idP");
+			String titulo = arreglarCotejamiento(jsonCurso.getString("titulo")).trim();
+			String comentable = jsonCurso.getString("comentable");
+			ArrayList<Profesor> profe = Profesor.getIidPwhereIdP(ctx, idP);
+			iidP=profe.get(0).getIidP();
+			
+			String color = jsonCurso.getString("color");
+						
 			Curso c = new Curso(ctx, Integer.parseInt(idC), Integer.parseInt(iidP == null ? "0" : iidP), titulo, Integer.toString(Functions.booleanToInt(comentable.equals("1"))), color);
 			if (c != null)
 				c.save(ctx);
@@ -169,6 +172,8 @@ public class Server extends Activity {
 				String inicio = horarioActual.getString("inicio");
 				String fin = horarioActual.getString("fin");
 				String ubicacion = arreglarCotejamiento(Horarios.get(i)	.getString("ubicacion"));
+				Curso curso = Curso.getCursoWhereIdC(ctx, idC);
+				iidC=curso.getId();
 
 				Modulo m = new Modulo(ctx, Integer.parseInt(idH), Integer.parseInt(iidC == null ? "0" : iidC), Integer.parseInt(inicio), Integer.parseInt(fin), ubicacion);
 				boolean pudeCrearlo = (m.save(ctx));

@@ -63,7 +63,7 @@ public class Modulo extends Modelo {
 			Curso c) {
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
-				nombreTabla, new String[] { "idC" },
+				nombreTabla, new String[] { "iidC" },
 				new String[] { c.getId() }, null, null, null, null);
 
 		return modulos;
@@ -80,7 +80,7 @@ public class Modulo extends Modelo {
 
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
-				nombreTabla, new String[] { "idC" },
+				nombreTabla, new String[] { "iidC" },
 				new String[] { c.getId() }, null, null, null, "inicio");
 
 		int tamanoModulos = modulos.size();
@@ -171,7 +171,7 @@ public class Modulo extends Modelo {
 			String idC = curso.getId();
 
 			ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class,
-					nombreTabla, new String[] { "idC" }, new String[] { idC },
+					nombreTabla, new String[] { "iidC" }, new String[] { idC },
 					new String[] { "fin" },
 					new String[] { Integer.toString(hoyMinutos) },
 					new String[] { Integer.toString(hoyMinutos + horas * 60) },
