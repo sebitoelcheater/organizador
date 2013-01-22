@@ -63,7 +63,7 @@ public class Curso extends Modelo {
 	}
 
 	public boolean esDescargado() {
-		return this.params.get("idC").equals("0");
+		return !this.params.get("idC").equals("0");
 	}
 
 	public String getColor() {
@@ -123,10 +123,10 @@ public class Curso extends Modelo {
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Curso> cursos1 = db.getRecordWhere(Curso.class, nombreTabla,
-				new String[] { keys[4] }, new String[] { "0" }, null, null,
+				new String[] { "comentable" }, new String[] { "0" }, null, null,
 				null, null);
 		ArrayList<Curso> cursos2 = db.getRecordWhere(Curso.class, nombreTabla,
-				new String[] { keys[4] }, new String[] { "1" }, null, null,
+				new String[] { "comentable" }, new String[] { "1" }, null, null,
 				null, null);
 		ArrayList<Curso> ordenados = new ArrayList<Curso>();
 		ordenados.addAll(cursos1);

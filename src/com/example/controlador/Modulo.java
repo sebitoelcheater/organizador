@@ -303,17 +303,19 @@ public class Modulo extends Modelo {
 	}
 
 	
-	public boolean actualizar(Context ctx, int minInicio, int minFin,
-			String ubicacion) {
+	public boolean actualizar(Context ctx, int minInicio, int minFin,String ubicacion) {
+		System.out.println("wena");
 
 		String[] params = (String[]) this.params.values().toArray();
 
 		boolean actualizar = false;
+		
 
 		if (this.getInicio() != minInicio || this.getFin() != minFin) {
 			if (minInicio < minFin) {
 				if (Modulo.puedoCambiarModulo(ctx, minInicio, minFin, this)) {
 					actualizar = true;
+					System.out.println(params[3]+"chao");
 					params[3] = "" + minInicio;
 					params[4] = "" + minFin;
 
@@ -343,7 +345,10 @@ public class Modulo extends Modelo {
 
 	public String getDiaDeLaSemana() {
 		// return diaDeLaSemana;
-		return (String) this.params.get(getKeys()[3]);
+		String minutos = (String) this.params.get(getKeys()[3]);
+		int day = Functions.getDia(Integer.parseInt(minutos));
+		//String dia = Functions.dayToDia(day);
+		return ""+day;
 	}
 
 	public String getIdMaster() {
@@ -356,28 +361,29 @@ public class Modulo extends Modelo {
 	}
 
 	public String getUbicacion() {
-		return (String) this.params.get(getKeys()[6]);
+		// Recordar que para cada x en getKeys()[x]: 0:iidH, 1: idH, 2: iidC, 3: inicio, 4: fin, 5: ubicacion
+		return (String) this.params.get(getKeys()[5]);
 	}
 
 	public String getNombreDiaDeLaSemana() {
 		String diaDeLaSemana = getDiaDeLaSemana();
-		if (diaDeLaSemana.equals("2")) {
+		if (diaDeLaSemana.equals("0")) {
 			return "Lunes";
-		} else if (diaDeLaSemana.equals("3")) {
+		} else if (diaDeLaSemana.equals("1")) {
 			return "Martes";
 
-		} else if (diaDeLaSemana.equals("4")) {
-			return "Miércoles";
+		} else if (diaDeLaSemana.equals("2")) {
+			return "MiŽrcoles";
 
-		} else if (diaDeLaSemana.equals("5")) {
+		} else if (diaDeLaSemana.equals("3")) {
 			return "Jueves";
-		} else if (diaDeLaSemana.equals("6")) {
+		} else if (diaDeLaSemana.equals("4")) {
 			return "Viernes";
 
-		} else if (diaDeLaSemana.equals("7")) {
-			return "Sábado";
+		} else if (diaDeLaSemana.equals("5")) {
+			return "S‡bado";
 
-		} else if (diaDeLaSemana.equals("1")) {
+		} else if (diaDeLaSemana.equals("6")) {
 			return "Domingo";
 
 		} else {
