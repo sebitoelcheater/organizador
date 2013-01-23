@@ -123,7 +123,6 @@ public class Modulo extends Modelo {
 						dia * Functions.minutosDeUnDia + "" }, new String[] {
 						(dia + 1) * Functions.minutosDeUnDia + "",
 						(dia + 1) * Functions.minutosDeUnDia + "" }, "inicio");
-
 		return modulosOrdenados;
 
 	}

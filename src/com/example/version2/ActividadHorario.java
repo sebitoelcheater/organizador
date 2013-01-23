@@ -305,7 +305,7 @@ public class ActividadHorario extends Activity { // PONER COLORES :)
 			else
 				mapa.put("Nombre",
 						c.getNombre() + " - " + m.getUbicacion());
-			mapa.put("Hora", Integer.toString(Functions.getHoraDelDia(m.getInicio())));
+			mapa.put("Hora", Functions.getHoraYMinutos(m.getInicio()));
 			array_modulos.add(mapa);
 		}
 		ListView listaModulos = (ListView) findViewById(R.id.listView1);
