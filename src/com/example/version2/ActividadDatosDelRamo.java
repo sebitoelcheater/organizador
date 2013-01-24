@@ -40,8 +40,7 @@ public class ActividadDatosDelRamo extends ListActivity implements
 
 		private List<Modulo> objects;
 
-		public MiModuloArrayAdapter(Context context, int textViewResourceId,
-				List<Modulo> listaModulos) {
+		public MiModuloArrayAdapter(Context context, int textViewResourceId,List<Modulo> listaModulos) {
 			super(context, textViewResourceId, listaModulos);
 			this.objects = listaModulos;
 		}
@@ -84,6 +83,7 @@ public class ActividadDatosDelRamo extends ListActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.app_name);
+		
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		// Recibe el mensaje del inetent
 		Intent intent = getIntent();

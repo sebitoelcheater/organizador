@@ -17,6 +17,7 @@ public abstract class Modelo {// EX ISeteable
 		
 	}
 
+
 	protected Modelo(String nombreTabla, String[] keys, Object[] values)
 			 {
 		if (keys.length -1 != values.length) {
@@ -43,6 +44,11 @@ public abstract class Modelo {// EX ISeteable
 		return false;
 	}
 
+	
 	public abstract void setData(String id, Object[] params);
-
+	public void setParam(String key,String value)
+	{
+		params.put(key, value);
+	
+	}
 }

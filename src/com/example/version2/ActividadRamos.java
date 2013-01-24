@@ -93,8 +93,7 @@ public class ActividadRamos extends ListActivity {
 			 * el ramo con el Servidor.
 			 */
 
-			Button boton_editar = (Button) fila
-					.findViewById(R.id.botonEditarRamo);
+			Button boton_editar = (Button) fila.findViewById(R.id.botonEditarRamo);
 			if (objects.get(position).esEditable()) {
 
 				boton_editar.setText(R.string.editar);
@@ -122,39 +121,43 @@ public class ActividadRamos extends ListActivity {
 					public void onClick(View v) {
 						// AquÃ­ las instrucciones para actualizar el Curso
 
-						boolean noHayTope = true;
+						Server.pullNewData();
+						
+//						boolean noHayTope = true;
+//
+//						
+//						
+//						try {
+//							noHayTope = objects.get(position).actualizar(
+//									ActividadRamos.this);
+//							Toast.makeText(v.getContext(), "Curso actualizado",
+//									Toast.LENGTH_LONG).show();
+//						} catch (UnknownHostException uhe) {
+//							Toast.makeText(v.getContext(),
+//									"Error :No hay conexión con el servidor",
+//									Toast.LENGTH_LONG).show();
+//							return;
+//						} catch (NoHttpResponseException nhre) {
+//							Toast.makeText(v.getContext(),
+//									"Error :No hay conexión con el servidor",
+//									Toast.LENGTH_LONG).show();
+//							return;
+//						} catch (NoExisteCursoException nece) {
+//							Toast.makeText(v.getContext(),
+//									"Error :El curso ya no existe",
+//									Toast.LENGTH_LONG).show();
+//							return;
+//						} catch (Exception e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 
-						try {
-							noHayTope = objects.get(position).actualizar(
-									ActividadRamos.this);
-							Toast.makeText(v.getContext(), "Curso actualizado",
-									Toast.LENGTH_LONG).show();
-						} catch (UnknownHostException uhe) {
-							Toast.makeText(v.getContext(),
-									"Error :No hay conexión con el servidor",
-									Toast.LENGTH_LONG).show();
-							return;
-						} catch (NoHttpResponseException nhre) {
-							Toast.makeText(v.getContext(),
-									"Error :No hay conexión con el servidor",
-									Toast.LENGTH_LONG).show();
-							return;
-						} catch (NoExisteCursoException nece) {
-							Toast.makeText(v.getContext(),
-									"Error :El curso ya no existe",
-									Toast.LENGTH_LONG).show();
-							return;
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-						if (!noHayTope)
-							Toast.makeText(v.getContext(),
-									"Hay topes de hora con algun modulo",
-									Toast.LENGTH_LONG).show();
-
-						actualizarListaRamos();
+//						if (!noHayTope)
+//							Toast.makeText(v.getContext(),
+//									"Hay topes de hora con algun modulo",
+//									Toast.LENGTH_LONG).show();
+//
+//						actualizarListaRamos();
 					}
 				});
 			}

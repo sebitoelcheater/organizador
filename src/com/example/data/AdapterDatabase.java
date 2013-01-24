@@ -265,6 +265,34 @@ public class AdapterDatabase {
 		}
 		return null;
 	}
+	/**
+	 * Obtiene Record segun el idMaster
+	 * @param _class
+	 * @param nombreTabla
+	 * @param rowId
+	 * @return
+	 * @throws SQLException
+	 */
+	public <T extends Modelo> T getRecordIdMaster(Class<T> _class, String nombreTabla,	long rowId) throws SQLException {
+		SQLiteDatabase db = DBHelper.getWritableDatabase();
+		Tabla t = tablas.get(nombreTabla);
+		Cursor mCursor = db.query(nombreTabla, getNombresCampos(nombreTabla),
+				t.getNombreLlaveMaster() + "=" + rowId, null, null, null, null, null);
+		if (mCursor != null) {
+
+			mCursor.moveToFirst();
+		}
+		ArrayList<T> listaDeUnaInstancia = obtenerInstancias(_class,
+				nombreTabla, mCursor);
+
+		db.close();
+		DBHelper.close();
+		mCursor.close();
+		if (listaDeUnaInstancia.size() != 0) {
+			return listaDeUnaInstancia.get(0);
+		}
+		return null;
+	}
 
 	/**
 	 * Obtiene todos los objetos(filas) que cumplan con las condiciones
@@ -445,5 +473,10 @@ public class AdapterDatabase {
 			_ex.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static String[] getKeys(String nombreTabla)
+	{
+		return AdapterDatabase.tablas.get(nombreTabla).keys;
 	}
 }

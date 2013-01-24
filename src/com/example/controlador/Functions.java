@@ -167,5 +167,24 @@ public class Functions {
 				return "DIA " + dia + " ";
 			}
 		}
+	 
+	 public static Class<?> getClass(String nombreTabla)
+	 {
+		 if(nombreTabla.equals("Cursos"))
+		 {
+			 return Curso.class;
+		 }else if(nombreTabla.equals("Horarios"))
+		 {
+			return Modulo.class; 
+		 }else if(nombreTabla.equals("Profesores"))
+		 {
+			 return Profesor.class;
+		 }else if(nombreTabla.equals("Comentarios"))
+		 {
+			 return Comentario.class;
+		 }
+		 
+		 return null;
+	 }
 
 }

@@ -12,7 +12,7 @@ public class Curso extends Modelo {
 	// String[]{"iidC","nombre","idC","idP","comentable","color"};
 	private static String[] keys;
 
-	static String[] getKeys() {
+	public static String[] getKeys() {
 		return keys;
 	}
 
@@ -29,8 +29,7 @@ public class Curso extends Modelo {
 		this.NombreTabla = nombreTabla;
 	}
 
-	public Curso(Context context, int idC, int iidP, String nombre,
-			String comentable, String color) {
+	public Curso(Context context, int idC, int iidP, String nombre,	String comentable, String color) {
 
 		super(nombreTabla, AdapterDatabase.tablas.get(nombreTabla).keys,
 				new String[] { "" + idC, "" + iidP, nombre, comentable, color });

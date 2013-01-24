@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.controlador.*;
+import com.example.data.AdapterDatabase;
 
 import android.app.Activity;
 import android.content.Context;
@@ -217,18 +218,9 @@ public class Server extends Activity {
 
 	public boolean actualizarCurso(String id, Context ctx) // retorna si hay un
 															// tope en la nueva
-															// edicion
-			throws Exception {
-
-		/*
-		 * Hay que re-hacer este metodo haciendo que use los metodos de
-		 * AdapterDatabase: deleteRecord, updateRecord e insertRecord
-		 */
-
-		// boolean delete=ad.deleteRecord("Curso", Long.parseLong(id));
-		
 		System.out.println("ACTUALIZARCURSO NO IMPLEMENTADO (Server)");
-		return false;
+		
+	return false;
 		
 //		boolean suscrito = false;
 //		// if(delete==true)
@@ -237,7 +229,7 @@ public class Server extends Activity {
 //		ad.updateRecord("Cursos", params);
 //
 //		return suscrito;
-
+/**
 		// boolean b = true;
 		// ArrayList<JSONObject> Profesor =
 		// getRecordFromDatabase(id,"Profesores");
@@ -263,6 +255,8 @@ public class Server extends Activity {
 		// String apellido = Profesor.get(i).getString("apellido");
 		// iidP = Controlador.insertarProfesor(ctx, idP, usuario, contrasena,
 		// nombre, apellido);
+		 * 
+		 */
 		// // introducir nuevo profesor (si no est‡ introducido). Lo obtengo a
 		// partir de un for, pero es claro que arrojar‡ s—lo un elemento
 		// }
@@ -391,4 +385,49 @@ public class Server extends Activity {
 		return variable;
 	}
 
+	public boolean pullNewData(Context ctx)
+	{
+		int id = Server.getMyId();
+		String URL = "http://www.cheaper.cl/android/funciones/suscribir.php?idU=" + id + "";
+ 		String JSONChain = getInternetData(URL);
+//		
+ 		if(JSONChain==null)
+			return true;
+ 		AdapterDatabase ad = new AdapterDatabase(ctx);
+ 		String[] nombreTablas = (String[])AdapterDatabase.tablas.keySet().toArray();
+ 		
+ 	
+ 		for( String nombreTabla : nombreTablas)
+ 		{
+ 			ArrayList<JSONObject> arreglo = stringToJSON.getArray(JSONChain, nombreTabla);
+ 			if(arreglo==null)
+ 				continue;
+ 			
+ 			String[] keys=AdapterDatabase.getKeys(nombreTabla);
+ 			int size=arreglo.size();
+ 			
+ 			//recorre cada JSONObject
+ 			for(int i=0;i<size;i++)
+ 			{
+ 				JSONObject jo = arreglo.get(i);
+ 				int idM=jo.getInt(keys[1]);//idMaster
+ 				Class clase = Functions.getClass(nombreTabla);
+ 				Modelo m = ad.getRecordIdMaster(clase, nombreTabla, idM);
+ 				
+ 				for(String key:keys)
+ 				{
+ 					String param = jo.getString(key);
+ 					if(param!=null)
+ 						
+ 				}
+ 				
+ 			}
+
+ 		}
+	
+		
+		
+		
+		
+	}
 }

@@ -55,4 +55,7 @@ public class Tabla {
 		return this.campos.get(0)[0];
 	}
 
+	public String getNombreLlaveMaster() {
+		return this.campos.get(1)[0];
+	}
 }
