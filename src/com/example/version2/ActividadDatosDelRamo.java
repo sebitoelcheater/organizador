@@ -1,5 +1,5 @@
 //SEBASTIAN
-package com.example.frontend;
+package com.example.version2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,8 @@ import android.widget.ListView;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.frontend.ActividadRamos.MiArrayAdapter;
 import com.example.version2.R;
+import com.example.version2.ActividadRamos.MiArrayAdapter;
 
 public class ActividadDatosDelRamo extends ListActivity implements
 		OnItemClickListener {

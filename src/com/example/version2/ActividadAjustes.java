@@ -1,5 +1,5 @@
 //gonzalo
-package com.example.frontend;
+package com.example.version2;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -33,15 +33,16 @@ import android.widget.Toast;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.frontend.ColorPickerDialog.OnColorChangedListener;
 import com.example.server.Server;
 import com.example.server.Server.NoExisteCursoException;
 //import android.app.Fragment;
 //import com.ciarang.tallyphant.DB;
 //import com.ciarang.tallyphant.DB;
 import com.example.version2.R;
+import com.example.version2.ColorPickerDialog.OnColorChangedListener;
 
-public class ActividadRamos extends ListActivity {
+
+public class ActividadAjustes extends ListActivity {
 	private static final int REQUEST_EDITAR_O_AGREGAR = 0;
 
 	public String id_curso = null;
@@ -84,9 +85,8 @@ public class ActividadRamos extends ListActivity {
 			// Recoje textview donde va el nombre del ramo
 			TextView label = (TextView) fila.findViewById(R.id.textoNombreRamo);
 			// Le pone el nombre al campo de texto del nombre del ramo
-			System.out.println("holass"+position);
-			System.out.println("hola"+objects.get(position).getNombre());
 			label.setText(objects.get(position).getNombre());
+
 			/*
 			 * Aquí discrimina a los Cursos que son editables o noEn caso de
 			 * que sean editables, le coloca al botón la etiqueta de "Editar"y
@@ -106,7 +106,7 @@ public class ActividadRamos extends ListActivity {
 				boton_editar.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
 						// Para Editar un RAmo
-						Intent intent = new Intent(ActividadRamos.this,
+						Intent intent = new Intent(ActividadAjustes.this,
 								ActividadEdicionRamo.class);
 						intent.putExtra("id", objects.get(position).getId());
 
@@ -131,7 +131,7 @@ public class ActividadRamos extends ListActivity {
 
 						try {
 							noHayTope = objects.get(position).actualizar(
-									ActividadRamos.this);
+									ActividadAjustes.this);
 							Toast.makeText(v.getContext(), "Curso actualizado",
 									Toast.LENGTH_LONG).show();
 						} catch (UnknownHostException uhe) {
@@ -167,7 +167,7 @@ public class ActividadRamos extends ListActivity {
 			label.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					// Para Ver un Ramo
-					Intent intent = new Intent(ActividadRamos.this,
+					Intent intent = new Intent(ActividadAjustes.this,
 							ActividadDatosDelRamo.class);
 					intent.putExtra("id", objects.get(position).getId());
 
@@ -237,7 +237,6 @@ public class ActividadRamos extends ListActivity {
 
 	public void actualizarListaRamos() {
 		ArrayList<Curso> nuevo_array_cursos = Curso.getCursosOrdenados(this);
-		System.out.println(nuevo_array_cursos.size());
 		adaptador.clear();
 		for (Curso curso : nuevo_array_cursos) {
 			adaptador.agregarCurso(curso);
@@ -315,7 +314,8 @@ public class ActividadRamos extends ListActivity {
 			// (EditText)findViewById(R.id.idCursoASuscribir2);
 			// id_curso = idCurso.getText().toString();
 
-			boton_suscribir_curso.setOnClickListener(new View.OnClickListener() {
+			boton_suscribir_curso
+					.setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
 							EditText textoid = (EditText) d
 									.findViewById(R.id.idCursoASuscribir2);
@@ -324,12 +324,15 @@ public class ActividadRamos extends ListActivity {
 								return;
 							boolean noHayTope = true;
 						//	if (!Functions.existeCursoComentable(v.getContext(), id_curso)) {
-							if(Curso.existeCursoWhereIdC(v.getContext(), id_curso)){
+							if(Curso.getCurso(v.getContext(), id_curso).getComentable()!="1"){
 							Server servidor = new Server();
 
 								try {
-									noHayTope = servidor.suscribirCurso(id_curso, ActividadRamos.this);
-									Toast.makeText(v.getContext(), "Curso Descargado", Toast.LENGTH_LONG).show();
+									noHayTope = servidor.suscribirCurso(
+											id_curso, ActividadAjustes.this);
+									Toast.makeText(v.getContext(),
+											"Curso Descargado",
+											Toast.LENGTH_LONG).show();
 								} catch (UnknownHostException uhe) {
 									Toast.makeText(
 											v.getContext(),
@@ -428,11 +431,11 @@ public class ActividadRamos extends ListActivity {
 //												+ "-"
 //												+ Functions.agregarCeros(3,
 //														Color.blue(color)));
-								Curso c = new Curso(ActividadRamos.this,0,0,nombre_curso,"0",Functions.agregarCeros(3,
+								Curso c = new Curso(ActividadAjustes.this,0,0,nombre_curso,"0",Functions.agregarCeros(3,
 										Color.red(color))+ "-"+ Functions.agregarCeros(3,Color.green(color))
 										+ "-"
 										+ Functions.agregarCeros(3,	Color.blue(color)));
-								c.save(ActividadRamos.this);
+								c.save(ActividadAjustes.this);
 								Toast.makeText(getApplicationContext(),
 										"Curso Agregado", Toast.LENGTH_LONG)
 										.show();

@@ -1,5 +1,5 @@
 //SEBASTIAN
-package com.example.frontend;
+package com.example.version2;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,8 +8,8 @@ import java.util.List;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.frontend.ActividadEdicionRamo.MiModuloEditandoArrayAdapter;
 import com.example.version2.R;
+import com.example.version2.ActividadEdicionRamo.MiModuloEditandoArrayAdapter;
 
 import android.net.Uri;
 import android.os.Bundle;

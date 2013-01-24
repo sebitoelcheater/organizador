@@ -1,5 +1,5 @@
 //SEBASTIAN
-package com.example.frontend;
+package com.example.version2;
 
 import twitter4j.auth.RequestToken;
 import java.util.ArrayList;

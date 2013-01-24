@@ -34,8 +34,7 @@ public class Server extends Activity {
 		// Create a new HttpClient and Post Header
 		HttpClient httpclient = new DefaultHttpClient();
 		comentario = comentario.replaceAll(" ", "%20");
-		HttpPost httppost = new HttpPost(
-				"http://www.cheaper.cl/android/comentar.php?ramo=" + i	+ "&comentario=" + comentario + "");
+		HttpPost httppost = new HttpPost("http://www.cheaper.cl/android/funciones/comentar.php?ramo=" + i	+ "&comentario=" + comentario + "");
 
 		try {
 			// Execute HTTP Post Request
@@ -85,8 +84,7 @@ public class Server extends Activity {
 			HttpGet request = new HttpGet();
 			request.setURI(website);
 			HttpResponse response = client.execute(request);
-			in = new BufferedReader(new InputStreamReader(response.getEntity()
-					.getContent()));
+			in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 			StringBuffer sb = new StringBuffer("");
 			String l = "";
 			String nl = System.getProperty("line.separator");
@@ -108,13 +106,11 @@ public class Server extends Activity {
 		}
 	}
 
-	public ArrayList<JSONObject> getRecordFromDatabase(String idC,
-			String elemento) throws Exception {
-		String URL = "http://www.cheaper.cl/android/suscribir.php?id=" + idC
-				+ "";
+	public ArrayList<JSONObject> getRecordFromDatabase(String idC,String nombreTabla) throws Exception {
+		String URL = "http://www.cheaper.cl/android/funciones/suscribir.php?id=" + idC + "";
 		String JSONChain = getInternetData(URL);
-		stringToJSON a = new stringToJSON();
-		ArrayList<JSONObject> arreglo = a.getArray(JSONChain, elemento);
+		
+		ArrayList<JSONObject> arreglo = stringToJSON.getArray(JSONChain, nombreTabla);
 		return arreglo;
 	}
 
@@ -124,8 +120,7 @@ public class Server extends Activity {
 		ArrayList<JSONObject> jsonProfesor = getRecordFromDatabase(id, "Profesores");
 		JSONObject jsonCurso = getRecordFromDatabase(id, "Cursos").get(0);
 		ArrayList<JSONObject> Horarios = getRecordFromDatabase(id, "Horarios");
-		ArrayList<JSONObject> Comentarios = getRecordFromDatabase(id,
-				"Comentarios");
+		ArrayList<JSONObject> Comentarios = getRecordFromDatabase(id,"Comentarios");
 
 		if (jsonProfesor == null && jsonCurso == null && Comentarios == null) {
 			throw new NoExisteCursoException("No existe CUrso");

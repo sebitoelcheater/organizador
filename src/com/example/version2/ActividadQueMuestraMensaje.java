@@ -1,4 +1,4 @@
-package com.example.frontend;
+package com.example.version2;
 
 import android.app.Activity;
 import android.content.Intent;

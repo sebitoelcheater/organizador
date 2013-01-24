@@ -1,5 +1,5 @@
 //SEBASTIAN
-package com.example.frontend;
+package com.example.version2;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,9 +29,9 @@ import android.widget.Toast;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.frontend.ActividadRamos.MiArrayAdapter;
-import com.example.frontend.ColorPickerDialog.OnColorChangedListener;
 import com.example.version2.R;
+import com.example.version2.ActividadRamos.MiArrayAdapter;
+import com.example.version2.ColorPickerDialog.OnColorChangedListener;
 
 public class ActividadEdicionRamo extends ListActivity implements
 		OnItemClickListener, OnColorChangedListener {

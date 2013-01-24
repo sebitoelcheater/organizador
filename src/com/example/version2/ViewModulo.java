@@ -1,4 +1,4 @@
-package com.example.frontend;
+package com.example.version2;
 
 import com.example.controlador.Modulo;
 import com.example.version2.R;

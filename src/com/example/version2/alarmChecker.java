@@ -1,5 +1,5 @@
 //gonzalo
-package com.example.frontend;
+package com.example.version2;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import org.apache.http.NoHttpResponseException;
 import com.example.controlador.Functions;
 import com.example.controlador.Curso;
 import com.example.controlador.Modulo;
-import com.example.frontend.ActividadHorario;
 import com.example.server.Server.NoExisteCursoException;
+import com.example.version2.ActividadHorario;
 import com.example.version2.R;
 
 import android.app.Notification;
