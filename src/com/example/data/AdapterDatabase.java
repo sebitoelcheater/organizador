@@ -23,6 +23,7 @@ public class AdapterDatabase {
 	public static Map<String, Tabla> tablas;
 
 	private static final String TAG = "AdapterCursos";
+
 	private static final String DATABASE_NAME = "OrganizadorDB";
 
 	private static final int DATABASE_VERSION = 9;
@@ -44,7 +45,7 @@ public class AdapterDatabase {
 				cursos,
 				new Tabla(
 						cursos,
-						"iidC integer primary key autoincrement, idC integer, iidP integer, title VARCHAR not null, comentable integer, color VARCHAR not null"));
+						"iidC integer primary key autoincrement, idC integer, iidP integer, title VARCHAR not null, comentable integer, color VARCHAR not null, accion integer"));
 
 		String horarios = "Horarios";
 		tablas.put(
@@ -52,7 +53,7 @@ public class AdapterDatabase {
 				new Tabla(
 
 						horarios,
-						"iidH integer primary key autoincrement, idH integer, iidC integer, inicio integer, fin integer, ubicacion VARCHAR"));
+						"iidH integer primary key autoincrement, idH integer, iidC integer, inicio integer, fin integer, ubicacion VARCHAR, accion integer"));
 
 		String profesores = "Profesores";
 
@@ -60,7 +61,7 @@ public class AdapterDatabase {
 				profesores,
 				new Tabla(
 						profesores,
-						"iidP integer primary key autoincrement, idP integer, usuario VARCHAR, contrasena VARCHAR, nombre VARCHAR, apellido VARCHAR"));
+						"iidP integer primary key autoincrement, idP integer, usuario VARCHAR, contrasena VARCHAR, nombre VARCHAR, apellido VARCHAR, accion integer"));
 
 		String comentarios = "Comentarios";
 		tablas.put(

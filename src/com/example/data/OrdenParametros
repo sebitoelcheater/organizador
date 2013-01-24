@@ -1,11 +1,11 @@
 Profesores:
-iidP, idP, usuario, contrasena, nombre, apellido
+iidP, idP, usuario, contrasena, nombre, apellido, accion
 
 Cursos:
-iidC, idC, iidP, title, comentable, color
+iidC, idC, iidP, title, comentable, color, accion
 
 Horarios:
-iidH, idH, iidC, inicio, fin, ubicaci—n
+iidH, idH, iidC, inicio, fin, ubicacion, accion
 
 Comentarios:
 iidCom, idCom, iidH, fecha, comentario
