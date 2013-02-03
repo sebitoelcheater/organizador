@@ -109,7 +109,7 @@ public class Functions {
  * @return
  */
 	public static String getHoraYMinutos(int minutos){
-		return ""+getHoraDelDia(minutos)+":"+getMinutosDelDia(minutos);
+		return llenarConCeros(""+getHoraDelDia(minutos),2)+":"+llenarConCeros(""+getMinutosDelDia(minutos),2);
 	}
 	
 	public static int booleanToInt(boolean b) {
@@ -139,7 +139,7 @@ public class Functions {
 	 
 	 public static String[] minToDate (int min){
 		 int dia = getDia(min);
-		 int hhmm = getHoraDelDia(min);
+		 String hhmm = getHoraYMinutos(min);
 		 return new String[] {dayToDia(dia),""+hhmm};
 	 }
 	 
@@ -168,4 +168,17 @@ public class Functions {
 			}
 		}
 
+	 public static String llenarConCeros (String cadena,int largo){
+		 int largoinicial = cadena.length();
+		 String ceros = repetirCadena("0",largo-largoinicial);
+		 return ceros+cadena;
+	 }
+	 
+	 public static String repetirCadena (String cadena,int n){
+		 String chain="";
+		 for (int j = 1; j <= n; ++j){
+			 chain=chain+cadena;
+		 }
+		 return chain;
+	 }
 }
