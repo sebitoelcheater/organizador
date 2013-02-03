@@ -2,7 +2,9 @@ package com.example.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.example.controlador.Comentario;
 import com.example.controlador.Curso;
@@ -16,6 +18,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.IInterface;
 import android.util.Log;
 
 public class AdapterDatabase {
@@ -38,42 +41,48 @@ public class AdapterDatabase {
 	 * colocar codigo aca
 	 */
 	public static void crearTablas() {
-		tablas = new HashMap<String, Tabla>(4);// si se va a agregar una tabla
+		tablas = new LinkedHashMap<String, Tabla>(4);// si se va a agregar una tabla
 												// aumentar este 4
+		
+		
 		String cursos = "Cursos";
+		String claseRepresentante = Curso.class.getName();
 		tablas.put(
 				cursos,
 				new Tabla(
-						cursos,
-						"iidC integer primary key autoincrement, idC integer, iidP integer, title VARCHAR not null, comentable integer, color VARCHAR not null, accion integer"));
+						cursos,claseRepresentante,
+						"iidC integer primary key autoincrement, idM integer, iidP integer, titulo VARCHAR not null, comentable integer, color VARCHAR not null, accion integer"));
 
+		claseRepresentante = Modulo.class.getName();
 		String horarios = "Horarios";
 		tablas.put(
 				horarios,
 				new Tabla(
 
-						horarios,
-						"iidH integer primary key autoincrement, idH integer, iidC integer, inicio integer, fin integer, ubicacion VARCHAR, accion integer"));
+						horarios,claseRepresentante,
+						"iidH integer primary key autoincrement, idM integer, iidC integer, inicio integer, fin integer, ubicacion VARCHAR, accion integer"));
 
+		claseRepresentante = Profesor.class.getName();
 		String profesores = "Profesores";
 
 		tablas.put(
 				profesores,
 				new Tabla(
-						profesores,
-						"iidP integer primary key autoincrement, idP integer, usuario VARCHAR, contrasena VARCHAR, nombre VARCHAR, apellido VARCHAR, accion integer"));
+						profesores,claseRepresentante,
+						"iidP integer primary key autoincrement, idM integer, usuario VARCHAR, contrasena VARCHAR, nombre VARCHAR, apellido VARCHAR, accion integer"));
 
+		claseRepresentante = Comentario.class.getName();
 		String comentarios = "Comentarios";
 		tablas.put(
 				comentarios,
 				new Tabla(
-						comentarios,
-						"iidCom integer primary key autoincrement, idCom integer, iidH integer, fecha date, comentario text"));
+						comentarios,claseRepresentante,
+						"iidCom integer primary key autoincrement, idM integer, iidH integer, fecha date, comentario text"));
 
-		Curso.setKeys(tablas.get(cursos).keys, cursos);
-		Modulo.setKeys(tablas.get(horarios).keys, horarios);
-		Profesor.setKeys(tablas.get(profesores).keys, profesores);
-		Comentario.setKeys(tablas.get(comentarios).keys, comentarios);
+		Curso.setKeys(tablas.get(cursos).getKeys(), cursos);
+		Modulo.setKeys(tablas.get(horarios).getKeys(), horarios);
+		Profesor.setKeys(tablas.get(profesores).getKeys(), profesores);
+		Comentario.setKeys(tablas.get(comentarios).getKeys(), comentarios);
 	}
 
 	public AdapterDatabase(Context ctx) {
@@ -217,7 +226,6 @@ public class AdapterDatabase {
 
 		if (ret.moveToFirst()) {
 			do {
-				String id = ret.getString(0);
 				T instancia = getInstance(_class);
 				// c = mcursor
 
@@ -227,7 +235,7 @@ public class AdapterDatabase {
 					params[i] = ret.getString(i);
 				}
 
-				instancia.setData(id, params);
+				instancia.setData( params);
 				arrayList.add(instancia);
 
 			} while (ret.moveToNext());
@@ -274,7 +282,8 @@ public class AdapterDatabase {
 	 * @return
 	 * @throws SQLException
 	 */
-	public <T extends Modelo> T getRecordIdMaster(Class<T> _class, String nombreTabla,	long rowId) throws SQLException {
+	
+	public <T> T getRecordIdMaster(Class<? extends Modelo> _class, String nombreTabla, String rowId) throws SQLException {
 		SQLiteDatabase db = DBHelper.getWritableDatabase();
 		Tabla t = tablas.get(nombreTabla);
 		Cursor mCursor = db.query(nombreTabla, getNombresCampos(nombreTabla),
@@ -283,8 +292,7 @@ public class AdapterDatabase {
 
 			mCursor.moveToFirst();
 		}
-		ArrayList<T> listaDeUnaInstancia = obtenerInstancias(_class,
-				nombreTabla, mCursor);
+		ArrayList<T> listaDeUnaInstancia = (ArrayList<T>) obtenerInstancias(_class,	nombreTabla, mCursor);
 
 		db.close();
 		DBHelper.close();
@@ -295,6 +303,44 @@ public class AdapterDatabase {
 		return null;
 	}
 
+	/**
+	 * Obtiene el maximo valor de una columna, dando la oportunidad de restringir un valor de columna.
+	 * @param _class
+	 * @param nombreTabla 
+	 * @param paramExtreme Nombre de la columna de la cual se quiere el maximo o minimo
+	 * @param quieroMax true si se busca el maximo, o false si es el minimo
+	 * @param paramRestrict nombre del parametro que quiero restringir (por ejemplo idc=4 , aca va idc)
+	 * @param valorRestrict valor que se quiere de paramRestrict
+	 * @return null si no hay nada que cumpla lo pedido, o un objeto de _class que si cumpla lo pedido
+	 * @throws SQLException
+	 */
+	public <T extends Modelo> T getExtremeRecord(Class<T> _class, String nombreTabla, String paramExtreme, boolean quieroMax, String paramRestrict,String valorRestrict) throws SQLException {
+		SQLiteDatabase db = DBHelper.getWritableDatabase();
+		Tabla t = tablas.get(nombreTabla);
+		//Cursor mCursor = db.query(nombreTabla, getNombresCampos(nombreTabla), t.getNombreLlave() + "=" + rowId, null, null, null, null, null);
+		String SQLCODE;
+		if(quieroMax)
+		{
+			SQLCODE = "SELECT MAX("+paramExtreme+") FROM "+nombreTabla+" WHERE "+paramRestrict+" = "+valorRestrict;
+		} else
+		{
+			SQLCODE = "SELECT MIN("+paramExtreme+") FROM "+nombreTabla+" WHERE "+paramRestrict+" = "+valorRestrict;
+		}
+		Cursor mCursor = db.query(nombreTabla, getNombresCampos(nombreTabla),SQLCODE.trim(), null, null, null, null);
+		if (mCursor != null) {
+
+			mCursor.moveToFirst();
+		}
+		ArrayList<T> listaDeUnaInstancia = obtenerInstancias(_class, nombreTabla, mCursor);
+
+		db.close();
+		DBHelper.close();
+		mCursor.close();
+		if (listaDeUnaInstancia.size() != 0) {
+			return listaDeUnaInstancia.get(0);
+		}
+		return null;
+	}
 	/**
 	 * Obtiene todos los objetos(filas) que cumplan con las condiciones
 	 * especificadas con los parametros. NOTA: El orden en que se pongan los
@@ -478,6 +524,59 @@ public class AdapterDatabase {
 	
 	public static String[] getKeys(String nombreTabla)
 	{
-		return AdapterDatabase.tablas.get(nombreTabla).keys;
+		return AdapterDatabase.tablas.get(nombreTabla).getKeys();
 	}
+	
+	public static String[] getNombresTablas()
+	{
+		if(tablas!=null)
+			return  tablas.keySet().toArray(new String[0]);
+		
+		return null;
+	}
+
+	public static String getNombreClaseFromTabla(String nombreTabla)
+	{
+		
+			if(tablas.containsKey(nombreTabla))
+			{
+				Tabla t =tablas.get(nombreTabla);
+				return t.nombreClaseRepresentante;
+				
+			}
+		
+			
+			return null;
+		
+	}
+	public static int findIidWithIdM(Context ctx,String key_iid,	LinkedHashMap<String, Modelo[]> objetosHastaElMomento) {
+		// TODO Auto-generated method stub
+		
+		String[] nombresTablas = tablas.keySet().toArray(new String[0]);
+		for(String nombreTabla : nombresTablas )
+		{
+			String id = tablas.get(nombreTabla).getNombreLlave();
+			if(key_iid.equals(id))
+			{
+				String ret = objetosHastaElMomento.get(nombreTabla)[0].getParam(id);
+				return Integer.parseInt( ret);
+			}
+		}
+		
+		
+		return -1;	
+			
+	}
+	 public static Class<?> getClass(String nombreTabla)
+	 {
+		 
+		 try {
+			return Class.forName(tablas.get(nombreTabla).nombreClaseRepresentante);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+		 
+		
+	 }
 }

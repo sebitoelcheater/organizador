@@ -147,7 +147,7 @@ public class ActividadDatosDelRamo extends ListActivity implements
 
 	public void editarRamo(View view) {
 		Intent intentEditarRamo = new Intent(this, ActividadEdicionRamo.class);
-		intentEditarRamo.putExtra("id", cursoAVer.getId());
+		intentEditarRamo.putExtra("id", cursoAVer.getIid());
 		startActivityForResult(intentEditarRamo, REQUEST_EDITAR_O_AGREGAR);
 	}
 

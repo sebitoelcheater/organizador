@@ -9,7 +9,7 @@ public class Curso extends Modelo {
 
 	// 0 1 2 3 4 5
 	// private static String[] keys = new
-	// String[]{"iidC","nombre","idC","idP","comentable","color"};
+	// String[]{"iidC","nombre","idM","idP","comentable","color"};
 	private static String[] keys;
 
 	public static String[] getKeys() {
@@ -29,24 +29,29 @@ public class Curso extends Modelo {
 		this.NombreTabla = nombreTabla;
 	}
 
-	public Curso(Context context, int idC, int iidP, String nombre,	String comentable, String color) {
+	public Curso(Context context, int idM, int iidP, String nombre,	String comentable, String color) {
 
-		super(nombreTabla, AdapterDatabase.tablas.get(nombreTabla).keys,
-				new String[] { "" + idC, "" + iidP, nombre, comentable, color });
+		super(nombreTabla, AdapterDatabase.tablas.get(nombreTabla).getKeys(),
+				new String[] { "" + idM, "" + iidP, nombre, comentable, color });
 		this.NombreTabla = nombreTabla;
 
 	}
+	
+	
 
-	public String getId() {
-		return (String) this.params.get("iidC");
+	@Override
+	public String getIid() {
+		if(params.containsKey(keys[0]))
+			return (String) this.params.get(keys[0]);
+		return null;
 	}
 
 	public String getNombre() {
-		return (String) this.params.get("title");
+		return (String) this.params.get("titulo");
 	}
 
 	public String getIdMaster() {
-		return (String) this.params.get("idC");
+		return (String) this.params.get("idM");
 	}
 
 	public String getIdP() {
@@ -62,7 +67,7 @@ public class Curso extends Modelo {
 	}
 
 	public boolean esDescargado() {
-		return !this.params.get("idC").equals("0");
+		return !this.params.get("idM").equals("0");
 	}
 
 	public String getColor() {
@@ -81,7 +86,7 @@ public class Curso extends Modelo {
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
 
-		if (db.deleteRecord(nombreTabla, Long.parseLong(getId()))) {
+		if (db.deleteRecord(nombreTabla, Long.parseLong(getIid()))) {
 			return true;
 		}
 
@@ -92,7 +97,7 @@ public class Curso extends Modelo {
 		AdapterDatabase db = new AdapterDatabase(context);
 
 		boolean b = db.getRecordWhere(Curso.class, "Cursos",
-				new String[] { "idC" }, new String[] { getIdMaster() }, null,
+				new String[] { "idM" }, new String[] { getIdMaster() }, null,
 				null, null, null).size() == 0;
 
 		return !b;
@@ -107,18 +112,18 @@ public class Curso extends Modelo {
 		return c;
 	}
 	
-	public static Curso getCursoWhereIdC(Context context, String idC) // DEPRECATED???
+	public static Curso getCursoWhereIdC(Context context, String idM) // DEPRECATED???
 	{
 		AdapterDatabase ad = new AdapterDatabase(context);
 
-		ArrayList<Curso> c = ad.getRecordWhere(Curso.class, nombreTabla, new String[] { "idC" }, new String[] { idC }, null, null,null, null);
+		ArrayList<Curso> c = ad.getRecordWhere(Curso.class, nombreTabla, new String[] { "idM" }, new String[] { idM }, null, null,null, null);
 		return c.get(0);
 	}
 
 	public static ArrayList<Curso> getCursosOrdenados(Context context)// por
 																		// esEditable
 																		// ==
-																		// idC=0
+																		// idM=0
 	{
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Curso> cursos1 = db.getRecordWhere(Curso.class, nombreTabla,
@@ -145,7 +150,7 @@ public class Curso extends Modelo {
 	}
 
 	public static ArrayList<Curso> getCursosEditables(Context context) {
-		// TODO Auto-generated method stub //idC=0
+		// TODO Auto-generated method stub //idM=0
 
 		AdapterDatabase db = new AdapterDatabase(context);
 
@@ -156,12 +161,21 @@ public class Curso extends Modelo {
 	}
 
 	@Override
-	public void setData(String id, Object[] params) {
-		this.NombreTabla = nombreTabla;
-		for (int i = 0; i < keys.length; i++) {
-			this.params.put(this.keys[i], (String) params[i]);
-		}
+	public void setData( Object[] params) {
 
+		if(params.length==keys.length)
+		{
+			for (int i = 0; i < keys.length; i++) {
+				this.params.put(this.keys[i], params[i]);
+			}
+		}
+		else
+		{
+			for (int i = 1; i < keys.length; i++) {
+				this.params.put(this.keys[i], params[i-1]);
+			}
+			
+		}
 	}
 
 	public static void setKeys(String[] keys, String nombreTabla) {
@@ -170,16 +184,16 @@ public class Curso extends Modelo {
 		Curso.nombreTabla = nombreTabla;
 	}
 	
-	public boolean actualizar(Context ctx, String color, String title, boolean comentable) {
+	public boolean actualizar(Context ctx, String color, String titulo, boolean comentable) {
 
 		
 		String[] params = (String[]) this.params.values().toArray();
 
 		boolean actualizar = false;
 
-		if (this.getColor() != color || this.getNombre() != title || this.getComentable() != Integer.toString(Functions.booleanToInt(comentable)) ) {
+		if (this.getColor() != color || this.getNombre() != titulo || this.getComentable() != Integer.toString(Functions.booleanToInt(comentable)) ) {
 			actualizar = true;
-			params[2] = "" + title;
+			params[2] = "" + titulo;
 			params[3] = "" + comentable;
 			params[4] = "" + color;
 		}
@@ -194,14 +208,48 @@ public class Curso extends Modelo {
 
 	}
 
-	public static boolean existeCursoWhereIdC(Context context, String idC) {
+	public ArrayList<Modulo> getModulos(Context ctx, String ordenadoPor)
+	{
+		AdapterDatabase ad = new AdapterDatabase(ctx);
+		return ad.getRecordWhere(Modulo.class,"Horarios", new String[]{"iidC"}, new String[]{this.getIid()}, null, null, null, ordenadoPor);
+		
+		
+	}
+	
+	public ArrayList<Profesor> getProfesores(Context ctx, String ordenadoPor)
+	{
+		AdapterDatabase ad = new AdapterDatabase(ctx);
+		return ad.getRecordWhere(Profesor.class,"Profesores", new String[]{"iidC"}, new String[]{this.getIid()}, null, null, null, ordenadoPor);
+		
+	}
+	
+	public String getAccion()
+	{
+		return this.params.get("accion").toString();
+	}
+	
+	public static boolean existeCursoWhereIdC(Context context, String idM) {
 		AdapterDatabase db = new AdapterDatabase(context);
 
 		boolean b = db.getRecordWhere(Curso.class, nombreTabla,
-				new String[] { "idC" }, new String[] { idC }, null,
+				new String[] { "idM" }, new String[] { idM }, null,
 				null, null, null).size() == 0;
 
 		return b;
 
+	}
+
+	public String getAccionProfesores(Context ctx) {
+		// TODO Auto-generated method stub
+		AdapterDatabase ad = new AdapterDatabase(ctx);
+		
+		return ad.getExtremeRecord(Profesor.class, "Profesores", "accion", true, "iidC", this.getIid()).getAccion();
+	}
+
+	public String getAccionHorarios(Context ctx) {
+		
+		AdapterDatabase ad = new AdapterDatabase(ctx);
+		
+		return ad.getExtremeRecord(Modulo.class, "Horarios", "accion", true, "iidC", this.getIid()).getAccion();
 	}
 }

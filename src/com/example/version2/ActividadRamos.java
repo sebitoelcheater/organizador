@@ -102,7 +102,7 @@ public class ActividadRamos extends ListActivity {
 						// Para Editar un RAmo
 						Intent intent = new Intent(ActividadRamos.this,
 								ActividadEdicionRamo.class);
-						intent.putExtra("id", objects.get(position).getId());
+						intent.putExtra("id", objects.get(position).getIid());
 
 						/*
 						 * Este intent envÃ­a un "requestCode" que es
@@ -120,8 +120,9 @@ public class ActividadRamos extends ListActivity {
 				boton_editar.setOnClickListener(new View.OnClickListener() {
 					public void onClick(View v) {
 						// AquÃ­ las instrucciones para actualizar el Curso
-
-						Server.pullNewData();
+						Server s = new Server();
+						
+						s.pullNewData(v.getContext());
 						
 //						boolean noHayTope = true;
 //
@@ -167,7 +168,7 @@ public class ActividadRamos extends ListActivity {
 					// Para Ver un Ramo
 					Intent intent = new Intent(ActividadRamos.this,
 							ActividadDatosDelRamo.class);
-					intent.putExtra("id", objects.get(position).getId());
+					intent.putExtra("id", objects.get(position).getIid());
 
 					startActivityForResult(intent, REQUEST_EDITAR_O_AGREGAR);
 				}
@@ -210,7 +211,7 @@ public class ActividadRamos extends ListActivity {
 		ArrayList<String> array_idramos = new ArrayList<String>();
 		for (Curso c : array_cursos) {
 			array_ramos.add(c.getNombre());
-			array_idramos.add(c.getId());
+			array_idramos.add(c.getIid());
 		}
 
 		// Ahora le damos los ids de las views que se deben ir llenando,
@@ -329,7 +330,7 @@ public class ActividadRamos extends ListActivity {
 								} catch (UnknownHostException uhe) {
 									Toast.makeText(
 											v.getContext(),
-											"Error :No hay conexión con el servidor",
+						 					"Error :No hay conexión con el servidor",
 											Toast.LENGTH_LONG).show();
 									textoid.setText(""); // PARA QUE CUADO VUELA
 															// A CARGAR NO ESTE

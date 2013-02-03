@@ -14,7 +14,6 @@ public class stringToJSON {
 	 */
 	public static ArrayList<JSONObject> getArray(String JSONchain, String nombreTabla) {
 		try {
-		
 			
 			JSONObject myjson = new JSONObject(JSONchain);
 			JSONArray the_json_array = myjson.getJSONArray(nombreTabla);
