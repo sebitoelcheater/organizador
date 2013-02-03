@@ -534,7 +534,7 @@ public class ActividadEdicionRamo extends ListActivity implements
 						
 						Modulo m = null;
 						try {
-							m = new Modulo(v.getContext(), 0,Integer.parseInt(cursoAEditar.getId()), inicio, fin, lugar);
+							m = new Modulo(v.getContext(), 0,Integer.parseInt(cursoAEditar.getIid()), inicio, fin, lugar);
 						} catch (NumberFormatException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

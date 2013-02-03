@@ -10,7 +10,7 @@ public class Modulo extends Modelo {
 	// 0 1 2 3 4 5 6
 	private static String[] keys;
 
-	// iidH, idH, iidC, dds, inicio, fin, ubicaci—n
+	// iidH, idM, iidC, dds, inicio, fin, ubicaci—n
 	static String[] getKeys() {
 		return keys;
 	}
@@ -22,7 +22,7 @@ public class Modulo extends Modelo {
 	static String nombreTabla = "Horarios";
 
 	// private String id=null;
-	// private String idH=null;
+	// private String idM=null;
 	// private String idCurso=null;
 	// private String ubicacion=null;
 	// private String diaDeLaSemana=null;
@@ -34,8 +34,8 @@ public class Modulo extends Modelo {
 		this.NombreTabla = nombreTabla;
 	}
 
-	public Modulo(Context context, int idH, int iidC, int inicio, int fin, String ubicacion) throws Exception {
-		super(nombreTabla, getKeys(), new Object[] { idH, iidC, inicio, fin, ubicacion });
+	public Modulo(Context context, int idM, int iidC, int inicio, int fin, String ubicacion) throws Exception {
+		super(nombreTabla, getKeys(), new Object[] { idM, iidC, inicio, fin, ubicacion });
 
 		this.NombreTabla = nombreTabla;
 
@@ -64,7 +64,7 @@ public class Modulo extends Modelo {
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
 				nombreTabla, new String[] { "iidC" },
-				new String[] { c.getId() }, null, null, null, null);
+				new String[] { c.getIid() }, null, null, null, null);
 
 		return modulos;
 
@@ -81,7 +81,7 @@ public class Modulo extends Modelo {
 		AdapterDatabase db = new AdapterDatabase(context);
 		ArrayList<Modulo> modulos = db.getRecordWhere(Modulo.class,
 				nombreTabla, new String[] { "iidC" },
-				new String[] { c.getId() }, null, null, null, "inicio");
+				new String[] { c.getIid() }, null, null, null, "inicio");
 
 		int tamanoModulos = modulos.size();
 		if (tamanoModulos != 0) {
@@ -167,7 +167,7 @@ public class Modulo extends Modelo {
 		ArrayList<Modulo> modulos = new ArrayList<Modulo>();
 
 		for (Curso curso : cursos) {
-			String idC = curso.getId();
+			String idC = curso.getIid();
 
 			ArrayList<Modulo> modulo = db.getRecordWhere(Modulo.class,
 					nombreTabla, new String[] { "iidC" }, new String[] { idC },
@@ -351,7 +351,7 @@ public class Modulo extends Modelo {
 	}
 
 	public String getIdMaster() {
-		// return idH;
+		// return idM;
 		return (String) this.params.get(getKeys()[1]);
 	}
 
@@ -360,7 +360,7 @@ public class Modulo extends Modelo {
 	}
 
 	public String getUbicacion() {
-		// Recordar que para cada x en getKeys()[x]: 0:iidH, 1: idH, 2: iidC, 3: inicio, 4: fin, 5: ubicacion
+		// Recordar que para cada x en getKeys()[x]: 0:iidH, 1: idM, 2: iidC, 3: inicio, 4: fin, 5: ubicacion
 		return (String) this.params.get(getKeys()[5]);
 	}
 
@@ -436,11 +436,37 @@ public class Modulo extends Modelo {
 	}
 
 	@Override
-	public void setData(String id, Object[] params) {
+	public void setData( Object[] params) {
 
-		for (int i = 0; i < keys.length; i++) {
-			this.params.put(this.keys[i], params[i]);
+		if(params.length==keys.length)
+		{
+			for (int i = 0; i < keys.length; i++) {
+				this.params.put(this.keys[i], params[i]);
+			}
 		}
+		else
+		{
+			for (int i = 1; i < keys.length; i++) {
+				this.params.put(this.keys[i], params[i-1]);
+			}
+			
+		}
+	}
 
+	public String getAccion() {
+	
+		return this.params.get("accion").toString();
+	}
+
+	public static String getNombreTabla() {
+		// TODO Auto-generated method stub
+		return nombreTabla;
+	}
+
+	@Override
+	public String getIid() {
+		if(params.containsKey(keys[0]))
+			return (String) this.params.get(keys[0]);
+		return null;
 	}
 }
