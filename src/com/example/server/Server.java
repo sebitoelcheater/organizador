@@ -181,6 +181,7 @@ public class Server extends Activity {
 		if(!valido)
 		{
 			borrarElementos(objetosSuscritos);
+			return true;
 		}
 		
 		return false;

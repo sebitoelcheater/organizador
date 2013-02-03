@@ -549,6 +549,12 @@ public class AdapterDatabase {
 			return null;
 		
 	}
+	 /**
+	  * Esta funcion revisa "objetosHastaElMomento", y si se encuentra el objeto adecuado, retorna su id interno en el caso de que exista o -1 si no. y -2 si es que la key no existe
+	  * @param key_iid
+	  * @param objetosHastaElMomento
+	  * @return
+	  */
 	public static int findIidWithIdM(Context ctx,String key_iid,	LinkedHashMap<String, Modelo[]> objetosHastaElMomento) {
 		// TODO Auto-generated method stub
 		

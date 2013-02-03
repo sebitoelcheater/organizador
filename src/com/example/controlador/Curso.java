@@ -211,7 +211,7 @@ public class Curso extends Modelo {
 	public ArrayList<Modulo> getModulos(Context ctx, String ordenadoPor)
 	{
 		AdapterDatabase ad = new AdapterDatabase(ctx);
-		return ad.getRecordWhere(Modulo.class,"Horarios", new String[]{"iidC"}, new String[]{this.getIid()}, null, null, null, ordenadoPor);
+		return ad.getRecordWhere(Modulo.class,Modulo.getNombreTabla(), new String[]{"iidC"}, new String[]{this.getIid()}, null, null, null, ordenadoPor);
 		
 		
 	}
@@ -219,7 +219,7 @@ public class Curso extends Modelo {
 	public ArrayList<Profesor> getProfesores(Context ctx, String ordenadoPor)
 	{
 		AdapterDatabase ad = new AdapterDatabase(ctx);
-		return ad.getRecordWhere(Profesor.class,"Profesores", new String[]{"iidC"}, new String[]{this.getIid()}, null, null, null, ordenadoPor);
+		return ad.getRecordWhere(Profesor.class,Profesor.getNombreTabla(), new String[]{"iidC"}, new String[]{this.getIid()}, null, null, null, ordenadoPor);
 		
 	}
 	
@@ -243,13 +243,12 @@ public class Curso extends Modelo {
 		// TODO Auto-generated method stub
 		AdapterDatabase ad = new AdapterDatabase(ctx);
 		
-		return ad.getExtremeRecord(Profesor.class, "Profesores", "accion", true, "iidC", this.getIid()).getAccion();
+		return ad.getExtremeRecord(Profesor.class, Profesor.getNombreTabla(), "accion", true, "iidC", this.getIid()).getAccion();
 	}
 
 	public String getAccionHorarios(Context ctx) {
 		
 		AdapterDatabase ad = new AdapterDatabase(ctx);
-		
-		return ad.getExtremeRecord(Modulo.class, "Horarios", "accion", true, "iidC", this.getIid()).getAccion();
+		return ad.getExtremeRecord(Modulo.class, Modulo.getNombreTabla(), "accion", true, "iidC", this.getIid()).getAccion();
 	}
 }
