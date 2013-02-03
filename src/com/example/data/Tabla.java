@@ -5,12 +5,13 @@ import java.util.*;
 public class Tabla {
 
 	public String nombre;
+	public String nombreClaseRepresentante;
 	/**
 	 * En campos[0] esta el nombre de la variable y en campos[1] esta el tipo y
 	 * en [2] el resto de palabras
 	 */
 	public ArrayList<String[]> campos = new ArrayList<String[]>();
-	public String[] keys;
+	private String[] keys;
 
 	public int numCampos = 0;
 
@@ -25,15 +26,15 @@ public class Tabla {
 	 * @throws Exception
 	 */
 
-	public Tabla(String nombre, String sqliteCode) {
+	public Tabla(String nombre,String claseRepresentante, String sqliteCode) {
 		this.nombre = nombre;
-
+		this.nombreClaseRepresentante=claseRepresentante;
 		String[] codeSplit = sqliteCode.split(",");
-		keys = new String[codeSplit.length];
+		setKeys(new String[codeSplit.length]);
 		for (int i = 0; i < codeSplit.length; i++) {
 			String[] txt = codeSplit[i].trim().split(" ");
 			String nombreCampo = txt[0];
-			keys[i] = nombreCampo;
+			getKeys()[i] = nombreCampo;
 			String tipoCampo = txt[1];
 			String resto = "";
 
@@ -55,4 +56,15 @@ public class Tabla {
 		return this.campos.get(0)[0];
 	}
 
+	public String getNombreLlaveMaster() {
+		return this.campos.get(1)[0];
+	}
+
+	public String[] getKeys() {
+		return keys;
+	}
+
+	public void setKeys(String[] keys) {
+		this.keys = keys;
+	}
 }

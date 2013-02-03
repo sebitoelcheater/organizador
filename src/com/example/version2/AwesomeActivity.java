@@ -66,21 +66,16 @@ public class AwesomeActivity extends TabActivity implements
 
 	private void setTabs() {
 		addTab("Hoy", R.drawable.tab_hoy, ActividadHorario.class, "HORARIO");
-		addTab("Horario", R.drawable.tab_horario,
-				ActividadHorarioSemanal2.class, "SEMANAL");
-		addTab("Feedback", R.drawable.tab_feedback, ActividadFeedBackear.class,
-				"FEEDBACK");
-		addTab("Ajustes", R.drawable.tab_preferencias, ActividadRamos.class,
-				"CONFIG");
+		addTab("Horario", R.drawable.tab_horario, ActividadHorarioSemanal2.class, "SEMANAL");
+		addTab("Feedback", R.drawable.tab_feedback, ActividadFeedBackear.class,	"FEEDBACK");
+		addTab("Ajustes", R.drawable.tab_preferencias, ActividadRamos.class, "CONFIG");
 	}
 
-	private void addTab(String labelId, int drawableId, Class<?> c,
-			String nombreTab) {
+	private void addTab(String labelId, int drawableId, Class<?> c,	String nombreTab) {
 		Intent intent = new Intent(this, c);
 		TabHost.TabSpec spec = tabHost.newTabSpec(nombreTab);
 
-		View tabIndicator = LayoutInflater.from(this).inflate(
-				R.layout.tab_indicator, getTabWidget(), false);
+		View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator, getTabWidget(), false);
 		TextView title = (TextView) tabIndicator.findViewById(R.id.title);
 		title.setText(labelId);
 		ImageView icon = (ImageView) tabIndicator.findViewById(R.id.icon);

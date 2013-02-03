@@ -17,6 +17,7 @@ public abstract class Modelo {// EX ISeteable
 		
 	}
 
+
 	protected Modelo(String nombreTabla, String[] keys, Object[] values)
 			 {
 		if (keys.length -1 != values.length) {
@@ -38,11 +39,62 @@ public abstract class Modelo {// EX ISeteable
 	public boolean save(Context ctx) {// Recordar que Modulo hace override de
 										// este metodo
 		AdapterDatabase ad = new AdapterDatabase(ctx);
-		if (ad.insertRecord(NombreTabla, this.params.values().toArray()) > 0)
+		
+		int id =(int) ad.insertRecord(NombreTabla, this.params.values().toArray());
+		
+		if (id > 0)
+		{
+			this.setParam(AdapterDatabase.getKeys(NombreTabla)[0], ""+id);
 			return true;
+		}
 		return false;
 	}
 
-	public abstract void setData(String id, Object[] params);
-
+	/**
+	 * Si el numero de parametros es igual o mayor al numero de keys, se tomaran en cuenta los primeros y se colocará el id interno, si no lo es, no se tomara el id interno (en este caso
+	 * deben haber exactamente keys-1 parametros)
+	 * @param params
+	 */
+	public abstract void setData(Object[] params);
+	public boolean estaRegistrado(Context ctx)
+	{
+		try
+		{
+			AdapterDatabase ad = new AdapterDatabase(ctx);
+			Object c =ad.getRecordIdMaster(this.getClass(), NombreTabla, (String)params.get(params.keySet().toArray()[1].toString()));
+			if(c==null)
+				return false;
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+	protected void setParam(String key,String value)
+	{
+		params.put(key, value);
+	
+	}
+	/**
+	 * Retorna el valor correspondiente a esta key. Si no existe retorna null
+	 * @param key
+	 * @return
+	 */
+	public String getParam(String key)
+	{
+		try
+		{
+			return  params.get(key).toString();
+		}catch(Exception e)
+		{
+			return null;
+		}
+	}
+	/**
+	 * Retorna su iid, o null si no esta.
+	 * @return
+	 */
+	public abstract String getIid();
+	
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -18,10 +19,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.controlador.*;
+import com.example.data.AdapterDatabase;
 
 import android.app.Activity;
 import android.content.Context;
@@ -116,84 +119,94 @@ public class Server extends Activity {
 
 	public boolean suscribirCurso(String id, Context ctx) throws Exception {
 
-		boolean b = true;
-		ArrayList<JSONObject> jsonProfesor = getRecordFromDatabase(id, "Profesores");
-		JSONObject jsonCurso = getRecordFromDatabase(id, "Cursos").get(0);
-		ArrayList<JSONObject> Horarios = getRecordFromDatabase(id, "Horarios");
-		ArrayList<JSONObject> Comentarios = getRecordFromDatabase(id,"Comentarios");
-
-		if (jsonProfesor == null && jsonCurso == null && Comentarios == null) {
-			throw new NoExisteCursoException("No existe CUrso");
-		}
-		String iidC = null, iidP = null, iidH = null, iidCom = null;
-
-		for (int i = 0; i < jsonProfesor.size(); i++) {
-			String idP = jsonProfesor.get(i).getString("idP");
-			String usuario = jsonProfesor.get(i).getString("usuario");
-			String contrasena = jsonProfesor.get(i).getString("contrasena");
-			String nombre = jsonProfesor.get(i).getString("nombre");
-			String apellido = jsonProfesor.get(i).getString("apellido");
-
-			Profesor profe = new Profesor(ctx, Integer.parseInt(idP), usuario, contrasena, nombre, apellido);
-			profe.save(ctx);
-			// introducir nuevo profesor (si no est‡ introducido). Lo obtengo a
-			// partir de un for, pero es claro que arrojar‡ s—lo un elemento
-		}
-
+//		boolean b = true;
+//		ArrayList<JSONObject> jsonProfesor = getRecordFromDatabase(id, "Profesores");
+//		ArrayList<JSONObject> jsonCurso = getRecordFromDatabase(id, "Cursos");
+//		ArrayList<JSONObject> Horarios = getRecordFromDatabase(id, "Horarios");
+//		ArrayList<JSONObject> Comentarios = getRecordFromDatabase(id,"Comentarios");
+//
+//		ArrayList<ArrayList<JSONObject>> jsonTablesData = new ArrayList<ArrayList<JSONObject>>();
+//		
+		
+		String[] nombresTablas = new String[]{Profesor.getNombreTabla(),Curso.getNombreTabla(),Modulo.getNombreTabla(),Comentario.getNombreTabla()};// REPARAR ESTO ! ! !
+		LinkedHashMap<String,Modelo[]> objetosSuscritos = new LinkedHashMap<String, Modelo[]>(); 
+		boolean valido=true;
+		for(String nombreTabla : nombresTablas)
 		{
-			String idC = jsonCurso.getString("idC");
-			String idP = jsonCurso.getString("idP");
-			String titulo = arreglarCotejamiento(jsonCurso.getString("titulo")).trim();
-			String comentable = jsonCurso.getString("comentable");
-			ArrayList<Profesor> profe = Profesor.getIidPwhereIdP(ctx, idP);
-			iidP=profe.get(0).getIidP();
-			
-			String color = jsonCurso.getString("color");
-						
-			Curso c = new Curso(ctx, Integer.parseInt(idC), Integer.parseInt(iidP == null ? "0" : iidP), titulo, Integer.toString(Functions.booleanToInt(comentable.equals("1"))), color);
-			if (c != null)
-				c.save(ctx);
-				iidC = c.getId();
-			// introducir nuevo curso con funciones hechas por Ariel, con los
-			// par‡metros declarados en este for. Lo mismo para profe,horarios y
-			// comentarios
-		}
-		if (Horarios != null) {
-			for (int i = 0; i < Horarios.size(); i++) {
-				JSONObject horarioActual = Horarios.get(i);
+			ArrayList<JSONObject> jsonTabla = getRecordFromDatabase(id, nombreTabla);
+			if(jsonTabla==null)
+				continue; 
+			String[] keys = AdapterDatabase.getKeys(nombreTabla);
+			String nombreClase=AdapterDatabase.getNombreClaseFromTabla(nombreTabla);
+			Class<?> clase = Class.forName(nombreClase);
+			Modelo[] objetos = new Modelo[jsonTabla.size()];
+			int j=0;
+			for(JSONObject js : jsonTabla)
+			{
+				Object[] values = new String[keys.length-1];
 				
-				String idH = horarioActual.getString("idH");
-				String idC = horarioActual.getString("idC");
-				String inicio = horarioActual.getString("inicio");
-				String fin = horarioActual.getString("fin");
-				String ubicacion = arreglarCotejamiento(Horarios.get(i)	.getString("ubicacion"));
-				Curso curso = Curso.getCursoWhereIdC(ctx, idC);
-				iidC=curso.getId();
-
-				Modulo m = new Modulo(ctx, Integer.parseInt(idH), Integer.parseInt(iidC == null ? "0" : iidC), Integer.parseInt(inicio), Integer.parseInt(fin), ubicacion);
-				boolean pudeCrearlo = (m.save(ctx));
-
-				if (!pudeCrearlo) {
-					b = false;
+				for(int i=1;i<keys.length;i++)
+				{
+					if(keys[i].startsWith("ii"))
+					{
+						values[i-1]=AdapterDatabase.findIidWithIdM(ctx,keys[i],objetosSuscritos)+"";
+					}
+					else
+					{
+						values[i-1] = js.getString(keys[i]);
+					}
+					
 				}
-				// introducir nuevo horarios
+				Modelo a =(Modelo) clase.newInstance();
+				a.setData(values);
+				if(!a.estaRegistrado(ctx))
+				{
+					objetos[j++]=a;
+					if(!a.save(ctx))
+					{
+						valido = false;
+						break;
+						
+					}
+				}
 			}
 
+			objetosSuscritos.put(nombreTabla, objetos);
+			if(!valido)
+				break;
+			
+			
 		}
-		/*
-		 * for (int i = 0; i < Comentarios.size(); i++) { String idCom =
-		 * Comentarios.get(i).getString("idCom"); String idH =
-		 * Comentarios.get(i).getString("idH"); String fecha =
-		 * Comentarios.get(i).getString("fecha"); String comentario =
-		 * Comentarios.get(i).getString("comentario"); iidCom =
-		 * Controlador.insertarComentario(ctx,idCom,
-		 * iidH==null?"0":iidH,fecha,comentario); // introducir nuevo
-		 * comentarios }
-		 */
-		return b;
-		// forma de get el campo "name" del usuario de idP 1
-		// Profesor.get(1).getString("name");
+		
+		if(!valido)
+		{
+			borrarElementos(objetosSuscritos);
+			return true;
+		}
+		
+		return false;
+		
 
+	}
+
+	private void borrarElementos(LinkedHashMap<String, Modelo[]> objetosSuscritos) {
+		String[] nombreTablas = objetosSuscritos.keySet().toArray(new String[0]);
+		AdapterDatabase ad = new AdapterDatabase(this);
+		for(String nombreTabla : nombreTablas)
+		{
+			Modelo[] objetosTabla = objetosSuscritos.get(nombreTabla);
+			
+			for(Modelo m :objetosTabla)
+			{
+				String id = m.getIid();
+				if(id!=null)
+				{
+					ad.deleteRecord(nombreTabla,Long.parseLong(id));
+				}
+				
+				
+			}
+		}
 	}
 
 	private String[] getParamsCurso(JSONObject Curso) {
@@ -215,20 +228,12 @@ public class Server extends Activity {
 
 	}
 
-	public boolean actualizarCurso(String id, Context ctx) // retorna si hay un
+	public boolean actualizarCurso(String id, Context ctx)
+	{// retorna si hay un
 															// tope en la nueva
-															// edicion
-			throws Exception {
-
-		/*
-		 * Hay que re-hacer este metodo haciendo que use los metodos de
-		 * AdapterDatabase: deleteRecord, updateRecord e insertRecord
-		 */
-
-		// boolean delete=ad.deleteRecord("Curso", Long.parseLong(id));
-		
 		System.out.println("ACTUALIZARCURSO NO IMPLEMENTADO (Server)");
-		return false;
+		
+	return false;
 		
 //		boolean suscrito = false;
 //		// if(delete==true)
@@ -237,7 +242,7 @@ public class Server extends Activity {
 //		ad.updateRecord("Cursos", params);
 //
 //		return suscrito;
-
+/**
 		// boolean b = true;
 		// ArrayList<JSONObject> Profesor =
 		// getRecordFromDatabase(id,"Profesores");
@@ -263,6 +268,8 @@ public class Server extends Activity {
 		// String apellido = Profesor.get(i).getString("apellido");
 		// iidP = Controlador.insertarProfesor(ctx, idP, usuario, contrasena,
 		// nombre, apellido);
+		 * 
+		 */
 		// // introducir nuevo profesor (si no est‡ introducido). Lo obtengo a
 		// partir de un for, pero es claro que arrojar‡ s—lo un elemento
 		// }
@@ -391,4 +398,98 @@ public class Server extends Activity {
 		return variable;
 	}
 
+	public boolean pullNewData(Context ctx)
+	{
+		
+		
+		
+		//String URL = "http://www.cheaper.cl/android/funciones/suscribir.php?json="+reunirIDsActualizar(ctx);
+ 		String JSONRequest = "{'Horarios':[[{'id':1},{'id':2}],[],[]],'Cursos':[[][][]]}"; //getInternetData(URL);
+//		
+ 		if(JSONRequest==null)
+			return true;
+ 		AdapterDatabase ad = new AdapterDatabase(ctx);
+ 		String[] nombreTablas = (String[])AdapterDatabase.tablas.keySet().toArray();
+ 		
+ 	
+ 		for( String nombreTabla : nombreTablas)
+ 		{
+ 			ArrayList<JSONObject> arreglo = stringToJSON.getArray(JSONRequest, nombreTabla);
+ 			if(arreglo==null)
+ 				continue;
+ 			
+ 			String[] keys=AdapterDatabase.getKeys(nombreTabla);
+ 			int size=arreglo.size();//en 0 deben venir los ids que quiero borrar, en 1 los actualizar, y en 2 agregar
+ 			
+ 			
+ 			JSONObject ja = arreglo.get(0);
+ 			
+ 			
+ 			return true;
+ 				
+ 			
+
+ 		}
+	
+ 		return true;
+		
+		
+		
+	}
+	
+	private String reunirIDsActualizar(Context ctx)
+	{
+		
+//		ArrayList<Curso> cursos = Curso.getAllRecords();
+//		
+//		JSONObject jsonChain = new JSONObject();
+//		for(Curso c : cursos)
+//		{
+//			String idM = c.getIdMaster();
+//			String accionCurso = c.getAccion();
+//			ArrayList<Modulo> ms = c.getModulos("accion");
+//			String accionModulo=ms.get(ms.size()-1).getAccion();
+//			
+//			ArrayList<Profesor> ps = c.getProfesores("accion");
+//			String accionProfesor = ps.get(ps.size()-1).getAccion();
+//						
+//			JSONObject jo = new JSONObject();
+//			jo.put("accionModulo", accionModulo);
+//			jo.put("accionProfesor", accionProfesor);
+//			jo.put("accionCurso", accionCurso);
+//			
+//			jsonChain.put(idM,jo);
+//		}
+		
+//		return jsonChain.toString();
+	
+		ArrayList<Curso> cursos = Curso.getCursosOrdenados(ctx);
+		
+		JSONObject jsonChain = new JSONObject();
+		for(Curso c : cursos)
+		{
+			String idM = c.getIdMaster();
+			
+			JSONObject jo = new JSONObject();
+			String accionProfesor = c.getAccionProfesores(ctx);
+			String accionModulo = c.getAccionHorarios(ctx);
+			String accionCursos = c.getAccion();
+			
+			try {
+				jo.put("accionModulo", accionModulo);
+				jo.put("accionProfesor", accionProfesor);
+				jo.put("accionCurso", accionCursos);
+				jsonChain.put(idM,jo);
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+		}
+		return jsonChain.toString();
+		
+	}
 }

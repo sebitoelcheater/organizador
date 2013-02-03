@@ -26,16 +26,22 @@ public class Comentario extends Modelo {
 	}
 	
 
-	
 	@Override
-	public void setData(String id, Object[] params) {
-		// TODO Auto-generated method stub
-		
-		
-		for (int i = 0; i < keys.length; i++) {
-			this.params.put(this.keys[i], (String) params[i]);
+	public void setData( Object[] params) {
+
+		if(params.length==keys.length)
+		{
+			for (int i = 0; i < keys.length; i++) {
+				this.params.put(this.keys[i], params[i]);
+			}
 		}
-		
+		else
+		{
+			for (int i = 1; i < keys.length; i++) {
+				this.params.put(this.keys[i], params[i-1]);
+			}
+			
+		}
 	}
 	
 	public static void setKeys(String[] keys,String nombreTabla)
@@ -43,6 +49,17 @@ public class Comentario extends Modelo {
 		Comentario.keys = keys;
 		Comentario.nombreTabla=nombreTabla;
 	}
-	
+
+	public static String getNombreTabla() {
+		// TODO Auto-generated method stub
+		return nombreTabla;
+	}
+
+	@Override
+	public String getIid() {
+		if(params.containsKey(keys[0]))
+			return (String) this.params.get(keys[0]);
+		return null;
+	}
 
 }

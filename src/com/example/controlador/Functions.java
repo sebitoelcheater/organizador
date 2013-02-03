@@ -1,6 +1,9 @@
 package com.example.controlador;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+
+import com.example.data.AdapterDatabase;
 
 public class Functions {
 
@@ -167,6 +170,16 @@ public class Functions {
 				return "DIA " + dia + " ";
 			}
 		}
+	 
+
+ /**
+  * Esta funcion revisa "objetosHastaElMomento", y si se encuentra el objeto adecuado, retorna su id interno en el caso de que exista o -1 si no. y -2 si es que la key no existe
+  * @param key_iid
+  * @param objetosHastaElMomento
+  * @return
+  */
+
+
 
 	 public static String llenarConCeros (String cadena,int largo){
 		 int largoinicial = cadena.length();
